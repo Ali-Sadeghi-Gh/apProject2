@@ -3,6 +3,7 @@ package client;
 public class Loop {
   private final double fps;
   protected Thread thread;
+  private static Loop currentLoop;
   private final Runnable updatable;
   private volatile boolean running;
 
@@ -14,6 +15,11 @@ public class Loop {
   }
 
   public void start() {
+    if (currentLoop != null) {
+      currentLoop.stop();
+    }
+    currentLoop = this;
+
     running = true;
     try {
       update();

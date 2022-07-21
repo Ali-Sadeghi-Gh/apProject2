@@ -68,6 +68,8 @@ public class ClientHandler implements Runnable {
     Response response = new Response(ResponseStatus.OK);
     switch (panelName) {
       case StudentPanel:
+      case EduAssistantPanel:
+      case ProfessorPanel:
         response.addData("lastLogin", user.getLastLogIn());
         response.addData("email", user.getEmail());
         response.addData("name", user.getName());
