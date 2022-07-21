@@ -2,12 +2,12 @@ package client;
 
 import GUI.LogInPanel;
 import GUI.MainFrame;
+import GUI.professors.eduAssistant.EduAssistantPanel;
 import GUI.student.StudentMainPanel;
 import GUI.student.StudentPanel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import shared.model.users.Student;
-import shared.model.users.User;
+import shared.model.PanelName;
 import shared.response.Response;
 import shared.response.ResponseStatus;
 
@@ -44,6 +44,22 @@ public class Client {
   }
 
   private void mainPanelCLI(Response response) {
-    mainFrame.setContentPane(new StudentPanel(mainFrame, null, new StudentMainPanel(null)));
+    if (String.valueOf(response.getData("panelName")).equals(PanelName.StudentPanel.toString())) {
+      StudentMainPanel studentMainPanel = new StudentMainPanel();
+      StudentPanel studentPanel = new StudentPanel(mainFrame, studentMainPanel, (int) Double.parseDouble(String.valueOf(response.getData("id"))));
+      mainFrame.setContentPane(studentPanel);
+
+      new Loop(1, () -> {
+        Response response1 = serverController.sendUpdateRequest(PanelName.StudentMainPanel);
+        studentMainPanel.update((String) response1.getData("educationalStatus"),
+                (String) response1.getData("supervisor"));
+
+        Response response2 = serverController.sendUpdateRequest(PanelName.StudentPanel);
+        studentPanel.update((String) response2.getData("lastLogin"), (String) response2.getData("email"),
+                (String) response2.getData("name"), (String) response2.getData("currentTime"));
+      }).start();
+    } else if (String.valueOf(response.getData("panelName")).equals(PanelName.EduAssistantPanel.toString())) {
+
+    }
   }
 }

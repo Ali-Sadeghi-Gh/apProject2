@@ -1,5 +1,6 @@
 package shared.request;
 
 public enum RequestType {
-  LOGIN
+  LOGIN,
+  UPDATE
 }

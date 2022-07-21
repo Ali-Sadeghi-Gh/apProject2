@@ -2,6 +2,7 @@ package client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import shared.model.PanelName;
 import shared.request.*;
 import shared.response.Response;
 
@@ -38,6 +39,13 @@ public class ServerController {
     String requestString = gson.toJson(request);
     printStream.println(requestString);
     printStream.flush();
+  }
+
+  public Response sendUpdateRequest(PanelName panelName) {
+    Request request = new Request(RequestType.UPDATE);
+    request.addData("panelName", panelName);
+    sendRequest(request);
+    return gson.fromJson(scanner.nextLine(), Response.class);
   }
 
   public Response sendLoginRequest(int id, String password) {
