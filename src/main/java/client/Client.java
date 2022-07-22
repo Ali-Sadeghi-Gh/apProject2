@@ -15,10 +15,10 @@ import shared.response.ResponseStatus;
 import javax.swing.*;
 
 public class Client {
-  private MainFrame mainFrame;
+  private final MainFrame mainFrame;
   private ServerController serverController;
   private final Gson gson = new GsonBuilder().create();
-  private int port;
+  private final int port;
 
   public Client(int port) {
     this.port = port;
@@ -49,7 +49,7 @@ public class Client {
   private void mainPanelCLI(Response response) {
     if (String.valueOf(response.getData("panelName")).equals(PanelName.StudentPanel.toString())) {
       StudentMainPanel studentMainPanel = new StudentMainPanel();
-      StudentPanel studentPanel = new StudentPanel(mainFrame, studentMainPanel, this, (int) Double.parseDouble(String.valueOf(response.getData("id"))));
+      StudentPanel studentPanel = new StudentPanel(mainFrame, studentMainPanel, this);
       mainFrame.setContentPane(studentPanel);
 
       new Loop(1, () -> {
@@ -58,29 +58,37 @@ public class Client {
                 (String) r.getData("supervisor"));
 
         Response r2 = serverController.sendUpdateRequest(PanelName.StudentPanel);
-        studentPanel.update((String) r2.getData("lastLogin"), (String) r2.getData("email"),
+        studentPanel.update((int) Double.parseDouble(String.valueOf(r2.getData("id"))),
+                (String) r2.getData("lastLogin"), (String) r2.getData("email"),
                 (String) r2.getData("name"), (String) r2.getData("currentTime"));
       }).start();
 
     } else if (String.valueOf(response.getData("panelName")).equals(PanelName.EduAssistantPanel.toString())) {
-      EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, new JPanel(), (int) Double.parseDouble(String.valueOf(response.getData("id"))));
+      EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, new JPanel(), this);
       mainFrame.setContentPane(eduAssistantPanel);
 
       new Loop(1, () -> {
         Response r = serverController.sendUpdateRequest(PanelName.EduAssistantPanel);
-        eduAssistantPanel.update((String) r.getData("name"), (String) r.getData("lastLogin"),
+        eduAssistantPanel.update((int) Double.parseDouble(String.valueOf(r.getData("id"))),
+                (String) r.getData("name"), (String) r.getData("lastLogin"),
                 (String) r.getData("email"), (String) r.getData("currentTime"));
       }).start();
 
     } else if (String.valueOf(response.getData("panelName")).equals(PanelName.ProfessorPanel.toString())) {
-      ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, new JPanel(), (int) Double.parseDouble(String.valueOf(response.getData("id"))));
+      ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, new JPanel(), this);
       mainFrame.setContentPane(professorPanel);
 
       new Loop(1, () -> {
         Response r = serverController.sendUpdateRequest(PanelName.ProfessorPanel);
-        professorPanel.update((String) r.getData("name"), (String) r.getData("lastLogin"),
+        professorPanel.update((int) Double.parseDouble(String.valueOf(r.getData("id"))),
+                (String) r.getData("name"), (String) r.getData("lastLogin"),
                 (String) r.getData("email"), (String) r.getData("currentTime"));
       }).start();
     }
+  }
+
+  public void logout() {
+    Loop.stopCurrent();
+    loginCLI();
   }
 }

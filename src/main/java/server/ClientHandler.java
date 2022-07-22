@@ -70,6 +70,7 @@ public class ClientHandler implements Runnable {
       case StudentPanel:
       case EduAssistantPanel:
       case ProfessorPanel:
+        response.addData("id", user.getId());
         response.addData("lastLogin", user.getLastLogIn());
         response.addData("email", user.getEmail());
         response.addData("name", user.getName());
@@ -95,7 +96,6 @@ public class ClientHandler implements Runnable {
     } else {
       this.user = user;
       response = new Response(ResponseStatus.OK);
-      response.addData("id", user.getId());
 
       PanelName panelName = null;
       if (user instanceof Student) {

@@ -47,6 +47,10 @@ public class Loop {
     }
   }
 
+  public static void stopCurrent() {
+    currentLoop.stop();
+  }
+
   private void run() {
     long lastCycleTime = System.nanoTime();
     double nanosecondsPerUpdate = 1000000000 / fps;
