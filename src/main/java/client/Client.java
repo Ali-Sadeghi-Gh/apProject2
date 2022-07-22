@@ -3,8 +3,10 @@ package client;
 import GUI.CoursesListPanel;
 import GUI.LogInPanel;
 import GUI.MainFrame;
+import GUI.ProfessorsListPanel;
 import GUI.professors.ProfessorPanel;
 import GUI.professors.ProfessorProfilePanel;
+import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
 import GUI.student.StudentMainPanel;
 import GUI.student.StudentPanel;
@@ -230,6 +232,75 @@ public class Client {
       } else if (userRole.equals(UserRole.Professor)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
+      }
+    }).start();
+  }
+
+  public void changeToProfessorsListPanel(UserRole userRole, String faculty, String name, String grade) {
+    if (userRole.equals(UserRole.Professor)) {
+      Response response = serverController.sendIsDeanRequest();
+      if (response.getStatus().equals(ResponseStatus.OK)) {
+        ProfessorsListDeanPanel professorsListDeanPanel = new ProfessorsListDeanPanel(mainFrame, this);
+        ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, professorsListDeanPanel, this);
+        mainFrame.setContentPane(professorPanel);
+
+        Request request = new Request(RequestType.UPDATE);
+        request.addData("faculty", faculty);
+        request.addData("name", name);
+        request.addData("grade", grade);
+        Response response1 = serverController.sendUpdateRequest(PanelName.ProfessorListDeanPanel, request);
+
+        ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response1.getData("data");
+        ArrayList<String[]> strings = new ArrayList<>();
+        for (ArrayList<String> arrayList1 : arrayList) {
+          strings.add(arrayList1.toArray(new String[0]));
+        }
+        professorsListDeanPanel.update((((ArrayList<String>) response1.getData("faculties")).toArray(new String[0])),
+                ((strings.toArray(new String[0][0]))));
+
+        new Loop(1, () -> {
+          updateProfessorPanel(professorPanel);
+        }).start();
+        return;
+      }
+    }
+
+    ProfessorsListPanel professorsListPanel = new ProfessorsListPanel(mainFrame, this, userRole);
+    JPanel jPanel = null;
+    if (userRole.equals(UserRole.Student)) {
+      jPanel = new StudentPanel(mainFrame, professorsListPanel, this);
+    } else if ((userRole.equals(UserRole.Professor))) {
+      jPanel = new ProfessorPanel(mainFrame, professorsListPanel, this);
+    } else if (userRole.equals(UserRole.EduAssistant)) {
+      jPanel = new EduAssistantPanel(mainFrame, professorsListPanel, this);
+    }
+    mainFrame.setContentPane(jPanel);
+
+    Request request = new Request(RequestType.UPDATE);
+    request.addData("faculty", faculty);
+    request.addData("name", name);
+    request.addData("grade", grade);
+    Response response = serverController.sendUpdateRequest(PanelName.ProfessorListPanel, request);
+
+    ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+    ArrayList<String[]> strings = new ArrayList<>();
+    for (ArrayList<String> arrayList1 : arrayList) {
+      strings.add(arrayList1.toArray(new String[0]));
+    }
+    professorsListPanel.update((((ArrayList<String>) response.getData("faculties")).toArray(new String[0])),
+            ((strings.toArray(new String[0][0]))));
+
+    JPanel finalJPanel = jPanel;
+    new Loop(1, () -> {
+      if (userRole.equals(UserRole.Student)) {
+        StudentPanel studentPanel = (StudentPanel) finalJPanel;
+        updateStudentPanel(studentPanel);
+      } else if (userRole.equals(UserRole.Professor)) {
+        ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
+        updateProfessorPanel(professorPanel);
+      } else if (userRole.equals(UserRole.EduAssistant)) {
+        EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
+        updateEduAssistantPanel(eduAssistantPanel);
       }
     }).start();
   }

@@ -121,8 +121,8 @@ public class Controller {
     List<String[]> data = new ArrayList<>();
     for (int i = 0; i < professors.size(); i++) {
       Professor professor = professors.get(i);
-      if ((faculty.equals("none") || faculty.equals(professor.getFacultyName())) && (name.equals("") || name.equals(professor.getName()))
-              && (degree.equals("none") || (professor.getDegree() != null && degree.equals(professor.getDegree().name())))) {
+      if ((faculty.equals("all") || faculty.equals(professor.getFacultyName())) && (name.equals("") || name.equals(professor.getName()))
+              && (degree.equals("all") || (professor.getDegree() != null && degree.equals(professor.getDegree().name())))) {
         data.add(new String[]{String.valueOf(professor.getId()), professor.getName(), professor.getFacultyName(), professor.getEmail(),
                 professor.getDegree() == null ? "" : professor.getDegree().name()});
       }

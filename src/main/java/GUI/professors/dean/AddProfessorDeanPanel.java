@@ -267,7 +267,7 @@ public class AddProfessorDeanPanel extends javax.swing.JPanel {
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsListDeanPanel(mainFrame, professor), client));
+    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsListDeanPanel(mainFrame, client), client));
     mainFrame.repaintFrame();
   }
 

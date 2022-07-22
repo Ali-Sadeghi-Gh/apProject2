@@ -418,8 +418,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        mainFrame.setContentPane(new StudentPanel(mainFrame, student, new ProfessorsListPanel(mainFrame)));
-//        mainFrame.repaintFrame();
+        client.changeToProfessorsListPanel(UserRole.Student, "all", "", "all");
     }
 
     private void educationalStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {

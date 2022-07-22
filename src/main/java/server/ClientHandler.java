@@ -78,6 +78,10 @@ public class ClientHandler implements Runnable {
         Controller.getInstance().changeEmail((String) request.getData("email"), user);
         sendResponse(new Response(ResponseStatus.OK));
         break;
+      case IS_DEAN:
+        Professor professor = (Professor) user;
+        sendResponse(new Response(professor.getPosition().equals(Professor.Position.dean) ? ResponseStatus.OK : ResponseStatus.ERROR));
+        break;
     }
   }
 
@@ -125,6 +129,12 @@ public class ClientHandler implements Runnable {
         response.addData("faculties", Controller.getInstance().getFacultiesName());
         response.addData("data", Controller.getInstance().getCoursesData((String) request.getData("faculty"),
                 (String) request.getData("professor"), (String) request.getData("grade")));
+        break;
+      case ProfessorListPanel:
+      case ProfessorListDeanPanel:
+        response.addData("faculties", Controller.getInstance().getFacultiesName());
+        response.addData("data", Controller.getInstance().getProfessorsData((String) request.getData("faculty"),
+                (String) request.getData("name"), (String) request.getData("grade")));
         break;
     }
     sendResponse(response);

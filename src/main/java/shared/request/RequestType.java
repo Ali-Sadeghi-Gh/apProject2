@@ -4,5 +4,6 @@ public enum RequestType {
   LOGIN,
   UPDATE,
   CHANGE_PHONE_NUMBER,
-  CHANGE_EMAIL
+  CHANGE_EMAIL,
+  IS_DEAN
 }

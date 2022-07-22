@@ -347,12 +347,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    if (professor.getPosition().equals(Professor.Position.dean)){
-//      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsListDeanPanel(mainFrame, professor), 0));
-//    } else {
-//      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsListPanel(mainFrame), 0));
-//    }
-//    mainFrame.repaintFrame();
+    client.changeToProfessorsListPanel(UserRole.Professor, "all", "", "all");
   }
 
   private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {

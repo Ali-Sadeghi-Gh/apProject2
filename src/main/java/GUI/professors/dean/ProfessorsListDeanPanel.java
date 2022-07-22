@@ -6,11 +6,10 @@ package GUI.professors.dean;
  */
 
 import GUI.MainFrame;
-import GUI.professors.ProfessorPanel;
 import client.Client;
 import shared.model.users.Professor;
+import shared.model.users.UserRole;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,14 +19,13 @@ import javax.swing.table.DefaultTableModel;
 public class ProfessorsListDeanPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Professor professor;
 
   /**
    * Creates new form ProfessorsListDeanPanel
    */
-  public ProfessorsListDeanPanel(MainFrame mainFrame, Professor professor) {
+  public ProfessorsListDeanPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.professor = professor;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -65,15 +63,12 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
     ));
     professorsTable.setCellSelectionEnabled(true);
     jScrollPane1.setViewportView(professorsTable);
-    showData("none", "", "none");
 
     facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     facultyLabel.setText("faculty:");
 
     facultyBox.setMaximumRowCount(10);
-//    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
-
 
     nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -87,7 +82,7 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
     degreeLabel.setText("degree:");
 
     degreeBox.setMaximumRowCount(10);
-    degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none", Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name() }));
+    degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "all", Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name() }));
 
 
     searchButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -192,35 +187,34 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    showData(facultyBox.getSelectedItem().toString(), nameField.getText(), degreeBox.getSelectedItem().toString());
+    client.changeToProfessorsListPanel(UserRole.Professor, facultyBox.getSelectedItem().toString(), nameField.getText(), degreeBox.getSelectedItem().toString());
   }
 
-  public void showData(String faculty, String name, String degree) {
+  public void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) professorsTable.getModel();
     String[] cols = {"id", "name", "faculty", "email", "degree"};
-//    String[][] data = Controller.getInstance().getProfessorsData(faculty, name, degree);
-//
-//    if (data.length == 0) {
-//      JOptionPane.showMessageDialog(mainFrame, "no professor found");
-//    }
-//    model.setDataVector(data, cols);
+    model.setDataVector(data, cols);
   }
 
   private void removeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RemoveProfessorPanel(mainFrame, professor), client));
-    mainFrame.repaintFrame();
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RemoveProfessorPanel(mainFrame, professor), client));
+//    mainFrame.repaintFrame();
   }
 
   private void addProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new AddProfessorDeanPanel(mainFrame, professor), client));
-    mainFrame.repaintFrame();
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new AddProfessorDeanPanel(mainFrame, professor), client));
+//    mainFrame.repaintFrame();
   }
 
   private void changeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
-    mainFrame.repaintFrame();
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
+//    mainFrame.repaintFrame();
   }
 
+  public void update(String[] faculties, String[][] data) {
+    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(faculties));
+    showData(data);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JButton addProfessorButton;

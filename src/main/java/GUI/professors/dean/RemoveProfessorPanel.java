@@ -103,7 +103,7 @@ public class RemoveProfessorPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsListDeanPanel(mainFrame, professor), client));
+    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsListDeanPanel(mainFrame, client), client));
     mainFrame.repaintFrame();
   }
 

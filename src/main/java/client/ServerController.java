@@ -78,4 +78,9 @@ public class ServerController {
 
     return gson.fromJson(scanner.nextLine(), Response.class);
   }
+
+  public Response sendIsDeanRequest() {
+    sendRequest(new Request(RequestType.IS_DEAN));
+    return gson.fromJson(scanner.nextLine(), Response.class);
+  }
 }

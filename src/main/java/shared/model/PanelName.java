@@ -8,5 +8,6 @@ public enum PanelName {
   StudentProfilePanel,
   ProfessorProfilePanel,
   CoursesListPanel,
-
+  ProfessorListPanel,
+  ProfessorListDeanPanel,
 }

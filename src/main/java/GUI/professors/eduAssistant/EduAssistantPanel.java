@@ -363,7 +363,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    //client.changePanel(PanelName.ProfessorProfilePanel, UserRole.EduAssistant);
+    client.changePanel(PanelName.ProfessorProfilePanel, UserRole.EduAssistant);
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -372,8 +372,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorsListPanel(mainFrame)));
-//    mainFrame.repaintFrame();
+    client.changeToProfessorsListPanel(UserRole.EduAssistant, "all", "", "all");
   }
 
   private void educationalStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -2,6 +2,7 @@ package GUI;
 
 import client.Client;
 import shared.model.users.Professor;
+import shared.model.users.UserRole;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,12 +20,15 @@ import javax.swing.table.DefaultTableModel;
 public class ProfessorsListPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
+  UserRole userRole;
 
   /**
    * Creates new form professorsListPanel
    */
-  public ProfessorsListPanel(MainFrame mainFrame) {
+  public ProfessorsListPanel(MainFrame mainFrame, Client client, UserRole userRole) {
+    this.client = client;
     this.mainFrame = mainFrame;
+    this.userRole = userRole;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -58,15 +62,12 @@ public class ProfessorsListPanel extends javax.swing.JPanel {
     ));
     professorsTable.setCellSelectionEnabled(true);
     jScrollPane1.setViewportView(professorsTable);
-    showData("none", "", "none");
 
     facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     facultyLabel.setText("faculty:");
 
     facultyBox.setMaximumRowCount(10);
-//    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
-
 
     nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -74,14 +75,12 @@ public class ProfessorsListPanel extends javax.swing.JPanel {
 
     nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-
     degreeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     degreeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     degreeLabel.setText("degree:");
 
     degreeBox.setMaximumRowCount(10);
-    degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none", Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name() }));
-
+    degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "all", Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name() }));
 
     searchButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     searchButton.setText("search");
@@ -140,18 +139,18 @@ public class ProfessorsListPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    showData(facultyBox.getSelectedItem().toString(), nameField.getText(), degreeBox.getSelectedItem().toString());
+    client.changeToProfessorsListPanel(userRole, facultyBox.getSelectedItem().toString(), nameField.getText(), degreeBox.getSelectedItem().toString());
   }
 
-  public void showData(String faculty, String name, String degree) {
+  public void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) professorsTable.getModel();
     String[] cols = {"id", "name", "faculty", "email", "degree"};
-//    String[][] data = Controller.getInstance().getProfessorsData(faculty, name, degree);
+    model.setDataVector(data, cols);
+  }
 
-//    if (data.length == 0) {
-//      JOptionPane.showMessageDialog(mainFrame, "no professor found");
-//    }
-//    model.setDataVector(data, cols);
+  public void update(String[] faculties, String[][] data) {
+    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(faculties));
+    showData(data);
   }
 
   // Variables declaration - do not modify
