@@ -8,8 +8,10 @@ package GUI.professors.eduAssistant;
 import GUI.*;
 import GUI.professors.ProfessorProfilePanel;
 import client.Client;
+import shared.model.PanelName;
 import shared.model.Time;
 import shared.model.users.Professor;
+import shared.model.users.UserRole;
 
 import javax.swing.*;
 import java.io.File;
@@ -339,8 +341,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new JPanel()));
-//    mainFrame.repaintFrame();
+    client.changePanel(PanelName.EduAssistantPanel, null);
   }
 
   private void registrationMattersButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -362,8 +363,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorProfilePanel(mainFrame, professor)));
-//    mainFrame.repaintFrame();
+    client.changePanel(PanelName.ProfessorProfilePanel, UserRole.EduAssistant);
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -413,7 +413,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
     nameLabel.setText("name: " + ((name==null || name.equals("")) ? "-" : name));
     timeLabel.setText("last login: " + lastLogin);
     emailLabel.setText("email: " + ((email==null || email.equals("")) ? "-" : email));
-    currentTimeLabel.setText("currentTime: " + currentTime);
+    currentTimeLabel.setText("current time: " + currentTime);
   }
 
   // Variables declaration - do not modify

@@ -8,7 +8,6 @@ package GUI.professors;
 
 import GUI.MainFrame;
 import client.Client;
-import shared.model.users.Professor;
 
 import javax.swing.*;
 
@@ -19,14 +18,13 @@ import javax.swing.*;
 public class ProfessorProfilePanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Professor professor;
 
   /**
    * Creates new form ProfessorProfilePanel
    */
-  public ProfessorProfilePanel(MainFrame mainFrame, Professor professor) {
+  public ProfessorProfilePanel(MainFrame mainFrame, Client client) {
     this.mainFrame = mainFrame;
-    this.professor = professor;
+    this.client = client;
 
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -68,7 +66,6 @@ public class ProfessorProfilePanel extends javax.swing.JPanel {
     degreeLabel.setBackground(new java.awt.Color(200, 200, 200));
     degreeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     degreeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    degreeLabel.setText("status: " + (professor.getDegree()==null ? "-" : professor.getDegree().toString()));
     degreeLabel.setOpaque(true);
 
     emailChangeButton.setText("change");
@@ -84,29 +81,21 @@ public class ProfessorProfilePanel extends javax.swing.JPanel {
     idLabel.setBackground(new java.awt.Color(200, 200, 200));
     idLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     idLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    idLabel.setText("id: " + professor.getId());
     idLabel.setOpaque(true);
 
     facultyLabel.setBackground(new java.awt.Color(200, 200, 200));
     facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    if (professor.getFacultyName()==null || professor.getFacultyName().equals("")) {
-      facultyLabel.setText("faculty: -");
-    } else {
-      facultyLabel.setText("faculty: " + professor.getFacultyName());
-    }
     facultyLabel.setOpaque(true);
 
     phoneLabel.setBackground(new java.awt.Color(200, 200, 200));
     phoneLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     phoneLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    phoneLabel.setText("phone: " + ((professor.getPhoneNumber()==null || professor.getPhoneNumber().equals("")) ? "-" : professor.getPhoneNumber()));
     phoneLabel.setOpaque(true);
 
     melliCodeLabel.setBackground(new java.awt.Color(200, 200, 200));
     melliCodeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     melliCodeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    melliCodeLabel.setText("code melli: " + ((professor.getMelliCode()==null || professor.getMelliCode().equals("")) ? "-" : professor.getMelliCode()));
     melliCodeLabel.setOpaque(true);
 
     phoneChangeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -115,7 +104,6 @@ public class ProfessorProfilePanel extends javax.swing.JPanel {
     roomNumberLabel.setBackground(new java.awt.Color(200, 200, 200));
     roomNumberLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     roomNumberLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    roomNumberLabel.setText("room number: " + ((professor.getRoomNumber()==null || professor.getRoomNumber().equals("")) ? "-" : professor.getRoomNumber()));
     roomNumberLabel.setOpaque(true);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -180,18 +168,30 @@ public class ProfessorProfilePanel extends javax.swing.JPanel {
 
   private void phoneChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
 //    Controller.getInstance().changePhoneNumber(phoneChangeField.getText(), professor);
-    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), client));
-    mainFrame.repaintFrame();
+//    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), client));
+//    mainFrame.repaintFrame();
   }
 
   private void emailChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
 //    Controller.getInstance().changeEmail(emailChangeField.getText(), professor);
-    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), client));
-    mainFrame.repaintFrame();
+//    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), client));
+//    mainFrame.repaintFrame();
   }
 
+  public void update(int id, String melliCode, String faculty, String phoneNumber, String degree, String roomNumber) {
+    idLabel.setText("id: " + id);
+    melliCodeLabel.setText("code melli: " + ((melliCode==null || melliCode.equals("")) ? "-" : melliCode));
+    if (faculty==null || faculty.equals("")) {
+      facultyLabel.setText("faculty: -");
+    } else {
+      facultyLabel.setText("faculty: " + faculty);
+    }
+    phoneLabel.setText("phone: " + ((phoneNumber==null || phoneNumber.equals("")) ? "-" : phoneNumber));
+    degreeLabel.setText("status: " + (degree==null ? "-" : degree));
+    roomNumberLabel.setText("room number: " + ((roomNumber==null || roomNumber.equals("")) ? "-" : roomNumber));
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JLabel degreeLabel;

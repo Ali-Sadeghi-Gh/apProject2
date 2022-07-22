@@ -386,7 +386,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.StudentMainPanel);
+        client.changePanel(PanelName.StudentMainPanel, null);
     }
 
     private void registrationMattersButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,7 +409,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.StudentProfilePanel);
+        client.changePanel(PanelName.StudentProfilePanel, null);
     }
 
     private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -495,7 +495,7 @@ public class StudentPanel extends javax.swing.JPanel {
         timeLabel.setText("last login: " + lastLogin);
         emailLabel.setText("email: " + ((email==null || email.equals("")) ? "-" : email));
         nameLabel.setText("name: " + ((name==null || name.equals("")) ? "-" : name));
-        currentTimeLabel.setText("currentTime: " + currentTime);
+        currentTimeLabel.setText("current time: " + currentTime);
     }
 
     // Variables declaration - do not modify

@@ -49,7 +49,17 @@ public class ClientHandler implements Runnable {
         Request request = gson.fromJson(scanner.nextLine(), Request.class);
         handleRequest(request);
       }
-    } catch (IOException ignore) {}
+    } catch (Exception e) {
+      kill();
+    }
+  }
+
+  private void kill() {
+    try {
+      socket.close();
+    } catch (Exception ignore) {}
+    printStream.close();
+    server.removeClientHandler(this);
   }
 
   private void handleRequest(Request request) {
@@ -80,7 +90,7 @@ public class ClientHandler implements Runnable {
       case StudentMainPanel:
         Student student = (Student) user;
         response.addData("educationalStatus", student.getStatus());
-        response.addData("supervisor", University.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
+        response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
         break;
       case StudentProfilePanel:
         student = (Student) user;
@@ -91,14 +101,24 @@ public class ClientHandler implements Runnable {
         response.addData("enteringYear", student.getEnteringYear());
         response.addData("grade", student.getGrade());
         response.addData("status", student.getStatus());
-        response.addData("supervisor", University.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
-        response.addData("averageScore", University.getInstance().getAverageScoreByStudent(student));
+        response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
+        response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent(student));
+        break;
+      case ProfessorProfilePanel:
+        Professor professor = (Professor) user;
+        response.addData("id", professor.getId());
+        response.addData("melliCode", professor.getMelliCode());
+        response.addData("faculty", professor.getFacultyName());
+        response.addData("phoneNumber", professor.getPhoneNumber());
+        response.addData("degree", professor.getDegree());
+        response.addData("roomNumber", professor.getRoomNumber());
+        break;
     }
     sendResponse(response);
   }
 
   private void handleLogin(Request request) {
-    User user = LogIn.checkUser((int) Double.parseDouble(String.valueOf(request.getData("id"))), (String) request.getData("password"));
+    User user = Controller.getInstance().logIn((int) Double.parseDouble(String.valueOf(request.getData("id"))), (String) request.getData("password"));
 
     Response response;
 

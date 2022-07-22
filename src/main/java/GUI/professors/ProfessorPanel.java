@@ -8,6 +8,8 @@ package GUI.professors;
 
 import GUI.*;
 import client.Client;
+import shared.model.PanelName;
+import shared.model.users.UserRole;
 
 import javax.swing.*;
 import java.io.File;
@@ -315,8 +317,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new JPanel(), client));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.ProfessorPanel, null);
   }
 
   private void registrationMattersButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -338,8 +339,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), 0));
-//    mainFrame.repaintFrame();
+    client.changePanel(PanelName.ProfessorProfilePanel, UserRole.Professor);
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -376,14 +376,14 @@ public class ProfessorPanel extends javax.swing.JPanel {
 //    mainFrame.repaintFrame();
   }
 
-  public void update(int id, String name, String lastLogin, String email, String currentTime) {
+  public void update(int id, String lastLogin, String email, String name, String currentTime) {
     File file = new File("./src/main/resources/pics/" + id + ".png");
     imgLabel.setIcon(new ImageIcon("./src/main/resources/pics/" + (file.exists() ? id : "default") + ".png"));
 
     nameLabel.setText("name: " + ((name==null || name.equals("")) ? "-" : name));
     timeLabel.setText("last login: " + lastLogin);
     emailLabel.setText("email: " + ((email==null || email.equals("")) ? "-" : email));
-    currentTimeLabel.setText("currentTime: " + currentTime);
+    currentTimeLabel.setText("current time: " + currentTime);
   }
 
   // Variables declaration - do not modify
