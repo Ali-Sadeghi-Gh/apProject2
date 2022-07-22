@@ -48,6 +48,12 @@ public class ServerController {
     return gson.fromJson(scanner.nextLine(), Response.class);
   }
 
+  public Response sendUpdateRequest(PanelName panelName, Request request) {
+    request.addData("panelName", panelName);
+    sendRequest(request);
+    return gson.fromJson(scanner.nextLine(), Response.class);
+  }
+
   public Response sendLoginRequest(int id, String password) {
     Request request = new Request(RequestType.LOGIN);
     request.addData("id", id);

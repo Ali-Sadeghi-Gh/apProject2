@@ -343,8 +343,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new CoursesListPanel(mainFrame), client));
-    mainFrame.repaintFrame();
+    client.changeToCoursesListPanel(UserRole.Professor, "all", "", "all");
   }
 
   private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {

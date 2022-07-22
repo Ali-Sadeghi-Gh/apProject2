@@ -9,6 +9,7 @@ package GUI.student;
 import GUI.*;
 import client.Client;
 import shared.model.PanelName;
+import shared.model.users.UserRole;
 
 import javax.swing.*;
 import java.io.File;
@@ -413,8 +414,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        mainFrame.setContentPane(new StudentPanel(mainFrame, student, new CoursesListPanel(mainFrame)));
-//        mainFrame.repaintFrame();
+        client.changeToCoursesListPanel(UserRole.Student, "all", "", "all");
     }
 
     private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {

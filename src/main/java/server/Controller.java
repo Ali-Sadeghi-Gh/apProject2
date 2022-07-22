@@ -83,9 +83,9 @@ public class Controller {
     List<String[]> data = new ArrayList<>();
     for (int i = 0; i < courses.size(); i++) {
       Course course = courses.get(i);
-      if ((faculty.equals("none") || faculty.equals(course.getFacultyName())) && (professor.equals("") ||
+      if ((faculty.equals("all") || faculty.equals(course.getFacultyName())) && (professor.equals("") ||
               (findProfessorByCourse(course.getId())!=null && professor.equals(findProfessorByCourse(course.getId()).getName())))
-              && (grade.equals("none") || (course.getGrade() != null && grade.equals(course.getGrade().name())))) {
+              && (grade.equals("all") || (course.getGrade() != null && grade.equals(course.getGrade().name())))) {
         data.add(new String[]{String.valueOf(course.getId()), course.getName(), String.valueOf(course.getCredit()),
                 findProfessorByCourse(course.getId()) == null ? "" : findProfessorByCourse(course.getId()).getName(),
                 course.getFacultyName(), (course.getGrade() == null) ? "" : course.getGrade().name(), course.getClassTime()});
@@ -170,7 +170,7 @@ public class Controller {
 
   public String[] getFacultiesName() {
     String[] names = new String[University.getInstance().getFaculties().size()+1];
-    names[0] = "none";
+    names[0] = "all";
     for (int i = 0; i < University.getInstance().getFaculties().size(); i++) {
       names[i+1] = University.getInstance().getFaculties().get(i).getName();
     }
