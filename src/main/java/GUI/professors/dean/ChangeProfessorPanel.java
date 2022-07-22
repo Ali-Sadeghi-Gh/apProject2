@@ -7,7 +7,6 @@ package GUI.professors.dean;
 
 import GUI.MainFrame;
 import GUI.professors.ProfessorPanel;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.Professor;
 
@@ -285,9 +284,9 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
       return;
     }
 
-    Controller.getInstance().changeProfessor(changingProfessor, nameField.getText(), emailField.getText(), melliCodeField.getText(),
-            phoneField.getText(), passwordField.getText(),
-            roomNumberField.getText(), degreeBox.getSelectedItem().toString(), positionBox.getSelectedItem().toString());
+//    Controller.getInstance().changeProfessor(changingProfessor, nameField.getText(), emailField.getText(), melliCodeField.getText(),
+//            phoneField.getText(), passwordField.getText(),
+//            roomNumberField.getText(), degreeBox.getSelectedItem().toString(), positionBox.getSelectedItem().toString());
 
     JOptionPane.showMessageDialog(mainFrame, "professor's information changed");
     mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
@@ -303,7 +302,7 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
       mainFrame.repaintFrame();
       return;
     }
-    changingProfessor = Controller.getInstance().findProfessorById(Integer.parseInt(idField.getText()));
+//    changingProfessor = Controller.getInstance().findProfessorById(Integer.parseInt(idField.getText()));
 
     idField.setText("");
     if (changingProfessor == null || !changingProfessor.getFacultyName().equals(professor.getFacultyName())) {
@@ -329,11 +328,11 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
     }
 
     if (changingProfessor.getPosition() == null || changingProfessor.getPosition().equals(Professor.Position.professor)) {
-      if (Controller.getInstance().findEduAssistantByFaculty(professor.getFacultyName()) == null) {
-        positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.professor.name(), Professor.Position.eduAssistant.name()}));
-      } else {
-        positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.professor.name()}));
-      }
+//      if (Controller.getInstance().findEduAssistantByFaculty(professor.getFacultyName()) == null) {
+//        positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.professor.name(), Professor.Position.eduAssistant.name()}));
+//      } else {
+//        positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.professor.name()}));
+//      }
     } else if (changingProfessor.getPosition().equals(Professor.Position.eduAssistant)) {
       positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.eduAssistant.name(), Professor.Position.professor.name()}));
     } else {

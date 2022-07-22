@@ -1,6 +1,5 @@
 package GUI;
 
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.Student;
 
@@ -69,7 +68,7 @@ public class CoursesListPanel extends javax.swing.JPanel {
     facultyLabel.setText("faculty:");
 
     facultyBox.setMaximumRowCount(10);
-    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
+//    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
 
 
     professorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -148,12 +147,12 @@ public class CoursesListPanel extends javax.swing.JPanel {
   private void showData(String faculty, String professor, String grade) {
     DefaultTableModel model = (DefaultTableModel) courseTable.getModel();
     String[] cols = {"id", "name", "credit", "professor", "faculty", "grade", "time of class"};
-    String[][] data = Controller.getInstance().getCoursesData(faculty, professor, grade);
+//    String[][] data = Controller.getInstance().getCoursesData(faculty, professor, grade);
 
-    if (data.length == 0) {
-      JOptionPane.showMessageDialog(mainFrame, "no course found");
-    }
-    model.setDataVector(data, cols);
+//    if (data.length == 0) {
+//      JOptionPane.showMessageDialog(mainFrame, "no course found");
+//    }
+//    model.setDataVector(data, cols);
   }
 
   // Variables declaration - do not modify

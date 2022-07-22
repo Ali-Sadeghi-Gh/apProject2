@@ -6,7 +6,6 @@ package GUI.student;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.EducationalRequest;
 import shared.model.users.Student;
 
@@ -53,10 +52,10 @@ public class DropoutRequestPanel extends javax.swing.JPanel {
     resultLabel.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
     resultLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     resultLabel.setText("");
-    EducationalRequest educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.dropout);
-    if (educationalRequest != null) {
-      resultLabel.setText(educationalRequest.getResult());
-    }
+//    EducationalRequest educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.dropout);
+//    if (educationalRequest != null) {
+//      resultLabel.setText(educationalRequest.getResult());
+//    }
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -85,11 +84,11 @@ public class DropoutRequestPanel extends javax.swing.JPanel {
 
   private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (resultLabel.getText().equals("")) {
-      EducationalRequest educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()), null,
-              student.getFacultyName(), null, EducationalRequest.Type.dropout);
+//      EducationalRequest educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()), null,
+//              student.getFacultyName(), null, EducationalRequest.Type.dropout);
 
       JOptionPane.showMessageDialog(mainFrame, "your request submitted");
-      resultLabel.setText(educationalRequest.getResult());
+//      resultLabel.setText(educationalRequest.getResult());
     }
   }
 

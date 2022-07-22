@@ -5,7 +5,6 @@ package GUI.student;
  * and open the template in the editor.
  */
 
-import LOGIC.Controller;
 import shared.model.users.Student;
 
 /**
@@ -74,7 +73,7 @@ public class DormitoryRequestPanel extends javax.swing.JPanel {
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (student.getDormitoryRequest() == null) {
-      student.setDormitoryRequest(Controller.getInstance().getDormitoryRequest(student));
+//      student.setDormitoryRequest(Controller.getInstance().getDormitoryRequest(student));
       resultLabel.setText("your request " + student.getDormitoryRequest());
     }
   }

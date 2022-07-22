@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.EducationalRequest;
 import shared.model.users.Professor;
 
@@ -130,15 +129,15 @@ public class AnswerDropoutPanel extends javax.swing.JPanel {
       return;
     }
 
-    EducationalRequest educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(idField.getText()));
-    if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.dropout) && educationalRequest.getFaculty()
-            .equals(professor.getFacultyName()) && !educationalRequest.isFinished()) {
-      Controller.getInstance().answerDropout(educationalRequest, accepted);
-      JOptionPane.showMessageDialog(mainFrame, "answer submitted");
-      idField.setText("");
-    } else {
-      JOptionPane.showMessageDialog(mainFrame, "request not found");
-    }
+//    EducationalRequest educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(idField.getText()));
+//    if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.dropout) && educationalRequest.getFaculty()
+//            .equals(professor.getFacultyName()) && !educationalRequest.isFinished()) {
+//      Controller.getInstance().answerDropout(educationalRequest, accepted);
+//      JOptionPane.showMessageDialog(mainFrame, "answer submitted");
+//      idField.setText("");
+//    } else {
+//      JOptionPane.showMessageDialog(mainFrame, "request not found");
+//    }
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -6,10 +6,7 @@ package GUI.student;
  * and open the template in the editor.
  */
 
-import LOGIC.Controller;
 import shared.model.users.Student;
-
-import javax.swing.*;
 
 /**
  *
@@ -76,7 +73,7 @@ public class DefendingRequestPanel extends javax.swing.JPanel {
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (student.getDefendingTurn() == null) {
-      student.setDefendingTurn(Controller.getInstance().getDefendingTurn(student));
+//      student.setDefendingTurn(Controller.getInstance().getDefendingTurn(student));
       resultLabel.setText("your defending turn is " + student.getDefendingTurn());
     }
   }

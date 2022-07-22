@@ -6,7 +6,6 @@ package GUI.professors;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.EducationalRequest;
 import shared.model.users.Professor;
@@ -135,15 +134,15 @@ public class AnswerRecommendationPanel extends javax.swing.JPanel {
       return;
     }
 
-    EducationalRequest educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(idField.getText()));
-    if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.recommendation) && educationalRequest.getProfessorId()
-            .equals(String.valueOf(professor.getId())) && !educationalRequest.isFinished()) {
-      Controller.getInstance().answerRecommendation(educationalRequest, accepted);
-      JOptionPane.showMessageDialog(mainFrame, "answer submitted");
-      idField.setText("");
-    } else {
-      JOptionPane.showMessageDialog(mainFrame, "request not found");
-    }
+//    EducationalRequest educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(idField.getText()));
+//    if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.recommendation) && educationalRequest.getProfessorId()
+//            .equals(String.valueOf(professor.getId())) && !educationalRequest.isFinished()) {
+//      Controller.getInstance().answerRecommendation(educationalRequest, accepted);
+//      JOptionPane.showMessageDialog(mainFrame, "answer submitted");
+//      idField.setText("");
+//    } else {
+//      JOptionPane.showMessageDialog(mainFrame, "request not found");
+//    }
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {

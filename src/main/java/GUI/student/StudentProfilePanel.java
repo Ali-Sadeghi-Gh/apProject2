@@ -5,11 +5,7 @@ package GUI.student;/*
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
-import shared.model.users.Student;
-
-import javax.swing.*;
 
 /**
  *
@@ -18,14 +14,13 @@ import javax.swing.*;
 public class StudentProfilePanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Student student;
 
   /**
    * Creates new form profile
    */
-  public StudentProfilePanel(MainFrame mainFrame, Student student) {
+  public StudentProfilePanel(MainFrame mainFrame, Client client) {
     this.mainFrame = mainFrame;
-    this.student = student;
+    this.client = client;
 
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -59,7 +54,6 @@ public class StudentProfilePanel extends javax.swing.JPanel {
     melliCodeLabel.setBackground(new java.awt.Color(200, 200, 200));
     melliCodeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     melliCodeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    melliCodeLabel.setText("code melli: " + ((student.getMelliCode()==null || student.getMelliCode().equals("")) ? "-" : student.getMelliCode()));
     melliCodeLabel.setOpaque(true);
 
     phoneChangeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -91,57 +85,41 @@ public class StudentProfilePanel extends javax.swing.JPanel {
     idLabel.setBackground(new java.awt.Color(200, 200, 200));
     idLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     idLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    idLabel.setText("id: " + student.getId());
     idLabel.setOpaque(true);
 
     facultyLabel.setBackground(new java.awt.Color(200, 200, 200));
     facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    if (student.getFacultyName()==null || student.getFacultyName().equals("")) {
-      facultyLabel.setText("faculty: -");
-    } else {
-      facultyLabel.setText("faculty: " + student.getFacultyName());
-    }
     facultyLabel.setOpaque(true);
 
     phoneLabel.setBackground(new java.awt.Color(200, 200, 200));
     phoneLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     phoneLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    phoneLabel.setText("phone: " + ((student.getPhoneNumber()==null || student.getPhoneNumber().equals("")) ? "-" : student.getPhoneNumber()));
     phoneLabel.setOpaque(true);
 
     enteringYearLabel.setBackground(new java.awt.Color(200, 200, 200));
     enteringYearLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     enteringYearLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    enteringYearLabel.setText("year of entry: " + ((student.getEnteringYear()==null || student.getEnteringYear().equals("")) ? "-" : student.getEnteringYear()));
     enteringYearLabel.setOpaque(true);
 
     gradeLabel.setBackground(new java.awt.Color(200, 200, 200));
     gradeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     gradeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    gradeLabel.setText("grade: " + (student.getGrade() == null ? "-" : student.getGrade()));
     gradeLabel.setOpaque(true);
 
     statusLabel.setBackground(new java.awt.Color(200, 200, 200));
     statusLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    statusLabel.setText("status: " + (student.getStatus()==null ? "-" : student.getStatus().toString()));
     statusLabel.setOpaque(true);
 
     supervisorLabel.setBackground(new java.awt.Color(200, 200, 200));
     supervisorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     supervisorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    if (student.getSupervisorId()==null || student.getSupervisorId().equals("")) {
-      supervisorLabel.setText("supervisor: -");
-    } else {
-      supervisorLabel.setText("supervisor: " + Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
-    }
     supervisorLabel.setOpaque(true);
 
     averageScoreLabel.setBackground(new java.awt.Color(200, 200, 200));
     averageScoreLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     averageScoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    averageScoreLabel.setText("average score: " + Controller.getInstance().getAverageScoreByStudent(student));
     averageScoreLabel.setOpaque(true);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -219,19 +197,38 @@ public class StudentProfilePanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void phoneChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    Controller.getInstance().changePhoneNumber(phoneChangeField.getText(), student);
-    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
-//  todo  mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentProfilePanel(mainFrame, student)));
-    mainFrame.repaintFrame();
+//    Controller.getInstance().changePhoneNumber(phoneChangeField.getText(), student);
+//    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
+////  todo  mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentProfilePanel(mainFrame, student)));
+//    mainFrame.repaintFrame();
   }
 
   private void emailChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    Controller.getInstance().changeEmail(emailChangeField.getText(), student);
-    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
-//  todo  mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentProfilePanel(mainFrame, student)));
-    mainFrame.repaintFrame();
+//    Controller.getInstance().changeEmail(emailChangeField.getText(), student);
+//    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
+////  todo  mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentProfilePanel(mainFrame, student)));
+//    mainFrame.repaintFrame();
   }
 
+  public void update(int id, String melliCode, String faculty, String phoneNumber, String enteringYear, String grade, String status, String supervisor, double averageScore) {
+    idLabel.setText("id: " + id);
+    melliCodeLabel.setText("code melli: " + ((melliCode==null || melliCode.equals("")) ? "-" : melliCode));
+    if (faculty==null || faculty.equals("")) {
+      facultyLabel.setText("faculty: -");
+    } else {
+      facultyLabel.setText("faculty: " + faculty);
+    }
+    phoneLabel.setText("phone: " + ((phoneNumber==null || phoneNumber.equals("")) ? "-" : phoneNumber));
+    enteringYearLabel.setText("year of entry: " + ((enteringYear==null || enteringYear.equals("")) ? "-" : enteringYear));
+    gradeLabel.setText("grade: " + (grade == null ? "-" : grade));
+    statusLabel.setText("status: " + (status==null ? "-" : status));
+    if (supervisor==null || supervisor.equals("")) {
+      supervisorLabel.setText("supervisor: -");
+    } else {
+      supervisorLabel.setText("supervisor: " + supervisor);
+    }
+    averageScoreLabel.setText("average score: " + averageScore);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JLabel averageScoreLabel;

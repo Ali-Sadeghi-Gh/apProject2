@@ -1,7 +1,5 @@
 package GUI;
 
-import LOGIC.Controller;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -35,7 +33,7 @@ public class MainFrame extends JFrame {
     addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing(WindowEvent e) {
-        Controller.getInstance().endProgram();
+//        Controller.getInstance().endProgram();
       }
     });
   }

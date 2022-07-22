@@ -5,7 +5,6 @@ package GUI;
  * and open the template in the editor.
  */
 
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.User;
 
@@ -75,12 +74,12 @@ public class WeeklySchedulePanel extends javax.swing.JPanel {
   private void showData() {
     DefaultTableModel model = (DefaultTableModel) scheduleTable.getModel();
     String[] cols = {"id", "name", "credit", "professor", "faculty", "grade", "time of class"};
-    String[][] data = Controller.getInstance().getScheduleData(user);
+//    String[][] data = Controller.getInstance().getScheduleData(user);
 
-    if (data.length == 0) {
-      JOptionPane.showMessageDialog(mainFrame, "you have no course");
-    }
-    model.setDataVector(data, cols);
+//    if (data.length == 0) {
+//      JOptionPane.showMessageDialog(mainFrame, "you have no course");
+//    }
+//    model.setDataVector(data, cols);
   }
 
 

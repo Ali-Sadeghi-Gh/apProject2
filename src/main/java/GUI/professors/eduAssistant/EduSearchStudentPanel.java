@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 
@@ -145,8 +144,8 @@ public class EduSearchStudentPanel extends javax.swing.JPanel {
 
     DefaultTableModel model = (DefaultTableModel) scoreTable.getModel();
     String[] cols = {"id", "name", "professor", "grade", "objection", "answer", "score"};
-    String[][] data = Controller.getInstance().getCourseTemporaryScoreDataByStudent(student);
-    model.setDataVector(data, cols);
+//    String[][] data = Controller.getInstance().getCourseTemporaryScoreDataByStudent(student);
+//    model.setDataVector(data, cols);
   }
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,7 +155,7 @@ public class EduSearchStudentPanel extends javax.swing.JPanel {
       JOptionPane.showMessageDialog(mainFrame, "student id must be a number");
       return;
     }
-    student = Controller.getInstance().findStudentById(Integer.parseInt(studentField.getText()));
+//    student = Controller.getInstance().findStudentById(Integer.parseInt(studentField.getText()));
     studentField.setText("");
 
     if (student == null) {

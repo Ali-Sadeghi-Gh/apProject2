@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.EducationalRequest;
 import shared.model.users.Professor;
 
@@ -130,16 +129,16 @@ public class AnswerMinorPanel extends javax.swing.JPanel {
       return;
     }
 
-    EducationalRequest educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(idField.getText()));
-    if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.minor) && (educationalRequest.getFaculty()
-            .equals(professor.getFacultyName()) || educationalRequest.getTargetFaculty().equals(professor.getFacultyName())) &&
-            !educationalRequest.isFinished()) {
-      Controller.getInstance().answerMinor(educationalRequest, professor.getFacultyName(), accepted);
-      JOptionPane.showMessageDialog(mainFrame, "answer submitted");
-      idField.setText("");
-    } else {
-      JOptionPane.showMessageDialog(mainFrame, "request not found");
-    }
+//    EducationalRequest educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(idField.getText()));
+//    if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.minor) && (educationalRequest.getFaculty()
+//            .equals(professor.getFacultyName()) || educationalRequest.getTargetFaculty().equals(professor.getFacultyName())) &&
+//            !educationalRequest.isFinished()) {
+//      Controller.getInstance().answerMinor(educationalRequest, professor.getFacultyName(), accepted);
+//      JOptionPane.showMessageDialog(mainFrame, "answer submitted");
+//      idField.setText("");
+//    } else {
+//      JOptionPane.showMessageDialog(mainFrame, "request not found");
+//    }
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {

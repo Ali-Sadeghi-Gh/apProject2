@@ -6,7 +6,6 @@ package GUI.student;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.Student;
 
@@ -98,16 +97,16 @@ public class StudentTemporaryScoreList extends javax.swing.JPanel {
   private void showData() {
     DefaultTableModel model = (DefaultTableModel) courseTable.getModel();
     String[] cols = {"id", "name", "professor", "grade", "objection", "answer", "score"};
-    String[][] data = Controller.getInstance().getCourseTemporaryScoreDataByStudent(student);
-    model.setDataVector(data, cols);
+//    String[][] data = Controller.getInstance().getCourseTemporaryScoreDataByStudent(student);
+//    model.setDataVector(data, cols);
   }
 
   private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
     for (int i = 0; i < courseTable.getModel().getRowCount(); i++) {
-      Controller.getInstance().addTemporaryScore(String.valueOf(student.getId()),
-              courseTable.getModel().getValueAt(i, 0).toString(), courseTable.getModel()
-                      .getValueAt(i, 4)==null ? "" : courseTable.getModel()
-                      .getValueAt(i, 4).toString(), null, null);
+//      Controller.getInstance().addTemporaryScore(String.valueOf(student.getId()),
+//              courseTable.getModel().getValueAt(i, 0).toString(), courseTable.getModel()
+//                      .getValueAt(i, 4)==null ? "" : courseTable.getModel()
+//                      .getValueAt(i, 4).toString(), null, null);
     }
 //  todo  mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentTemporaryScoreList(mainFrame, student)));
     mainFrame.repaintFrame();

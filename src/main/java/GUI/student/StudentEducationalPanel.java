@@ -6,7 +6,7 @@ package GUI.student;
  * and open the template in the editor.
  */
 
-import LOGIC.Controller;
+import shared.model.University;
 import shared.model.users.Student;
 
 import javax.swing.table.DefaultTableModel;
@@ -56,13 +56,13 @@ public class StudentEducationalPanel extends javax.swing.JPanel {
     passCreditLabel.setBackground(new java.awt.Color(200, 200, 200));
     passCreditLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     passCreditLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    passCreditLabel.setText("Passed credits: " + Controller.getInstance().getPassCredit(student));
+    passCreditLabel.setText("Passed credits: " + University.getInstance().getPassCredit(student));
     passCreditLabel.setOpaque(true);
 
     averageScoreLabel.setBackground(new java.awt.Color(200, 200, 200));
     averageScoreLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     averageScoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    averageScoreLabel.setText("average score: " + Controller.getInstance().getAverageScoreByStudent(student));
+    averageScoreLabel.setText("average score: " + University.getInstance().getAverageScoreByStudent(student));
     averageScoreLabel.setOpaque(true);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -96,9 +96,9 @@ public class StudentEducationalPanel extends javax.swing.JPanel {
   public void showData() {
     DefaultTableModel model = (DefaultTableModel) coursesTable.getModel();
     String[] cols = {"id", "course name", "credit", "score"};
-    String[][] data = Controller.getInstance().getScoresData(student);
+    //String[][] data = University.getInstance().getScoresData(student);
 
-    model.setDataVector(data, cols);
+    //model.setDataVector(data, cols);
   }
 
 

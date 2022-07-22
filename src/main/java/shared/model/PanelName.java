@@ -4,5 +4,6 @@ public enum PanelName {
   StudentPanel,
   StudentMainPanel,
   ProfessorPanel,
-  EduAssistantPanel
+  EduAssistantPanel,
+  StudentProfilePanel
 }

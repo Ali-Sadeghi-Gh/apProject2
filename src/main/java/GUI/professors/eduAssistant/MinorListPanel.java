@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.EducationalRequest;
 import shared.model.users.Professor;
 
@@ -106,9 +105,9 @@ public class MinorListPanel extends javax.swing.JPanel {
   private void showData() {
     DefaultTableModel model = (DefaultTableModel) requestTable.getModel();
     String[] cols = {"request id", "student id", "name", "faculty", "target faculty", "grade", "average score", "passed credits"};
-    String[][] data = Controller.getInstance().getMinorData(professor.getFacultyName(), EducationalRequest.Type.minor);
+//    String[][] data = Controller.getInstance().getMinorData(professor.getFacultyName(), EducationalRequest.Type.minor);
 
-    model.setDataVector(data, cols);
+//    model.setDataVector(data, cols);
   }
 
   private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {

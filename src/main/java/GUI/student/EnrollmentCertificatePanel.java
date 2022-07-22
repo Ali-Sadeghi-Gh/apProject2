@@ -5,7 +5,6 @@ package GUI.student;
  * and open the template in the editor.
  */
 
-import LOGIC.Controller;
 import shared.model.users.Student;
 
 /**
@@ -80,7 +79,7 @@ public class EnrollmentCertificatePanel extends javax.swing.JPanel {
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (certificateArea.getText().equals("")) {
-      certificateArea.append(Controller.getInstance().getEnrollmentString(student));
+//      certificateArea.append(Controller.getInstance().getEnrollmentString(student));
     }
   }
 

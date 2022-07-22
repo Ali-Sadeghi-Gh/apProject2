@@ -8,7 +8,6 @@ package GUI.professors.dean;
 
 import GUI.MainFrame;
 import GUI.professors.ProfessorPanel;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.Professor;
 
@@ -127,13 +126,13 @@ public class RemoveProfessorPanel extends javax.swing.JPanel {
       return;
     }
 
-    if (Controller.getInstance().removeProfessor(id, professor.getFacultyName())) {
-      JOptionPane.showMessageDialog(mainFrame, "professor with id: " + idField.getText() + " removed");
-      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RemoveProfessorPanel(mainFrame, professor), client));
-      mainFrame.repaintFrame();
-    } else {
-      JOptionPane.showMessageDialog(mainFrame, "professor not found");
-    }
+//    if (Controller.getInstance().removeProfessor(id, professor.getFacultyName())) {
+//      JOptionPane.showMessageDialog(mainFrame, "professor with id: " + idField.getText() + " removed");
+//      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RemoveProfessorPanel(mainFrame, professor), client));
+//      mainFrame.repaintFrame();
+//    } else {
+//      JOptionPane.showMessageDialog(mainFrame, "professor not found");
+//    }
   }
 
 

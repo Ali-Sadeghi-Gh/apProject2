@@ -6,7 +6,6 @@ package GUI.student;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.EducationalRequest;
 import shared.model.users.Student;
@@ -29,7 +28,7 @@ public class MinorRequestPanel extends javax.swing.JPanel {
   public MinorRequestPanel(MainFrame mainFrame, Student student) {
     this.student = student;
     this.mainFrame = mainFrame;
-    educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.minor);
+//    educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.minor);
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -53,20 +52,20 @@ public class MinorRequestPanel extends javax.swing.JPanel {
     facultyLabel.setText("target faculty:");
 
     facultyBox.setMaximumRowCount(10);
-    if (educationalRequest == null) {
-      String[] allFaculties = Controller.getInstance().getFacultiesName();
-      String[] facultyName = new String[allFaculties.length-2];
-      int counter = 0;
-      for (int i = 1; i < allFaculties.length; i++) {
-        if (!allFaculties[i].equals(student.getFacultyName())) {
-          facultyName[counter] = allFaculties[i];
-          counter++;
-        }
-      }
-      facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(facultyName));
-    } else {
-      facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{educationalRequest.getTargetFaculty()}));
-    }
+//    if (educationalRequest == null) {
+//      String[] allFaculties = Controller.getInstance().getFacultiesName();
+//      String[] facultyName = new String[allFaculties.length-2];
+//      int counter = 0;
+//      for (int i = 1; i < allFaculties.length; i++) {
+//        if (!allFaculties[i].equals(student.getFacultyName())) {
+//          facultyName[counter] = allFaculties[i];
+//          counter++;
+//        }
+//      }
+//      facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(facultyName));
+//    } else {
+//      facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{educationalRequest.getTargetFaculty()}));
+//    }
 
     requestButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
     requestButton.setText("minor dropout");
@@ -125,8 +124,8 @@ public class MinorRequestPanel extends javax.swing.JPanel {
 //        return;
 //      }
 
-      Controller.getInstance().addRequest(String.valueOf(student.getId()), null, student.getFacultyName(),
-              facultyBox.getSelectedItem().toString(), EducationalRequest.Type.minor);
+//      Controller.getInstance().addRequest(String.valueOf(student.getId()), null, student.getFacultyName(),
+//              facultyBox.getSelectedItem().toString(), EducationalRequest.Type.minor);
 
       JOptionPane.showMessageDialog(mainFrame, "your request submitted");
 //   todo   mainFrame.setContentPane(new StudentPanel(mainFrame, student, new MinorRequestPanel(mainFrame, student)));

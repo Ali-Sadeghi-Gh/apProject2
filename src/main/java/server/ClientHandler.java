@@ -9,6 +9,7 @@ import shared.model.University;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 import shared.model.users.User;
+import shared.model.users.UserRole;
 import shared.request.Request;
 import shared.response.Response;
 import shared.response.ResponseStatus;
@@ -81,6 +82,17 @@ public class ClientHandler implements Runnable {
         response.addData("educationalStatus", student.getStatus());
         response.addData("supervisor", University.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
         break;
+      case StudentProfilePanel:
+        student = (Student) user;
+        response.addData("id", student.getId());
+        response.addData("melliCode", student.getMelliCode());
+        response.addData("faculty", student.getFacultyName());
+        response.addData("phoneNumber", student.getPhoneNumber());
+        response.addData("enteringYear", student.getEnteringYear());
+        response.addData("grade", student.getGrade());
+        response.addData("status", student.getStatus());
+        response.addData("supervisor", University.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
+        response.addData("averageScore", University.getInstance().getAverageScoreByStudent(student));
     }
     sendResponse(response);
   }
@@ -97,18 +109,18 @@ public class ClientHandler implements Runnable {
       this.user = user;
       response = new Response(ResponseStatus.OK);
 
-      PanelName panelName = null;
+      UserRole userRole = null;
       if (user instanceof Student) {
-        panelName = PanelName.StudentPanel;
+        userRole = UserRole.Student;
       } else if (user instanceof Professor) {
         Professor professor = (Professor) user;
         if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
-          panelName = PanelName.EduAssistantPanel;
+          userRole = UserRole.EduAssistant;
         } else {
-          panelName = PanelName.ProfessorPanel;
+          userRole = UserRole.Professor;
         }
       }
-      response.addData("panelName", panelName);
+      response.addData("userRole", userRole);
     }
 
     sendResponse(response);

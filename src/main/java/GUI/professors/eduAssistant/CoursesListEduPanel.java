@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 
@@ -72,7 +71,7 @@ public class CoursesListEduPanel extends javax.swing.JPanel {
     facultyLabel.setText("faculty:");
 
     facultyBox.setMaximumRowCount(10);
-    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
+//    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
 
 
     professorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -207,12 +206,12 @@ public class CoursesListEduPanel extends javax.swing.JPanel {
   private void showData(String faculty, String professor, String grade) {
     DefaultTableModel model = (DefaultTableModel) courseTable.getModel();
     String[] cols = {"id", "name", "credit", "professor", "faculty", "grade", "time of class"};
-    String[][] data = Controller.getInstance().getCoursesData(faculty, professor, grade);
-
-    if (data.length == 0) {
-      JOptionPane.showMessageDialog(mainFrame, "no course found");
-    }
-    model.setDataVector(data, cols);
+//    String[][] data = Controller.getInstance().getCoursesData(faculty, professor, grade);
+//
+//    if (data.length == 0) {
+//      JOptionPane.showMessageDialog(mainFrame, "no course found");
+//    }
+//    model.setDataVector(data, cols);
   }
 
 

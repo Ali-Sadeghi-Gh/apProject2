@@ -5,7 +5,6 @@ package GUI;
  * and open the template in the editor.
  */
 
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.User;
 
@@ -73,12 +72,12 @@ public class ExamListPanel extends javax.swing.JPanel {
   private void showData() {
     DefaultTableModel model = (DefaultTableModel) examTable.getModel();
     String[] cols = {"id", "name", "credit", "professor", "faculty", "grade", "date of exam"};
-    String[][] data = Controller.getInstance().getExamListData(user);
+//    String[][] data = Controller.getInstance().getExamListData(user);
 
-    if (data.length == 0) {
-      JOptionPane.showMessageDialog(mainFrame, "you have no course");
-    }
-    model.setDataVector(data, cols);
+//    if (data.length == 0) {
+//      JOptionPane.showMessageDialog(mainFrame, "you have no course");
+//    }
+//    model.setDataVector(data, cols);
   }
 
   // Variables declaration - do not modify

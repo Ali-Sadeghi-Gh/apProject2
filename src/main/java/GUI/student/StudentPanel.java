@@ -8,6 +8,7 @@ package GUI.student;
 
 import GUI.*;
 import client.Client;
+import shared.model.PanelName;
 
 import javax.swing.*;
 import java.io.File;
@@ -385,8 +386,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentMainPanel(student)));
-//        mainFrame.repaintFrame();
+        client.changePanel(PanelName.StudentMainPanel);
     }
 
     private void registrationMattersButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,8 +409,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentProfilePanel(mainFrame, student)));
-//        mainFrame.repaintFrame();
+        client.changePanel(PanelName.StudentProfilePanel);
     }
 
     private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -7,7 +7,6 @@ package GUI.professors;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.Professor;
 
@@ -180,14 +179,14 @@ public class ProfessorProfilePanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void phoneChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    Controller.getInstance().changePhoneNumber(phoneChangeField.getText(), professor);
+//    Controller.getInstance().changePhoneNumber(phoneChangeField.getText(), professor);
     JOptionPane.showMessageDialog(mainFrame, "successfully changed");
     mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), client));
     mainFrame.repaintFrame();
   }
 
   private void emailChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    Controller.getInstance().changeEmail(emailChangeField.getText(), professor);
+//    Controller.getInstance().changeEmail(emailChangeField.getText(), professor);
     JOptionPane.showMessageDialog(mainFrame, "successfully changed");
     mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), client));
     mainFrame.repaintFrame();

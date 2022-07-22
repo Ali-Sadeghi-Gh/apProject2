@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.users.Professor;
 
 import javax.swing.*;
@@ -225,10 +224,10 @@ public class AddProfessorPanel extends javax.swing.JPanel {
       return;
     }
 
-    int id = Controller.getInstance().addProfessor(nameField.getText(), emailField.getText(), melliCodeField.getText(),
-            professor.getFacultyName(), phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
-            degreeBox.getSelectedItem().toString(), Professor.Position.professor.name());
-    JOptionPane.showMessageDialog(mainFrame, "professor with id " + id + " added");
+//    int id = Controller.getInstance().addProfessor(nameField.getText(), emailField.getText(), melliCodeField.getText(),
+//            professor.getFacultyName(), phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
+//            degreeBox.getSelectedItem().toString(), Professor.Position.professor.name());
+//    JOptionPane.showMessageDialog(mainFrame, "professor with id " + id + " added");
 
 //  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddProfessorPanel(mainFrame, professor)));
     mainFrame.repaintFrame();

@@ -6,11 +6,9 @@ package GUI.student;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.EducationalRequest;
 import shared.model.users.Student;
-import shared.model.users.Professor;
 
 import javax.swing.*;
 
@@ -117,23 +115,23 @@ public class RecommendationRequestPanel extends javax.swing.JPanel {
       return;
     }
 
-    Professor professor = Controller.getInstance().findProfessorById(Integer.parseInt(idField.getText()));
-    if (professor == null) {
-      JOptionPane.showMessageDialog(mainFrame, "professor id not found");
-      idField.setText("");
-      resultArea.setText("");
-      return;
-    }
+//    Professor professor = Controller.getInstance().findProfessorById(Integer.parseInt(idField.getText()));
+//    if (professor == null) {
+//      JOptionPane.showMessageDialog(mainFrame, "professor id not found");
+//      idField.setText("");
+//      resultArea.setText("");
+//      return;
+//    }
 
-    EducationalRequest educationalRequest = Controller.getInstance().findRequestByProfessor(student, professor, EducationalRequest.Type.recommendation);
-    if (educationalRequest == null) {
-      educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()), String.valueOf(professor.getId()),
-              null, null, EducationalRequest.Type.recommendation);
-      JOptionPane.showMessageDialog(mainFrame, "your request submitted");
-    } else {
-      JOptionPane.showMessageDialog(mainFrame, "you request recommendation before");
-    }
-    resultArea.setText(educationalRequest.getResult());
+//    EducationalRequest educationalRequest = Controller.getInstance().findRequestByProfessor(student, professor, EducationalRequest.Type.recommendation);
+//    if (educationalRequest == null) {
+//      educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()), String.valueOf(professor.getId()),
+//              null, null, EducationalRequest.Type.recommendation);
+//      JOptionPane.showMessageDialog(mainFrame, "your request submitted");
+//    } else {
+//      JOptionPane.showMessageDialog(mainFrame, "you request recommendation before");
+//    }
+//    resultArea.setText(educationalRequest.getResult());
     idField.setText("");
   }
 

@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.users.Professor;
 
 import javax.swing.*;
@@ -117,13 +116,13 @@ public class RemoveCoursePanel extends javax.swing.JPanel {
       return;
     }
 
-    if (Controller.getInstance().removeCourse(id, professor.getFacultyName())) {
-      JOptionPane.showMessageDialog(mainFrame, "course with id: " + idField.getText() + " removed");
+//    if (Controller.getInstance().removeCourse(id, professor.getFacultyName())) {
+//      JOptionPane.showMessageDialog(mainFrame, "course with id: " + idField.getText() + " removed");
 //   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new RemoveCoursePanel(mainFrame, professor)));
-      mainFrame.repaintFrame();
-    } else {
-      JOptionPane.showMessageDialog(mainFrame, "course not found");
-    }
+//      mainFrame.repaintFrame();
+//    } else {
+//      JOptionPane.showMessageDialog(mainFrame, "course not found");
+//    }
   }
 
 

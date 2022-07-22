@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.EducationalRequest;
 import shared.model.users.Professor;
 
@@ -106,9 +105,9 @@ public class DropoutListPanel extends javax.swing.JPanel {
   private void showData() {
     DefaultTableModel model = (DefaultTableModel) requestTable.getModel();
     String[] cols = {"request id", "student id", "name", "grade", "average score", "passed credits"};
-    String[][] data = Controller.getInstance().getDropoutData(professor.getFacultyName(), EducationalRequest.Type.dropout);
+//    String[][] data = Controller.getInstance().getDropoutData(professor.getFacultyName(), EducationalRequest.Type.dropout);
 
-    model.setDataVector(data, cols);
+//    model.setDataVector(data, cols);
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -48,7 +48,9 @@ public class Loop {
   }
 
   public static void stopCurrent() {
-    currentLoop.stop();
+    if (currentLoop != null) {
+      currentLoop.stop();
+    }
   }
 
   private void run() {

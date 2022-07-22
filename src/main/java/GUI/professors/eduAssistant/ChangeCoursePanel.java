@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.*;
 import shared.model.users.Professor;
 import shared.model.users.Student;
@@ -314,10 +313,10 @@ public class ChangeCoursePanel extends javax.swing.JPanel {
       JOptionPane.showMessageDialog(mainFrame, "professor id must be a number");
       return;
     }
-    if (Controller.getInstance().findProfessorById(Integer.parseInt(professorField.getText())) == null) {
-      JOptionPane.showMessageDialog(mainFrame, "professor not found");
-      return;
-    }
+//    if (Controller.getInstance().findProfessorById(Integer.parseInt(professorField.getText())) == null) {
+//      JOptionPane.showMessageDialog(mainFrame, "professor not found");
+//      return;
+//    }
     try {
       Integer.parseInt(creditField.getText());
     } catch (Exception e) {
@@ -364,8 +363,8 @@ public class ChangeCoursePanel extends javax.swing.JPanel {
       return;
     }
 
-    Controller.getInstance().changeCourse(changingCourse, nameField.getText(), gradeBox.getSelectedItem().toString(),
-            creditField.getText(), Time.convertDateToStringExam(examDate), classTimeField.getText(), professorField.getText());
+//    Controller.getInstance().changeCourse(changingCourse, nameField.getText(), gradeBox.getSelectedItem().toString(),
+//            creditField.getText(), Time.convertDateToStringExam(examDate), classTimeField.getText(), professorField.getText());
 
     JOptionPane.showMessageDialog(mainFrame, "course's information changed");
 // todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ChangeCoursePanel(mainFrame, professor)));
@@ -381,7 +380,7 @@ public class ChangeCoursePanel extends javax.swing.JPanel {
       mainFrame.repaintFrame();
       return;
     }
-    changingCourse = Controller.getInstance().findCourse(Integer.parseInt(idField.getText()));
+//    changingCourse = Controller.getInstance().findCourse(Integer.parseInt(idField.getText()));
 
     idField.setText("");
     if (changingCourse == null || !changingCourse.getFacultyName().equals(professor.getFacultyName())) {
@@ -392,8 +391,8 @@ public class ChangeCoursePanel extends javax.swing.JPanel {
     }
 
     nameField.setText(changingCourse.getName()==null ? "" : changingCourse.getName());
-    professorField.setText(Controller.getInstance().findProfessorByCourse(changingCourse.getId())==null ?
-            "" : String.valueOf(Controller.getInstance().findProfessorByCourse(changingCourse.getId()).getId()));
+//    professorField.setText(Controller.getInstance().findProfessorByCourse(changingCourse.getId())==null ?
+//            "" : String.valueOf(Controller.getInstance().findProfessorByCourse(changingCourse.getId()).getId()));
     creditField.setText(String.valueOf(changingCourse.getCredit()));
     classTimeField.setText(changingCourse.getClassTime()==null ? "" : changingCourse.getClassTime());
 

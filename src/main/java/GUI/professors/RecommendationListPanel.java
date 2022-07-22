@@ -6,7 +6,6 @@ package GUI.professors;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.EducationalRequest;
 import shared.model.users.Professor;
@@ -110,9 +109,9 @@ public class RecommendationListPanel extends javax.swing.JPanel {
   private void showData() {
     DefaultTableModel model = (DefaultTableModel) requestTable.getModel();
     String[] cols = {"request id", "student id", "name", "faculty", "grade", "average score", "passed credits"};
-    String[][] data = Controller.getInstance().getRecommendationData(professor, EducationalRequest.Type.recommendation);
+//    String[][] data = Controller.getInstance().getRecommendationData(professor, EducationalRequest.Type.recommendation);
 
-    model.setDataVector(data, cols);
+//    model.setDataVector(data, cols);
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {

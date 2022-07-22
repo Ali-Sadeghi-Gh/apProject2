@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.Time;
 import shared.model.users.Professor;
 import shared.model.users.Student;
@@ -287,10 +286,10 @@ public class AddCoursePanel extends javax.swing.JPanel {
       JOptionPane.showMessageDialog(mainFrame, "professor id must be a number");
       return;
     }
-    if (Controller.getInstance().findProfessorById(Integer.parseInt(professorField.getText())) == null) {
-      JOptionPane.showMessageDialog(mainFrame, "professor not found");
-      return;
-    }
+//    if (Controller.getInstance().findProfessorById(Integer.parseInt(professorField.getText())) == null) {
+//      JOptionPane.showMessageDialog(mainFrame, "professor not found");
+//      return;
+//    }
     try {
       Integer.parseInt(creditField.getText());
     } catch (Exception e) {
@@ -337,10 +336,10 @@ public class AddCoursePanel extends javax.swing.JPanel {
       return;
     }
 
-    int id = Controller.getInstance().addCourse(nameField.getText(), professor.getFacultyName(), gradeBox.getSelectedItem().toString(),
-            creditField.getText(), Time.convertDateToStringExam(examDate), classTimeField.getText(), professorField.getText());
+//    int id = Controller.getInstance().addCourse(nameField.getText(), professor.getFacultyName(), gradeBox.getSelectedItem().toString(),
+//            creditField.getText(), Time.convertDateToStringExam(examDate), classTimeField.getText(), professorField.getText());
 
-    JOptionPane.showMessageDialog(mainFrame, "course with id: " + id + " added");
+//    JOptionPane.showMessageDialog(mainFrame, "course with id: " + id + " added");
 //  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddCoursePanel(mainFrame,professor)));
     mainFrame.repaintFrame();
   }

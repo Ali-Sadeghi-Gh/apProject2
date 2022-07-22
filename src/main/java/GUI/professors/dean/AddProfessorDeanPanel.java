@@ -7,7 +7,6 @@ package GUI.professors.dean;
 
 import GUI.MainFrame;
 import GUI.professors.ProfessorPanel;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.Professor;
 
@@ -124,12 +123,12 @@ public class AddProfessorDeanPanel extends javax.swing.JPanel {
 
     positionBox.setMaximumRowCount(10);
     String[] positionStrings;
-    if (Controller.getInstance().findEduAssistantByFaculty(professor.getFacultyName()) == null) {
-      positionStrings = new String[]{Professor.Position.professor.name(), Professor.Position.eduAssistant.name()};
-    } else {
-      positionStrings = new String[]{Professor.Position.professor.name()};
-    }
-    positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(positionStrings));
+//    if (Controller.getInstance().findEduAssistantByFaculty(professor.getFacultyName()) == null) {
+//      positionStrings = new String[]{Professor.Position.professor.name(), Professor.Position.eduAssistant.name()};
+//    } else {
+//      positionStrings = new String[]{Professor.Position.professor.name()};
+//    }
+//    positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(positionStrings));
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -258,10 +257,10 @@ public class AddProfessorDeanPanel extends javax.swing.JPanel {
       return;
     }
 
-    int id = Controller.getInstance().addProfessor(nameField.getText(), emailField.getText(), melliCodeField.getText(),
-            professor.getFacultyName(), phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
-            degreeBox.getSelectedItem().toString(), positionBox.getSelectedItem().toString());
-    JOptionPane.showMessageDialog(mainFrame, "professor with id " + id + " added");
+//    int id = Controller.getInstance().addProfessor(nameField.getText(), emailField.getText(), melliCodeField.getText(),
+//            professor.getFacultyName(), phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
+//            degreeBox.getSelectedItem().toString(), positionBox.getSelectedItem().toString());
+//    JOptionPane.showMessageDialog(mainFrame, "professor with id " + id + " added");
 
     mainFrame.setContentPane(new ProfessorPanel(mainFrame, new AddProfessorDeanPanel(mainFrame, professor), client));
     mainFrame.repaintFrame();

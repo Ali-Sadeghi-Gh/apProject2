@@ -6,8 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import GUI.student.StudentEducationalPanel;
-import LOGIC.Controller;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 
@@ -117,25 +115,25 @@ public class EduEducationalPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void nameSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    Student student = Controller.getInstance().findStudentByName(nameField.getText());
-    if (student == null) {
-      JOptionPane.showMessageDialog(mainFrame, "no student found");
-    } else {
+//    Student student = Controller.getInstance().findStudentByName(nameField.getText());
+//    if (student == null) {
+//      JOptionPane.showMessageDialog(mainFrame, "no student found");
+//    } else {
 //  todo    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduEducationalPanel(mainFrame, professor, new StudentEducationalPanel(student))));
-      mainFrame.repaintFrame();
-    }
+//      mainFrame.repaintFrame();
+//    }
   }
 
   private void idSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
     try {
       int id = Integer.parseInt(idField.getText());
-      Student student = Controller.getInstance().findStudentById(id);
-      if (student == null) {
-        JOptionPane.showMessageDialog(mainFrame, "no student found");
-      } else {
+//      Student student = Controller.getInstance().findStudentById(id);
+//      if (student == null) {
+//        JOptionPane.showMessageDialog(mainFrame, "no student found");
+//      } else {
 //   todo     mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduEducationalPanel(mainFrame, professor, new StudentEducationalPanel(student))));
-        mainFrame.repaintFrame();
-      }
+//        mainFrame.repaintFrame();
+//      }
     } catch (Exception e) {
       JOptionPane.showMessageDialog(mainFrame, "id must be a number");
     }

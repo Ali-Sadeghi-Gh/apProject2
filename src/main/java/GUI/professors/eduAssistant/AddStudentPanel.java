@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 
@@ -275,16 +274,16 @@ public class AddStudentPanel extends javax.swing.JPanel {
       return;
     }
 
-    Professor supervisor = Controller.getInstance().findProfessorById(Integer.parseInt(supervisorField.getText()));
-    if (supervisor == null) {
-      JOptionPane.showMessageDialog(mainFrame, "invalid supervisor id");
-      return;
-    }
+//    Professor supervisor = Controller.getInstance().findProfessorById(Integer.parseInt(supervisorField.getText()));
+//    if (supervisor == null) {
+//      JOptionPane.showMessageDialog(mainFrame, "invalid supervisor id");
+//      return;
+//    }
 
-    int id = Controller.getInstance().addStudent(nameField.getText(), emailField.getText(), melliCodeField.getText(),
-            professor.getFacultyName(), phoneField.getText(), passwordField.getText(), String.valueOf(supervisor.getId()), enteringYearField.getText(),
-            statusBox.getSelectedItem().toString(), gradeBox.getSelectedItem().toString());
-    JOptionPane.showMessageDialog(mainFrame, "student with id " + id + " added");
+//    int id = Controller.getInstance().addStudent(nameField.getText(), emailField.getText(), melliCodeField.getText(),
+//            professor.getFacultyName(), phoneField.getText(), passwordField.getText(), String.valueOf(supervisor.getId()), enteringYearField.getText(),
+//            statusBox.getSelectedItem().toString(), gradeBox.getSelectedItem().toString());
+//    JOptionPane.showMessageDialog(mainFrame, "student with id " + id + " added");
 
 //  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddStudentPanel(mainFrame, professor)));
     mainFrame.repaintFrame();

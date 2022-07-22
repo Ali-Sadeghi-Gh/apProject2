@@ -1,7 +1,6 @@
 package GUI;
 
 import GUI.professors.ProfessorPanel;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.*;
 
@@ -199,8 +198,8 @@ public class ChangePasswordPanel extends javax.swing.JPanel {
     }
 
 
-    Controller.getInstance().changePassword(newPassField.getText(), user);
-    Controller.getInstance().setUserLoginTime(user);
+//    Controller.getInstance().changePassword(newPassField.getText(), user);
+//    Controller.getInstance().setUserLoginTime(user);
 
     if (user instanceof Student) {
 //todo      mainFrame.setContentPane(new StudentPanel(mainFrame, (Student) user, new StudentMainPanel((Student) user)));

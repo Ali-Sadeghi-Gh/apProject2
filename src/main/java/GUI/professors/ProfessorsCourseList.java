@@ -6,7 +6,6 @@ package GUI.professors;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.Professor;
 
@@ -72,8 +71,8 @@ public class ProfessorsCourseList extends javax.swing.JPanel {
           mainFrame.repaintFrame();
           return;
         }
-        mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorTemporaryScoreList(mainFrame,
-                professor, Controller.getInstance().findCourse(courseId)), client));
+//        mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorTemporaryScoreList(mainFrame,
+//                professor, Controller.getInstance().findCourse(courseId)), client));
         mainFrame.repaintFrame();
       }
     });
@@ -103,8 +102,8 @@ public class ProfessorsCourseList extends javax.swing.JPanel {
   private void showData() {
     DefaultTableModel model = (DefaultTableModel) courseTable.getModel();
     String[] cols = {"id", "name", "credit", "faculty", "grade"};
-    String[][] data = Controller.getInstance().getCoursesDataByProfessor(professor);
-    model.setDataVector(data, cols);
+//    String[][] data = Controller.getInstance().getCoursesDataByProfessor(professor);
+//    model.setDataVector(data, cols);
   }
 
   // Variables declaration - do not modify

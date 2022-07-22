@@ -7,7 +7,6 @@ package GUI.professors.dean;
 
 import GUI.MainFrame;
 import GUI.professors.ProfessorPanel;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.users.Professor;
 
@@ -73,7 +72,7 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
     facultyLabel.setText("faculty:");
 
     facultyBox.setMaximumRowCount(10);
-    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
+//    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
 
 
     nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -199,12 +198,12 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
   public void showData(String faculty, String name, String degree) {
     DefaultTableModel model = (DefaultTableModel) professorsTable.getModel();
     String[] cols = {"id", "name", "faculty", "email", "degree"};
-    String[][] data = Controller.getInstance().getProfessorsData(faculty, name, degree);
-
-    if (data.length == 0) {
-      JOptionPane.showMessageDialog(mainFrame, "no professor found");
-    }
-    model.setDataVector(data, cols);
+//    String[][] data = Controller.getInstance().getProfessorsData(faculty, name, degree);
+//
+//    if (data.length == 0) {
+//      JOptionPane.showMessageDialog(mainFrame, "no professor found");
+//    }
+//    model.setDataVector(data, cols);
   }
 
   private void removeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {

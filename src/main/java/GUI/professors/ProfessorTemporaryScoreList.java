@@ -6,7 +6,6 @@ package GUI.professors;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import client.Client;
 import shared.model.*;
 import shared.model.users.Professor;
@@ -173,8 +172,8 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
   private void showData() {
     DefaultTableModel model = (DefaultTableModel) studentTable.getModel();
     String[] cols = {"id", "name", "faculty", "grade", "objection", "answer", "score"};
-    String[][] data = Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course);
-    model.setDataVector(data, cols);
+//    String[][] data = Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course);
+//    model.setDataVector(data, cols);
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,10 +211,10 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
     }
 
     for (int i = 0; i < studentTable.getModel().getRowCount(); i++) {
-      Controller.getInstance().addTemporaryScore(studentTable.getModel().getValueAt(i, 0).toString(),
-              String.valueOf(course.getId()), null, studentTable.getModel().getValueAt(i, 5)==null
-                      ? "" : studentTable.getModel().getValueAt(i, 5).toString(), studentTable.getModel()
-                      .getValueAt(i, 6)==null ? "" : studentTable.getModel().getValueAt(i, 6).toString());
+//      Controller.getInstance().addTemporaryScore(studentTable.getModel().getValueAt(i, 0).toString(),
+//              String.valueOf(course.getId()), null, studentTable.getModel().getValueAt(i, 5)==null
+//                      ? "" : studentTable.getModel().getValueAt(i, 5).toString(), studentTable.getModel()
+//                      .getValueAt(i, 6)==null ? "" : studentTable.getModel().getValueAt(i, 6).toString());
     }
 
     if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
@@ -228,19 +227,19 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
   }
 
   private void finalButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (studentTable.getModel().getRowCount() == Controller.getInstance().findTemporaryScoreByCourse(course).length) {
-      Controller.getInstance().setFinalScores(course);
-      JOptionPane.showMessageDialog(mainFrame, "scores submitted");
-      if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
+//    if (studentTable.getModel().getRowCount() == Controller.getInstance().findTemporaryScoreByCourse(course).length) {
+//      Controller.getInstance().setFinalScores(course);
+//      JOptionPane.showMessageDialog(mainFrame, "scores submitted");
+//      if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
 //    todo    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorsCourseList(mainFrame, professor)));
-        mainFrame.repaintFrame();
-        return;
-      }
-      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsCourseList(mainFrame, professor), client));
-      mainFrame.repaintFrame();
-    } else {
-      JOptionPane.showMessageDialog(mainFrame, "scores must submit temporary first");
-    }
+//        mainFrame.repaintFrame();
+//        return;
+//      }
+//      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsCourseList(mainFrame, professor), client));
+//      mainFrame.repaintFrame();
+//    } else {
+//      JOptionPane.showMessageDialog(mainFrame, "scores must submit temporary first");
+//    }
   }
 
 

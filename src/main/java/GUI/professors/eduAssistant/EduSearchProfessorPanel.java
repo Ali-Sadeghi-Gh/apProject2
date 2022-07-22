@@ -6,7 +6,6 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import LOGIC.Controller;
 import shared.model.users.Professor;
 
 import javax.swing.*;
@@ -158,10 +157,10 @@ public class EduSearchProfessorPanel extends javax.swing.JPanel {
     degreeLabel.setText("degree: " + (professor.getDegree()==null ? "-" : professor.getDegree()));
 
     String[] cols = {"course id", "course name", "student id", "student name", "objection", "answer", "score"};
-    String[][] data = Controller.getInstance().getAllScoresDataByProfessor(professor);
+//    String[][] data = Controller.getInstance().getAllScoresDataByProfessor(professor);
 
     DefaultTableModel model = (DefaultTableModel) scoreTable.getModel();
-    model.setDataVector(data, cols);
+//    model.setDataVector(data, cols);
   }
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,14 +170,14 @@ public class EduSearchProfessorPanel extends javax.swing.JPanel {
       JOptionPane.showMessageDialog(mainFrame, "professor id must be a number");
       return;
     }
-    Professor searchProfessor = Controller.getInstance().findProfessorById(Integer.parseInt(professorField.getText()));
-    professorField.setText("");
+//    Professor searchProfessor = Controller.getInstance().findProfessorById(Integer.parseInt(professorField.getText()));
+//    professorField.setText("");
 
-    if (searchProfessor == null) {
-      JOptionPane.showMessageDialog(mainFrame, "professor not found");
-    } else {
-      showData(searchProfessor);
-    }
+//    if (searchProfessor == null) {
+//      JOptionPane.showMessageDialog(mainFrame, "professor not found");
+//    } else {
+//      showData(searchProfessor);
+//    }
   }
 
   // Variables declaration - do not modify

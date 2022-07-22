@@ -146,4 +146,74 @@ public class University {
     }
     return null;
   }
+
+  public double getAverageScoreByStudent(Student student) {
+    double sumScore = 0;
+    if (!findScoreByStudent(student).isEmpty()) {
+      for (Score score : findScoreByStudent(student)) {
+        if (convertScoreToData(score) != null) {
+          sumScore += Integer.parseInt(convertScoreToData(score)[2]) * Double.parseDouble(convertScoreToData(score)[3]);
+        }
+      }
+      int averageScore = 0;
+      if (getPassCredit(student) != 0) {
+        averageScore = (int) ((sumScore / getAllCredit(student)) * 100 + 0.5);
+      }
+      return (double) averageScore / 100;
+    }
+    return 0;
+  }
+
+  public List<Score> findScoreByStudent(Student student) {
+    List<Score> scores = new ArrayList<>();
+    for (Score score : University.getInstance().getScores()) {
+      if (score.getStudentId() == student.getId()) {
+        scores.add(score);
+      }
+    }
+    return scores;
+  }
+
+  public String[] convertScoreToData(Score score) {
+    String[] data = addCourseDataToScoreData(score.getCourseId());
+    if (data != null) {
+      data[3] = String.valueOf(score.getScore());
+    }
+    return data;
+  }
+
+  public int getAllCredit(Student student) {
+    int credit = 0;
+    for (Score score : findScoreByStudent(student)) {
+      credit += Integer.parseInt(convertScoreToData(score)[2]);
+    }
+    return credit;
+  }
+
+  public int getPassCredit(Student student) {
+    int passCredit = 0;
+    for (Score score : findScoreByStudent(student)) {
+      if (convertScoreToData(score) != null && score.getScore() >= 10) {
+        passCredit += Integer.parseInt(convertScoreToData(score)[2]);
+      }
+    }
+    return passCredit;
+  }
+
+  public String[] addCourseDataToScoreData(int courseId) {
+    Course course = findCourse(courseId);
+    if (course != null) {
+      return new String[]{String.valueOf(course.getId()), course.getName(), String.valueOf(course.getCredit()), "N/A"};
+    }
+    return null;
+  }
+
+  public Course findCourse(int id) {
+    for (Course course : University.getInstance().getCourses()) {
+      if (course.getId() == id) {
+        return course;
+      }
+    }
+    return null;
+  }
 }
