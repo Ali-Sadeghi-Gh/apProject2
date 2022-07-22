@@ -56,4 +56,20 @@ public class ServerController {
 
     return gson.fromJson(scanner.nextLine(), Response.class);
   }
+
+  public Response sendChangePhoneNumberRequest(String phoneNumber) {
+    Request request = new Request(RequestType.CHANGE_PHONE_NUMBER);
+    request.addData("phoneNumber", phoneNumber);
+    sendRequest(request);
+
+    return gson.fromJson(scanner.nextLine(), Response.class);
+  }
+
+  public Response sendChangeEmailRequest(String email) {
+    Request request = new Request(RequestType.CHANGE_EMAIL);
+    request.addData("email", email);
+    sendRequest(request);
+
+    return gson.fromJson(scanner.nextLine(), Response.class);
+  }
 }

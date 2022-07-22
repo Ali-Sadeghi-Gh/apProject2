@@ -8,8 +8,6 @@ import GUI.professors.eduAssistant.EduAssistantPanel;
 import GUI.student.StudentMainPanel;
 import GUI.student.StudentPanel;
 import GUI.student.StudentProfilePanel;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import shared.model.PanelName;
 import shared.model.users.UserRole;
 import shared.response.Response;
@@ -108,8 +106,8 @@ public class Client {
     new Loop(1, () -> {
       Response response1 = serverController.sendUpdateRequest(PanelName.ProfessorPanel);
       professorPanel.update((int) Double.parseDouble(String.valueOf(response1.getData("id"))),
-              (String) response1.getData("name"), (String) response1.getData("lastLogin"),
-              (String) response1.getData("email"), (String) response1.getData("currentTime"));
+              (String) response1.getData("lastLogin"), (String) response1.getData("email"),
+              (String) response1.getData("name"), (String) response1.getData("currentTime"));
     }).start();
   }
 
@@ -120,8 +118,8 @@ public class Client {
     new Loop(1, () -> {
       Response response1 = serverController.sendUpdateRequest(PanelName.EduAssistantPanel);
       eduAssistantPanel.update((int) Double.parseDouble(String.valueOf(response1.getData("id"))),
-              (String) response1.getData("name"), (String) response1.getData("lastLogin"),
-              (String) response1.getData("email"), (String) response1.getData("currentTime"));
+              (String) response1.getData("lastLogin"), (String) response1.getData("email"),
+              (String) response1.getData("name"), (String) response1.getData("currentTime"));
     }).start();
   }
 
@@ -175,5 +173,19 @@ public class Client {
                 (String) response1.getData("name"), (String) response1.getData("currentTime"));
       }
     }).start();
+  }
+
+  public void changePhoneNumber(String phoneNumber) {
+    Response response = serverController.sendChangePhoneNumberRequest(phoneNumber);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage("successfully changed");
+    }
+  }
+
+  public void changeEmail(String email) {
+    Response response = serverController.sendChangeEmailRequest(email);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage("successfully changed");
+    }
   }
 }

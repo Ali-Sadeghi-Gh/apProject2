@@ -197,17 +197,13 @@ public class StudentProfilePanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void phoneChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    Controller.getInstance().changePhoneNumber(phoneChangeField.getText(), student);
-//    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
-////  todo  mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentProfilePanel(mainFrame, student)));
-//    mainFrame.repaintFrame();
+    client.changePhoneNumber(phoneChangeField.getText());
+    phoneChangeField.setText("");
   }
 
   private void emailChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    Controller.getInstance().changeEmail(emailChangeField.getText(), student);
-//    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
-////  todo  mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentProfilePanel(mainFrame, student)));
-//    mainFrame.repaintFrame();
+    client.changeEmail(emailChangeField.getText());
+    emailChangeField.setText("");
   }
 
   public void update(int id, String melliCode, String faculty, String phoneNumber, String enteringYear, String grade, String status, String supervisor, double averageScore) {

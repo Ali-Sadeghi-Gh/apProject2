@@ -492,7 +492,7 @@ public class StudentPanel extends javax.swing.JPanel {
         File file = new File("./src/main/resources/pics/" + id + ".png");
         imgLabel.setIcon(new ImageIcon("./src/main/resources/pics/" + (file.exists() ? id : "default") + ".png"));
 
-        timeLabel.setText("last login: " + lastLogin);
+        timeLabel.setText("last login: " + ((lastLogin==null || lastLogin.equals("")) ? "-" : lastLogin));
         emailLabel.setText("email: " + ((email==null || email.equals("")) ? "-" : email));
         nameLabel.setText("name: " + ((name==null || name.equals("")) ? "-" : name));
         currentTimeLabel.setText("current time: " + currentTime);

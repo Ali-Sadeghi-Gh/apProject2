@@ -2,5 +2,7 @@ package shared.request;
 
 public enum RequestType {
   LOGIN,
-  UPDATE
+  UPDATE,
+  CHANGE_PHONE_NUMBER,
+  CHANGE_EMAIL
 }

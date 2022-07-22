@@ -167,17 +167,13 @@ public class ProfessorProfilePanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void phoneChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    Controller.getInstance().changePhoneNumber(phoneChangeField.getText(), professor);
-//    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), client));
-//    mainFrame.repaintFrame();
+    client.changePhoneNumber(phoneChangeField.getText());
+    phoneChangeField.setText("");
   }
 
   private void emailChangeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    Controller.getInstance().changeEmail(emailChangeField.getText(), professor);
-//    JOptionPane.showMessageDialog(mainFrame, "successfully changed");
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorProfilePanel(mainFrame, professor), client));
-//    mainFrame.repaintFrame();
+    client.changeEmail(emailChangeField.getText());
+    emailChangeField.setText("");
   }
 
   public void update(int id, String melliCode, String faculty, String phoneNumber, String degree, String roomNumber) {

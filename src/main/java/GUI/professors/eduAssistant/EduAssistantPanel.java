@@ -406,12 +406,12 @@ public class EduAssistantPanel extends javax.swing.JPanel {
 //    mainFrame.repaintFrame();
   }
 
-  public void update(int id, String name, String lastLogin, String email, String currentTime) {
+  public void update(int id, String lastLogin, String email, String name, String currentTime) {
     File file = new File("./src/main/resources/pics/" + id + ".png");
     imgLabel.setIcon(new ImageIcon("./src/main/resources/pics/" + (file.exists() ? id : "default") + ".png"));
 
     nameLabel.setText("name: " + ((name==null || name.equals("")) ? "-" : name));
-    timeLabel.setText("last login: " + lastLogin);
+    timeLabel.setText("last login: " + ((lastLogin==null || lastLogin.equals("")) ? "-" : lastLogin));
     emailLabel.setText("email: " + ((email==null || email.equals("")) ? "-" : email));
     currentTimeLabel.setText("current time: " + currentTime);
   }

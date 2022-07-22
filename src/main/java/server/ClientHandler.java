@@ -70,6 +70,14 @@ public class ClientHandler implements Runnable {
       case UPDATE:
         handleUpdate(request);
         break;
+      case CHANGE_PHONE_NUMBER:
+        Controller.getInstance().changePhoneNumber((String) request.getData("phoneNumber"), user);
+        sendResponse(new Response(ResponseStatus.OK));
+        break;
+      case CHANGE_EMAIL:
+        Controller.getInstance().changeEmail((String) request.getData("email"), user);
+        sendResponse(new Response(ResponseStatus.OK));
+        break;
     }
   }
 
@@ -127,6 +135,7 @@ public class ClientHandler implements Runnable {
       response.setErrorMessage("wrong id or password input");
     } else {
       this.user = user;
+      Controller.getInstance().setUserLoginTime(user);
       response = new Response(ResponseStatus.OK);
 
       UserRole userRole = null;
