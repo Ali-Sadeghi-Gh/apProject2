@@ -10,4 +10,6 @@ public enum PanelName {
   CoursesListPanel,
   ProfessorListPanel,
   ProfessorListDeanPanel,
+  StudentEducationalOutPanel,
+
 }

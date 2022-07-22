@@ -8,9 +8,7 @@ import GUI.professors.ProfessorPanel;
 import GUI.professors.ProfessorProfilePanel;
 import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
-import GUI.student.StudentMainPanel;
-import GUI.student.StudentPanel;
-import GUI.student.StudentProfilePanel;
+import GUI.student.*;
 import shared.model.PanelName;
 import shared.model.users.UserRole;
 import shared.request.Request;
@@ -105,6 +103,9 @@ public class Client {
         break;
       case ProfessorProfilePanel:
         changeToProfessorProfilePanel(userRole);
+        break;
+      case StudentEducationalOutPanel:
+        changeToStudentEducationalPanel();
         break;
     }
   }
@@ -302,6 +303,28 @@ public class Client {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
       }
+    }).start();
+  }
+
+  private void changeToStudentEducationalPanel() {
+    StudentEducationalOuterPanel studentEducationalOuterPanel = new StudentEducationalOuterPanel(this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, studentEducationalOuterPanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+
+
+    new Loop(1, () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.StudentEducationalOutPanel);
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      studentEducationalOuterPanel.update((int) Double.parseDouble(String.valueOf(response.getData("credit"))),
+              Double.parseDouble(String.valueOf(response.getData("averageScore"))),
+              ((strings.toArray(new String[0][0]))));
+
+      updateStudentPanel(studentPanel);
     }).start();
   }
 }

@@ -136,6 +136,11 @@ public class ClientHandler implements Runnable {
         response.addData("data", Controller.getInstance().getProfessorsData((String) request.getData("faculty"),
                 (String) request.getData("name"), (String) request.getData("grade")));
         break;
+      case StudentEducationalOutPanel:
+        response.addData("credit", Controller.getInstance().getPassCredit((Student) user));
+        response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent((Student) user));
+        response.addData("data", Controller.getInstance().getScoresData((Student) user));
+        break;
     }
     sendResponse(response);
   }

@@ -119,7 +119,7 @@ public class EduEducationalPanel extends javax.swing.JPanel {
 //    if (student == null) {
 //      JOptionPane.showMessageDialog(mainFrame, "no student found");
 //    } else {
-//  todo    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduEducationalPanel(mainFrame, professor, new StudentEducationalPanel(student))));
+//  todo    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduEducationalPanel(mainFrame, professor, new StudentEducationalOutPanel(student))));
 //      mainFrame.repaintFrame();
 //    }
   }
@@ -131,7 +131,7 @@ public class EduEducationalPanel extends javax.swing.JPanel {
 //      if (student == null) {
 //        JOptionPane.showMessageDialog(mainFrame, "no student found");
 //      } else {
-//   todo     mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduEducationalPanel(mainFrame, professor, new StudentEducationalPanel(student))));
+//   todo     mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduEducationalPanel(mainFrame, professor, new StudentEducationalOutPanel(student))));
 //        mainFrame.repaintFrame();
 //      }
     } catch (Exception e) {

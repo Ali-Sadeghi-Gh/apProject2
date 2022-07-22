@@ -6,8 +6,7 @@ package GUI.student;
  * and open the template in the editor.
  */
 
-import server.Controller;
-import shared.model.users.Student;
+import client.Client;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -16,13 +15,13 @@ import javax.swing.table.DefaultTableModel;
  * @author HP
  */
 public class StudentEducationalPanel extends javax.swing.JPanel {
-  private Student student;
+  Client client;
 
   /**
    * Creates new form StudentEducationalStatus
    */
-  public StudentEducationalPanel(Student student) {
-    this.student = student;
+  public StudentEducationalPanel(Client client) {
+    this.client = client;
 
     setBounds(400, 0, 800, 700);
     initComponents();
@@ -50,19 +49,16 @@ public class StudentEducationalPanel extends javax.swing.JPanel {
 
             }
     ));
-    showData();
     jScrollPane1.setViewportView(coursesTable);
 
     passCreditLabel.setBackground(new java.awt.Color(200, 200, 200));
     passCreditLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     passCreditLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-//    passCreditLabel.setText("Passed credits: " + Controller.getInstance().getPassCredit(student));
     passCreditLabel.setOpaque(true);
 
     averageScoreLabel.setBackground(new java.awt.Color(200, 200, 200));
     averageScoreLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     averageScoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    averageScoreLabel.setText("average score: " + Controller.getInstance().getAverageScoreByStudent(student));
     averageScoreLabel.setOpaque(true);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -93,14 +89,17 @@ public class StudentEducationalPanel extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  public void showData() {
+  public void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) coursesTable.getModel();
     String[] cols = {"id", "course name", "credit", "score"};
-    //String[][] data = University.getInstance().getScoresData(student);
-
-    //model.setDataVector(data, cols);
+    model.setDataVector(data, cols);
   }
 
+  public void update(int credit, double averageScore, String[][] data) {
+    passCreditLabel.setText("Passed credits: " + credit);
+    averageScoreLabel.setText("average score: " + averageScore);
+    showData(data);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JTable coursesTable;

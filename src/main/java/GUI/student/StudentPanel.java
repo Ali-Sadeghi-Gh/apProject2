@@ -422,8 +422,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void educationalStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentEducationalOuterPanel(student)));
-//        mainFrame.repaintFrame();
+        client.changePanel(PanelName.StudentEducationalOutPanel, null);
     }
 
     private void temporaryScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {
