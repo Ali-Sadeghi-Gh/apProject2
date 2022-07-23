@@ -1,15 +1,19 @@
 package GUI;
 
+import client.Client;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class MainFrame extends JFrame {
+  private final Client client;
   public int FRAME_WIDTH;
   public int FRAME_HEIGHT;
 
-  public MainFrame() {
+  public MainFrame(Client client) {
+    this.client = client;
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     GraphicsDevice[] gd = ge.getScreenDevices();
     FRAME_WIDTH = gd[0].getDefaultConfiguration().getBounds().width + 30;
@@ -33,7 +37,7 @@ public class MainFrame extends JFrame {
     addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing(WindowEvent e) {
-//        Controller.getInstance().endProgram();
+        client.kill();
       }
     });
   }

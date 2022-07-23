@@ -61,6 +61,12 @@ public class ProfessorsListPanel extends javax.swing.JPanel {
             }
     ));
     professorsTable.setCellSelectionEnabled(true);
+    professorsTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
     jScrollPane1.setViewportView(professorsTable);
 
     facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N

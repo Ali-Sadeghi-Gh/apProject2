@@ -49,6 +49,12 @@ public class StudentEducationalPanel extends javax.swing.JPanel {
 
             }
     ));
+    coursesTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
     jScrollPane1.setViewportView(coursesTable);
 
     passCreditLabel.setBackground(new java.awt.Color(200, 200, 200));

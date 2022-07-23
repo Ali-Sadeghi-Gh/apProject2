@@ -64,6 +64,12 @@ public class CoursesListPanel extends javax.swing.JPanel {
     courseTable.setCellSelectionEnabled(true);
     jScrollPane1.setViewportView(courseTable);
     courseTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+    courseTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
 
     facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

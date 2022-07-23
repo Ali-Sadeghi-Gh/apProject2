@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ServerController {
+  private Socket socket;
   private PrintStream printStream;
   private Scanner scanner;
   private final GsonBuilder gsonBuilder = new GsonBuilder();
@@ -27,12 +28,21 @@ public class ServerController {
 
   public void connectToServer() {
     try {
-      Socket socket = new Socket(InetAddress.getLocalHost(), port);
+      socket = new Socket(InetAddress.getLocalHost(), port);
       printStream = new PrintStream(socket.getOutputStream());
       scanner = new Scanner(socket.getInputStream());
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void kill() {
+    scanner.close();
+    printStream.close();
+    try {
+      socket.close();
+    } catch (Exception ignore) {}
+    System.exit(0);
   }
 
   private void sendRequest(Request request) {
@@ -81,6 +91,16 @@ public class ServerController {
 
   public Response sendIsDeanRequest() {
     sendRequest(new Request(RequestType.IS_DEAN));
+    return gson.fromJson(scanner.nextLine(), Response.class);
+  }
+
+  public Response sendAddTemporaryScoreRequest(String courseId, String objection, String answer, String score) {
+    Request request = new Request(RequestType.ADD_TEMPORARY_SCORE);
+    request.addData("courseId", courseId);
+    request.addData("objection", objection);
+    request.addData("answer", answer);
+    request.addData("score", score);
+    sendRequest(request);
     return gson.fromJson(scanner.nextLine(), Response.class);
   }
 }

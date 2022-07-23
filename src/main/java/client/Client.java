@@ -26,7 +26,11 @@ public class Client {
 
   public Client(int port) {
     this.port = port;
-    mainFrame = new MainFrame();
+    mainFrame = new MainFrame(this);
+  }
+
+  public void kill() {
+    serverController.kill();
   }
 
   public void start() {
@@ -106,6 +110,9 @@ public class Client {
         break;
       case StudentEducationalOutPanel:
         changeToStudentEducationalPanel();
+        break;
+      case StudentTemporaryScoreList:
+        changeToStudentTemporaryScoreList();
         break;
     }
   }
@@ -311,8 +318,6 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, studentEducationalOuterPanel, this);
     mainFrame.setContentPane(studentPanel);
 
-
-
     new Loop(1, () -> {
       Response response = serverController.sendUpdateRequest(PanelName.StudentEducationalOutPanel);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
@@ -326,5 +331,30 @@ public class Client {
 
       updateStudentPanel(studentPanel);
     }).start();
+  }
+
+  private void changeToStudentTemporaryScoreList() {
+    StudentTemporaryScoreList studentTemporaryScoreList = new StudentTemporaryScoreList(mainFrame, this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, studentTemporaryScoreList, this);
+    mainFrame.setContentPane(studentPanel);
+
+    Response response = serverController.sendUpdateRequest(PanelName.StudentTemporaryScoreList);
+    ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+    ArrayList<String[]> strings = new ArrayList<>();
+    for (ArrayList<String> arrayList1 : arrayList) {
+      strings.add(arrayList1.toArray(new String[0]));
+    }
+    studentTemporaryScoreList.update(strings.toArray(new String[0][0]));
+
+    new Loop(1, () -> {
+      updateStudentPanel(studentPanel);
+    }).start();
+  }
+
+  public void addTemporaryScore(String courseId, String objection, String answer, String score) {
+    Response response = serverController.sendAddTemporaryScoreRequest(courseId, objection, answer, score);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      changePanel(PanelName.StudentTemporaryScoreList, null);
+    }
   }
 }

@@ -848,14 +848,12 @@ public class Controller {
     }
   }
 
-  public void endProgram() {
+  public void saveData() {
     try {
       data.saveData(University.getInstance());
     } catch (Exception e) {
       logger.error("can't save data");
     }
-
-    logger.info("Application finished");
-    System.exit(0);
+    logger.info("a client closed window");
   }
 }

@@ -1,9 +1,5 @@
 package server;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import shared.model.Data;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -36,6 +32,7 @@ public class Server {
   }
 
   public void removeClientHandler(ClientHandler clientHandler) {
+    Controller.getInstance().saveData();
     clientHandlers.remove(clientHandler);
   }
 }

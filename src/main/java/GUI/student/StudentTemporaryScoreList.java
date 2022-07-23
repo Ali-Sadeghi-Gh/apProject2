@@ -7,7 +7,6 @@ package GUI.student;
 
 import GUI.MainFrame;
 import client.Client;
-import shared.model.users.Student;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -18,14 +17,13 @@ import javax.swing.table.DefaultTableModel;
 public class StudentTemporaryScoreList extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Student student;
 
   /**
    * Creates new form StudentTemporaryScoreList
    */
-  public StudentTemporaryScoreList(MainFrame mainFrame, Student student) {
+  public StudentTemporaryScoreList(MainFrame mainFrame, Client client) {
     this.mainFrame = mainFrame;
-    this.student = student;
+    this.client = client;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -61,7 +59,6 @@ public class StudentTemporaryScoreList extends javax.swing.JPanel {
         return false;
       }
     });
-    showData();
 
     submitButton.setText("submit");
     submitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -94,24 +91,24 @@ public class StudentTemporaryScoreList extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void showData() {
+  private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) courseTable.getModel();
     String[] cols = {"id", "name", "professor", "grade", "objection", "answer", "score"};
-//    String[][] data = Controller.getInstance().getCourseTemporaryScoreDataByStudent(student);
-//    model.setDataVector(data, cols);
+    model.setDataVector(data, cols);
   }
 
   private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
     for (int i = 0; i < courseTable.getModel().getRowCount(); i++) {
-//      Controller.getInstance().addTemporaryScore(String.valueOf(student.getId()),
-//              courseTable.getModel().getValueAt(i, 0).toString(), courseTable.getModel()
-//                      .getValueAt(i, 4)==null ? "" : courseTable.getModel()
-//                      .getValueAt(i, 4).toString(), null, null);
+      client.addTemporaryScore(courseTable.getModel().getValueAt(i, 0).toString(),
+              courseTable.getModel().getValueAt(i, 4)==null ? "" : courseTable.getModel().getValueAt(i, 4).toString(),
+              null, null);
     }
-//  todo  mainFrame.setContentPane(new StudentPanel(mainFrame, student, new StudentTemporaryScoreList(mainFrame, student)));
     mainFrame.repaintFrame();
   }
 
+  public void update(String[][] data) {
+    showData(data);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JTable courseTable;

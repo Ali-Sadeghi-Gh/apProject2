@@ -82,6 +82,12 @@ public class ClientHandler implements Runnable {
         Professor professor = (Professor) user;
         sendResponse(new Response(professor.getPosition().equals(Professor.Position.dean) ? ResponseStatus.OK : ResponseStatus.ERROR));
         break;
+      case ADD_TEMPORARY_SCORE:
+        Controller.getInstance().addTemporaryScore(String.valueOf(user.getId()),
+                (String) request.getData("courseId"), (String) request.getData("objection"),
+                (String) request.getData("answer"), (String) request.getData("score"));
+        sendResponse(new Response(ResponseStatus.OK));
+        break;
     }
   }
 
@@ -140,6 +146,9 @@ public class ClientHandler implements Runnable {
         response.addData("credit", Controller.getInstance().getPassCredit((Student) user));
         response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent((Student) user));
         response.addData("data", Controller.getInstance().getScoresData((Student) user));
+        break;
+      case StudentTemporaryScoreList:
+        response.addData("data", Controller.getInstance().getCourseTemporaryScoreDataByStudent((Student) user));
         break;
     }
     sendResponse(response);

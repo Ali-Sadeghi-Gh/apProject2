@@ -5,5 +5,6 @@ public enum RequestType {
   UPDATE,
   CHANGE_PHONE_NUMBER,
   CHANGE_EMAIL,
-  IS_DEAN
+  IS_DEAN,
+  ADD_TEMPORARY_SCORE
 }
