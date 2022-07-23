@@ -7,8 +7,6 @@ package GUI.student;
 
 import GUI.MainFrame;
 import client.Client;
-import shared.model.EducationalRequest;
-import shared.model.users.Student;
 
 import javax.swing.*;
 
@@ -18,13 +16,12 @@ import javax.swing.*;
 public class RecommendationRequestPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Student student;
 
   /**
    * Creates new form RecommendationRequestPanel
    */
-  public RecommendationRequestPanel(MainFrame mainFrame, Student student) {
-    this.student = student;
+  public RecommendationRequestPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -46,11 +43,7 @@ public class RecommendationRequestPanel extends javax.swing.JPanel {
     resultArea = new javax.swing.JTextArea();
 
     requestButton.setText("request recommendation");
-    requestButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        requestButtonActionPerformed(evt);
-      }
-    });
+    requestButton.addActionListener(this::requestButtonActionPerformed);
 
     professorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     professorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -115,26 +108,14 @@ public class RecommendationRequestPanel extends javax.swing.JPanel {
       return;
     }
 
-//    Professor professor = Controller.getInstance().findProfessorById(Integer.parseInt(idField.getText()));
-//    if (professor == null) {
-//      JOptionPane.showMessageDialog(mainFrame, "professor id not found");
-//      idField.setText("");
-//      resultArea.setText("");
-//      return;
-//    }
-
-//    EducationalRequest educationalRequest = Controller.getInstance().findRequestByProfessor(student, professor, EducationalRequest.Type.recommendation);
-//    if (educationalRequest == null) {
-//      educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()), String.valueOf(professor.getId()),
-//              null, null, EducationalRequest.Type.recommendation);
-//      JOptionPane.showMessageDialog(mainFrame, "your request submitted");
-//    } else {
-//      JOptionPane.showMessageDialog(mainFrame, "you request recommendation before");
-//    }
-//    resultArea.setText(educationalRequest.getResult());
+    resultArea.setText("");
+    client.getRecommendationResult(this, idField.getText());
     idField.setText("");
   }
 
+  public void update(String result) {
+    resultArea.setText(result);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JTextField idField;

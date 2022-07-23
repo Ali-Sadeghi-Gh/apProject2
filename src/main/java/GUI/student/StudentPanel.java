@@ -461,12 +461,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void recommendationButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        if (student.getGrade() != null && (student.getGrade().equals(Student.Grade.masters) || student.getGrade().equals(Student.Grade.underGraduate))) {
-//            mainFrame.setContentPane(new StudentPanel(mainFrame, student, new RecommendationRequestPanel(mainFrame,student)));
-//            mainFrame.repaintFrame();
-//        } else {
-//            JOptionPane.showMessageDialog(mainFrame, "this section is only for undergraduate and masters students");
-//        }
+        client.changePanel(PanelName.RecommendationRequestPanel, null);
     }
 
     private void dropoutButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -110,4 +110,11 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendGetRecommendationResultRequest(String professorId) {
+    Request request = new Request(RequestType.GET_RECOMMENDATION_RESULT);
+    request.addData("professorId", professorId);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

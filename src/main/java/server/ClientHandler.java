@@ -1,11 +1,10 @@
 package server;
 
+import GUI.student.RecommendationRequestPanel;
+import GUI.student.StudentPanel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import shared.model.LogIn;
-import shared.model.PanelName;
-import shared.model.Time;
-import shared.model.University;
+import shared.model.*;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 import shared.model.users.User;
@@ -14,6 +13,7 @@ import shared.request.Request;
 import shared.response.Response;
 import shared.response.ResponseStatus;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -57,7 +57,8 @@ public class ClientHandler implements Runnable {
   private void kill() {
     try {
       socket.close();
-    } catch (Exception ignore) {}
+    } catch (Exception ignore) {
+    }
     printStream.close();
     server.removeClientHandler(this);
   }
@@ -87,6 +88,27 @@ public class ClientHandler implements Runnable {
                 (String) request.getData("courseId"), (String) request.getData("objection"),
                 (String) request.getData("answer"), (String) request.getData("score"));
         sendResponse(new Response(ResponseStatus.OK));
+        break;
+      case GET_RECOMMENDATION_RESULT:
+        Student student = (Student) user;
+        professor = Controller.getInstance().findProfessorById(Integer.parseInt((String) request.getData("professorId")));
+        Response response;
+        if (professor == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("professor id not found");
+        } else {
+          response = new Response(ResponseStatus.OK);
+          EducationalRequest educationalRequest = Controller.getInstance().findRequestByProfessor(student, professor, EducationalRequest.Type.recommendation);
+          if (educationalRequest == null) {
+            educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()), String.valueOf(professor.getId()),
+                    null, null, EducationalRequest.Type.recommendation);
+            response.setErrorMessage("your request submitted");
+          } else {
+            response.setErrorMessage("you request recommendation before");
+          }
+          response.addData("result", educationalRequest.getResult());
+        }
+        sendResponse(response);
         break;
     }
   }
@@ -155,6 +177,14 @@ public class ClientHandler implements Runnable {
         break;
       case ExamListPanel:
         response.addData("data", Controller.getInstance().getExamListData(user));
+        break;
+      case RecommendationRequestPanel:
+        student = (Student) user;
+        if (student.getGrade() == null || (!student.getGrade().equals(Student.Grade.masters) && !student.getGrade().equals(Student.Grade.underGraduate))) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("this section is only for undergraduate and masters students");
+        }
+        break;
     }
     sendResponse(response);
   }

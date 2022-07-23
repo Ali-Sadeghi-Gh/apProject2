@@ -7,11 +7,9 @@ import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
 import GUI.student.*;
 import shared.model.PanelName;
-import shared.model.users.UserRole;
-import shared.request.Request;
-import shared.request.RequestType;
-import shared.response.Response;
-import shared.response.ResponseStatus;
+import shared.model.users.*;
+import shared.request.*;
+import shared.response.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -116,6 +114,9 @@ public class Client {
         break;
       case ExamListPanel:
         changeToExamListPanel(userRole);
+        break;
+      case RecommendationRequestPanel:
+        changeToRecommendationRequestPanel();
         break;
     }
   }
@@ -429,5 +430,31 @@ public class Client {
         updateEduAssistantPanel(eduAssistantPanel);
       }
     }).start();
+  }
+
+  private void changeToRecommendationRequestPanel() {
+    Response response = serverController.sendUpdateRequest(PanelName.RecommendationRequestPanel);
+    if (!response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      return;
+    }
+    RecommendationRequestPanel recommendationRequestPanel = new RecommendationRequestPanel(mainFrame, this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, recommendationRequestPanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+    new Loop(1, () -> {
+      updateStudentPanel(studentPanel);
+    }).start();
+  }
+
+  public void getRecommendationResult(RecommendationRequestPanel recommendationRequestPanel, String professorId) {
+    Response response = serverController.sendGetRecommendationResultRequest(professorId);
+
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      recommendationRequestPanel.update((String) response.getData("result"));
+    } else {
+      mainFrame.showMessage(response.getErrorMessage());
+    }
   }
 }
