@@ -114,6 +114,9 @@ public class Client {
       case WeeklySchedulePanel:
         changeToWeeklySchedulePanel(userRole);
         break;
+      case ExamListPanel:
+        changeToExamListPanel(userRole);
+        break;
     }
   }
 
@@ -379,6 +382,41 @@ public class Client {
         strings.add(arrayList1.toArray(new String[0]));
       }
       weeklySchedulePanel.update(strings.toArray(new String[0][0]));
+
+      if (userRole.equals(UserRole.Student)) {
+        StudentPanel studentPanel = (StudentPanel) finalJPanel;
+        updateStudentPanel(studentPanel);
+      } else if (userRole.equals(UserRole.Professor)) {
+        ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
+        updateProfessorPanel(professorPanel);
+      } else if (userRole.equals(UserRole.EduAssistant)) {
+        EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
+        updateEduAssistantPanel(eduAssistantPanel);
+      }
+    }).start();
+  }
+
+  private void changeToExamListPanel(UserRole userRole) {
+    ExamListPanel examListPanel = new ExamListPanel(mainFrame, this);
+    JPanel jPanel = null;
+    if (userRole.equals(UserRole.Student)) {
+      jPanel = new StudentPanel(mainFrame, examListPanel, this);
+    } else if ((userRole.equals(UserRole.Professor))) {
+      jPanel = new ProfessorPanel(mainFrame, examListPanel, this);
+    } else if (userRole.equals(UserRole.EduAssistant)) {
+      jPanel = new EduAssistantPanel(mainFrame, examListPanel, this);
+    }
+    mainFrame.setContentPane(jPanel);
+
+    JPanel finalJPanel = jPanel;
+    new Loop(1, () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.ExamListPanel);
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      examListPanel.update(strings.toArray(new String[0][0]));
 
       if (userRole.equals(UserRole.Student)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;

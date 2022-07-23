@@ -434,8 +434,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        mainFrame.setContentPane(new StudentPanel(mainFrame, student, new ExamListPanel(mainFrame, student)));
-//        mainFrame.repaintFrame();
+        client.changePanel(PanelName.ExamListPanel, UserRole.Student);
     }
 
     private void enrollmentCertificateButtonActionPerformed(java.awt.event.ActionEvent evt) {

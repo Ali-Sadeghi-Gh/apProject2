@@ -6,9 +6,7 @@ package GUI;
  */
 
 import client.Client;
-import shared.model.users.User;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,13 +16,13 @@ import javax.swing.table.DefaultTableModel;
 public class ExamListPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  User user;
+
   /**
    * Creates new form ExamListPanel
    */
-  public ExamListPanel(MainFrame mainFrame, User user) {
+  public ExamListPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.user = user;
     setBounds(200, 270, 1100, 700);initComponents();
   }
 
@@ -48,8 +46,13 @@ public class ExamListPanel extends javax.swing.JPanel {
 
             }
     ));
+    examTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
     jScrollPane1.setViewportView(examTable);
-    showData();
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -69,15 +72,14 @@ public class ExamListPanel extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void showData() {
+  private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) examTable.getModel();
     String[] cols = {"id", "name", "credit", "professor", "faculty", "grade", "date of exam"};
-//    String[][] data = Controller.getInstance().getExamListData(user);
+    model.setDataVector(data, cols);
+  }
 
-//    if (data.length == 0) {
-//      JOptionPane.showMessageDialog(mainFrame, "you have no course");
-//    }
-//    model.setDataVector(data, cols);
+  public void update(String[][] data) {
+    showData(data);
   }
 
   // Variables declaration - do not modify

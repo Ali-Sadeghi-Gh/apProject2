@@ -153,6 +153,8 @@ public class ClientHandler implements Runnable {
       case WeeklySchedulePanel:
         response.addData("data", Controller.getInstance().getScheduleData(user));
         break;
+      case ExamListPanel:
+        response.addData("data", Controller.getInstance().getExamListData(user));
     }
     sendResponse(response);
   }
