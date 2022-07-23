@@ -351,8 +351,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new WeeklySchedulePanel(mainFrame, professor), 0));
-//    mainFrame.repaintFrame();
+    client.changePanel(PanelName.WeeklySchedulePanel, UserRole.Professor);
   }
 
   private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -1,9 +1,6 @@
 package client;
 
-import GUI.CoursesListPanel;
-import GUI.LogInPanel;
-import GUI.MainFrame;
-import GUI.ProfessorsListPanel;
+import GUI.*;
 import GUI.professors.ProfessorPanel;
 import GUI.professors.ProfessorProfilePanel;
 import GUI.professors.dean.ProfessorsListDeanPanel;
@@ -113,6 +110,9 @@ public class Client {
         break;
       case StudentTemporaryScoreList:
         changeToStudentTemporaryScoreList();
+        break;
+      case WeeklySchedulePanel:
+        changeToWeeklySchedulePanel(userRole);
         break;
     }
   }
@@ -356,5 +356,40 @@ public class Client {
     if (response.getStatus().equals(ResponseStatus.OK)) {
       changePanel(PanelName.StudentTemporaryScoreList, null);
     }
+  }
+
+  private void changeToWeeklySchedulePanel(UserRole userRole) {
+    WeeklySchedulePanel weeklySchedulePanel = new WeeklySchedulePanel(mainFrame, this);
+    JPanel jPanel = null;
+    if (userRole.equals(UserRole.Student)) {
+      jPanel = new StudentPanel(mainFrame, weeklySchedulePanel, this);
+    } else if ((userRole.equals(UserRole.Professor))) {
+      jPanel = new ProfessorPanel(mainFrame, weeklySchedulePanel, this);
+    } else if (userRole.equals(UserRole.EduAssistant)) {
+      jPanel = new EduAssistantPanel(mainFrame, weeklySchedulePanel, this);
+    }
+    mainFrame.setContentPane(jPanel);
+
+    JPanel finalJPanel = jPanel;
+    new Loop(1, () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.WeeklySchedulePanel);
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      weeklySchedulePanel.update(strings.toArray(new String[0][0]));
+
+      if (userRole.equals(UserRole.Student)) {
+        StudentPanel studentPanel = (StudentPanel) finalJPanel;
+        updateStudentPanel(studentPanel);
+      } else if (userRole.equals(UserRole.Professor)) {
+        ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
+        updateProfessorPanel(professorPanel);
+      } else if (userRole.equals(UserRole.EduAssistant)) {
+        EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
+        updateEduAssistantPanel(eduAssistantPanel);
+      }
+    }).start();
   }
 }

@@ -12,4 +12,5 @@ public enum PanelName {
   ProfessorListDeanPanel,
   StudentEducationalOutPanel,
   StudentTemporaryScoreList,
+  WeeklySchedulePanel
 }

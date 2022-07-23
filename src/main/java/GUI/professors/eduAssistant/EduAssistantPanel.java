@@ -391,8 +391,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new WeeklySchedulePanel(mainFrame, professor)));
-//    mainFrame.repaintFrame();
+    client.changePanel(PanelName.WeeklySchedulePanel, UserRole.EduAssistant);
   }
 
   private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -6,9 +6,8 @@ package GUI;
  */
 
 import client.Client;
-import shared.model.users.User;
+import shared.model.users.UserRole;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,14 +17,13 @@ import javax.swing.table.DefaultTableModel;
 public class WeeklySchedulePanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  User user;
 
   /**
    * Creates new form weeklySchedulePanel
    */
-  public WeeklySchedulePanel(MainFrame mainFrame, User user) {
+  public WeeklySchedulePanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.user = user;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -50,8 +48,13 @@ public class WeeklySchedulePanel extends javax.swing.JPanel {
 
             }
     ));
+    scheduleTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
     jScrollPane1.setViewportView(scheduleTable);
-    showData();
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -71,17 +74,15 @@ public class WeeklySchedulePanel extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void showData() {
+  private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) scheduleTable.getModel();
     String[] cols = {"id", "name", "credit", "professor", "faculty", "grade", "time of class"};
-//    String[][] data = Controller.getInstance().getScheduleData(user);
-
-//    if (data.length == 0) {
-//      JOptionPane.showMessageDialog(mainFrame, "you have no course");
-//    }
-//    model.setDataVector(data, cols);
+    model.setDataVector(data, cols);
   }
 
+  public void update(String[][] data) {
+    showData(data);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JScrollPane jScrollPane1;

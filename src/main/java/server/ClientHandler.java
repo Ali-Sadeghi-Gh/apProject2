@@ -150,6 +150,9 @@ public class ClientHandler implements Runnable {
       case StudentTemporaryScoreList:
         response.addData("data", Controller.getInstance().getCourseTemporaryScoreDataByStudent((Student) user));
         break;
+      case WeeklySchedulePanel:
+        response.addData("data", Controller.getInstance().getScheduleData(user));
+        break;
     }
     sendResponse(response);
   }
