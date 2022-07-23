@@ -117,4 +117,9 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendEnrollmentCertificationRequest() {
+    sendRequest(new Request(RequestType.ENROLLMENT_CERTIFICATION));
+    return scanResponse();
+  }
 }

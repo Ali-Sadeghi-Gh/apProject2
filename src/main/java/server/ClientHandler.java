@@ -1,7 +1,5 @@
 package server;
 
-import GUI.student.RecommendationRequestPanel;
-import GUI.student.StudentPanel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import shared.model.*;
@@ -13,7 +11,6 @@ import shared.request.Request;
 import shared.response.Response;
 import shared.response.ResponseStatus;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -108,6 +105,11 @@ public class ClientHandler implements Runnable {
           }
           response.addData("result", educationalRequest.getResult());
         }
+        sendResponse(response);
+        break;
+      case ENROLLMENT_CERTIFICATION:
+        response = new Response(ResponseStatus.OK);
+        response.addData("certification", Controller.getInstance().getEnrollmentString((Student) user));
         sendResponse(response);
         break;
     }

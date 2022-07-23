@@ -14,5 +14,6 @@ public enum PanelName {
   StudentTemporaryScoreList,
   WeeklySchedulePanel,
   ExamListPanel,
-  RecommendationRequestPanel
+  RecommendationRequestPanel,
+  EnrollmentCertificatePanel
 }

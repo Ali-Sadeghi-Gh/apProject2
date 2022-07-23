@@ -5,20 +5,21 @@ package GUI.student;
  * and open the template in the editor.
  */
 
-import shared.model.users.Student;
+
+import client.Client;
 
 /**
  *
  * @author HP
  */
 public class EnrollmentCertificatePanel extends javax.swing.JPanel {
-  Student student;
+  Client client;
 
   /**
    * Creates new form EnrollmentCertificatePanel
    */
-  public EnrollmentCertificatePanel(Student student) {
-    this.student = student;
+  public EnrollmentCertificatePanel(Client client) {
+    this.client = client;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -37,11 +38,7 @@ public class EnrollmentCertificatePanel extends javax.swing.JPanel {
     requestButton = new javax.swing.JButton();
 
     requestButton.setText("request enrollment certificate");
-    requestButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        requestButtonActionPerformed(evt);
-      }
-    });
+    requestButton.addActionListener(this::requestButtonActionPerformed);
 
     certificateArea.setColumns(20);
     certificateArea.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -79,8 +76,12 @@ public class EnrollmentCertificatePanel extends javax.swing.JPanel {
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (certificateArea.getText().equals("")) {
-//      certificateArea.append(Controller.getInstance().getEnrollmentString(student));
+      client.enrollmentCertificate(this);
     }
+  }
+
+  public void update(String certification) {
+    certificateArea.append(certification);
   }
 
   // Variables declaration - do not modify

@@ -118,6 +118,9 @@ public class Client {
       case RecommendationRequestPanel:
         changeToRecommendationRequestPanel();
         break;
+      case EnrollmentCertificatePanel:
+        changeToEnrollmentCertificatePanel();
+        break;
     }
   }
 
@@ -455,6 +458,23 @@ public class Client {
       recommendationRequestPanel.update((String) response.getData("result"));
     } else {
       mainFrame.showMessage(response.getErrorMessage());
+    }
+  }
+
+  private void changeToEnrollmentCertificatePanel() {
+    EnrollmentCertificatePanel enrollmentCertificatePanel = new EnrollmentCertificatePanel(this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, enrollmentCertificatePanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+    new Loop(1, () -> {
+      updateStudentPanel(studentPanel);
+    }).start();
+  }
+
+  public void enrollmentCertificate(EnrollmentCertificatePanel enrollmentCertificatePanel) {
+    Response response = serverController.sendEnrollmentCertificationRequest();
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      enrollmentCertificatePanel.update((String) response.getData("certification"));
     }
   }
 }

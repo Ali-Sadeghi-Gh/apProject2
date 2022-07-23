@@ -720,7 +720,7 @@ public class Controller {
         str += scanner.nextLine();
       }
       logger.info("student whit id " + student.getId() + " request enrollment certificate");
-      return String.format(str, student.getName(), String.valueOf(student.getId()), student.getFacultyName(), Time.getExpiration());
+      return String.format(str, student.getName(), student.getId(), student.getFacultyName(), Time.getExpiration());
     } catch (FileNotFoundException e) {
       logger.error("enrollmentCertificate file not found");
       return "";
