@@ -121,6 +121,9 @@ public class Client {
       case EnrollmentCertificatePanel:
         changeToEnrollmentCertificatePanel();
         break;
+      case MinorRequestPanel:
+        changeToMinorRequestPanel();
+        break;
     }
   }
 
@@ -476,5 +479,32 @@ public class Client {
     if (response.getStatus().equals(ResponseStatus.OK)) {
       enrollmentCertificatePanel.update((String) response.getData("certification"));
     }
+  }
+
+  private void changeToMinorRequestPanel() {
+    Response response = serverController.sendUpdateRequest(PanelName.MinorRequestPanel);
+    if (!response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      return;
+    }
+    MinorRequestPanel minorRequestPanel = new MinorRequestPanel(mainFrame, this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, minorRequestPanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+    minorRequestPanel.update((String) response.getData("result"), (String) response.getData("targetFaculty"),
+            ((ArrayList<String>) response.getData("faculties")).toArray(new String[0]));
+
+    new Loop(1, () -> {
+      updateStudentPanel(studentPanel);
+    }).start();
+  }
+
+  public void requestMinor(MinorRequestPanel minorRequestPanel, String faculty) {
+    Response response = serverController.sendMinorRequest(faculty);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      minorRequestPanel.update((String) response.getData("result"), (String) response.getData("targetFaculty"),
+              ((ArrayList<String>) response.getData("faculties")).toArray(new String[0]));
+    }
+    mainFrame.showMessage(response.getErrorMessage());
   }
 }

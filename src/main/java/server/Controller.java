@@ -177,6 +177,19 @@ public class Controller {
     return names;
   }
 
+  public String[] getMinorFacultiesName(String facultyName) {
+    String[] allFaculties = Controller.getInstance().getFacultiesName();
+    String[] names = new String[allFaculties.length-2];
+    int counter = 0;
+    for (int i = 1; i < allFaculties.length; i++) {
+      if (!allFaculties[i].equals(facultyName)) {
+        names[counter] = allFaculties[i];
+        counter++;
+      }
+    }
+    return names;
+  }
+
   public String[][] getRecommendationData(Professor professor, EducationalRequest.Type type) {
     List<String[]> data = new ArrayList<>();
     for (EducationalRequest request : University.getInstance().getRequests()) {

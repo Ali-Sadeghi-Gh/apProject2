@@ -7,8 +7,6 @@ package GUI.student;
 
 import GUI.MainFrame;
 import client.Client;
-import shared.model.EducationalRequest;
-import shared.model.users.Student;
 
 import javax.swing.*;
 
@@ -19,16 +17,13 @@ import javax.swing.*;
 public class MinorRequestPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Student student;
-  EducationalRequest educationalRequest;
 
   /**
    * Creates new form MinorRequestPanel
    */
-  public MinorRequestPanel(MainFrame mainFrame, Student student) {
-    this.student = student;
+  public MinorRequestPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-//    educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.minor);
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -52,32 +47,13 @@ public class MinorRequestPanel extends javax.swing.JPanel {
     facultyLabel.setText("target faculty:");
 
     facultyBox.setMaximumRowCount(10);
-//    if (educationalRequest == null) {
-//      String[] allFaculties = Controller.getInstance().getFacultiesName();
-//      String[] facultyName = new String[allFaculties.length-2];
-//      int counter = 0;
-//      for (int i = 1; i < allFaculties.length; i++) {
-//        if (!allFaculties[i].equals(student.getFacultyName())) {
-//          facultyName[counter] = allFaculties[i];
-//          counter++;
-//        }
-//      }
-//      facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(facultyName));
-//    } else {
-//      facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{educationalRequest.getTargetFaculty()}));
-//    }
 
     requestButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-    requestButton.setText("minor dropout");
-    requestButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        requestButtonActionPerformed(evt);
-      }
-    });
+    requestButton.setText("minor request");
+    requestButton.addActionListener(this::requestButtonActionPerformed);
 
     resultLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
     resultLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    resultLabel.setText((educationalRequest ==null || educationalRequest.getResult()==null) ? "" : educationalRequest.getResult());
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -115,23 +91,20 @@ public class MinorRequestPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (educationalRequest == null) {
-//      if (Controller.getInstance().getPassCredit(student) < 0) {
-//        JOptionPane.showMessageDialog(mainFrame, "you must have at least 8 passed credits");
-//      }
-//      if (Controller.getInstance().getAverageScoreByStudent(student) < 1) {
-//        JOptionPane.showMessageDialog(mainFrame, "your average score must be above 18");
-//        return;
-//      }
-
-//      Controller.getInstance().addRequest(String.valueOf(student.getId()), null, student.getFacultyName(),
-//              facultyBox.getSelectedItem().toString(), EducationalRequest.Type.minor);
-
-      JOptionPane.showMessageDialog(mainFrame, "your request submitted");
-//   todo   mainFrame.setContentPane(new StudentPanel(mainFrame, student, new MinorRequestPanel(mainFrame, student)));
-      mainFrame.repaintFrame();
+    if (resultLabel.getText().equals("")) {
+      client.requestMinor(this, facultyBox.getSelectedItem().toString());
     } else {
-      JOptionPane.showMessageDialog(mainFrame, "you can't request more than once");
+      mainFrame.showMessage("you can't request more than once");
+    }
+  }
+
+  public void update(String result, String targetFaculty, String[] faculties) {
+    resultLabel.setText(result);
+
+    if (result.equals("")) {
+      facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(faculties));
+    } else {
+      facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{targetFaculty}));
     }
   }
 

@@ -16,13 +16,13 @@ public class ServerController {
   private Socket socket;
   private PrintStream printStream;
   private Scanner scanner;
+  private String authToken;
   private final GsonBuilder gsonBuilder = new GsonBuilder();
   private final Gson gson;
   private final int port;
 
   public ServerController(int port) {
     this.port = port;
-
     gson = gsonBuilder.create();
   }
 
@@ -31,6 +31,7 @@ public class ServerController {
       socket = new Socket(InetAddress.getLocalHost(), port);
       printStream = new PrintStream(socket.getOutputStream());
       scanner = new Scanner(socket.getInputStream());
+      authToken = scanner.nextLine();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -47,7 +48,7 @@ public class ServerController {
 
   private void sendRequest(Request request) {
     String requestString = gson.toJson(request);
-    printStream.println(requestString);
+    printStream.println(authToken + "&" + requestString);
     printStream.flush();
   }
 
@@ -120,6 +121,13 @@ public class ServerController {
 
   public Response sendEnrollmentCertificationRequest() {
     sendRequest(new Request(RequestType.ENROLLMENT_CERTIFICATION));
+    return scanResponse();
+  }
+
+  public Response sendMinorRequest(String faculty) {
+    Request request = new Request(RequestType.MINOR_REQUEST);
+    request.addData("faculty", faculty);
+    sendRequest(request);
     return scanResponse();
   }
 }

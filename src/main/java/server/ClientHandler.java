@@ -20,7 +20,6 @@ import java.util.Scanner;
 public class ClientHandler implements Runnable {
   private final Server server;
   private final Socket socket;
-  private final int id;
   private final PrintStream printStream;
   private final String authToken;
   private final GsonBuilder gsonBuilder = new GsonBuilder();
@@ -31,10 +30,10 @@ public class ClientHandler implements Runnable {
   public ClientHandler(Server server, Socket socket, int id) throws IOException {
     this.server = server;
     this.socket = socket;
-    this.id = id;
     printStream = new PrintStream(socket.getOutputStream());
     authToken = String.valueOf(new SecureRandom().nextInt());
-
+    printStream.println(authToken);
+    printStream.flush();
     gson = gsonBuilder.create();
   }
 
@@ -43,8 +42,11 @@ public class ClientHandler implements Runnable {
     try {
       Scanner scanner = new Scanner(socket.getInputStream());
       while (true) {
-        Request request = gson.fromJson(scanner.nextLine(), Request.class);
-        handleRequest(request);
+        String[] strings = scanner.nextLine().split("&");
+        if (strings[0].equals(authToken)) {
+          Request request = gson.fromJson(strings[1], Request.class);
+          handleRequest(request);
+        }
       }
     } catch (Exception e) {
       kill();
@@ -110,6 +112,26 @@ public class ClientHandler implements Runnable {
       case ENROLLMENT_CERTIFICATION:
         response = new Response(ResponseStatus.OK);
         response.addData("certification", Controller.getInstance().getEnrollmentString((Student) user));
+        sendResponse(response);
+        break;
+      case MINOR_REQUEST:
+        student = (Student) user;
+        if (Controller.getInstance().getPassCredit(student) < 8) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("you must have at least 8 passed credits");
+        } else if (Controller.getInstance().getAverageScoreByStudent(student) < 18) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("your average score must be above 18");
+        } else {
+          EducationalRequest educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()),
+                  null, student.getFacultyName(), (String) request.getData("faculty"),
+                  EducationalRequest.Type.minor);
+          response = new Response(ResponseStatus.OK);
+          response.addData("result", educationalRequest.getResult());
+          response.addData("targetFaculty", educationalRequest.getTargetFaculty());
+          response.addData("faculties", new String[0]);
+          response.setErrorMessage("your request submitted");
+        }
         sendResponse(response);
         break;
     }
@@ -185,6 +207,24 @@ public class ClientHandler implements Runnable {
         if (student.getGrade() == null || (!student.getGrade().equals(Student.Grade.masters) && !student.getGrade().equals(Student.Grade.underGraduate))) {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage("this section is only for undergraduate and masters students");
+        }
+        break;
+      case MinorRequestPanel:
+        student = (Student) user;
+        if (student.getGrade() != null && student.getGrade().equals(Student.Grade.underGraduate)) {
+          EducationalRequest educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.minor);
+          if (educationalRequest == null) {
+            response.addData("result", "");
+            response.addData("targetFaculty", "");
+            response.addData("faculties", Controller.getInstance().getMinorFacultiesName(student.getFacultyName()));
+          } else {
+            response.addData("result", educationalRequest.getResult());
+            response.addData("targetFaculty", educationalRequest.getTargetFaculty());
+            response.addData("faculties", new String[0]);
+          }
+        } else {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("this section is only for undergraduate students");
         }
         break;
     }

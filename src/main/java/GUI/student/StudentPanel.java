@@ -12,6 +12,7 @@ import shared.model.PanelName;
 import shared.model.users.UserRole;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 /**
@@ -71,65 +72,35 @@ public class StudentPanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1950, 1035));
 
         logoutButton.setText("log out");
-        logoutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logoutButtonActionPerformed(evt);
-            }
-        });
+        logoutButton.addActionListener(this::logoutButtonActionPerformed);
 
         registrationMattersButton.setText("registration matters");
-        registrationMattersButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registrationMattersButtonActionPerformed(evt);
-            }
-        });
+        registrationMattersButton.addActionListener(this::registrationMattersButtonActionPerformed);
 
         educationalServicesButton.setText("educational services");
-        educationalServicesButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                educationalServicesButtonActionPerformed(evt);
-                educationalServicesButtonActionPerformed(evt);
-                educationalServicesButtonActionPerformed(evt);
-            }
+        educationalServicesButton.addActionListener(evt -> {
+            educationalServicesButtonActionPerformed();
+            educationalServicesButtonActionPerformed();
+            educationalServicesButtonActionPerformed();
         });
 
         recordAffairsButton.setText("record affairs");
-        recordAffairsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recordAffairsButtonActionPerformed(evt);
-            }
-        });
+        recordAffairsButton.addActionListener(this::recordAffairsButtonActionPerformed);
 
         mainPageButton.setText("main page");
-        mainPageButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mainPageButtonActionPerformed(evt);
-            }
-        });
+        mainPageButton.addActionListener(this::mainPageButtonActionPerformed);
 
         profileButton.setText("profile");
-        profileButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                profileButtonActionPerformed(evt);
-            }
-        });
+        profileButton.addActionListener(this::profileButtonActionPerformed);
 
         registrationMattersPanel.setBackground(new java.awt.Color(100, 100, 240));
         registrationMattersPanel.setVisible(false);
 
         coursesListButton.setText("list of courses");
-        coursesListButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                coursesListButtonActionPerformed(evt);
-            }
-        });
+        coursesListButton.addActionListener(this::coursesListButtonActionPerformed);
 
         professorsListButton.setText("list of professors");
-        professorsListButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                professorsListButtonActionPerformed(evt);
-            }
-        });
+        professorsListButton.addActionListener(this::professorsListButtonActionPerformed);
 
         javax.swing.GroupLayout registrationMattersPanelLayout = new javax.swing.GroupLayout(registrationMattersPanel);
         registrationMattersPanel.setLayout(registrationMattersPanelLayout);
@@ -157,60 +128,28 @@ public class StudentPanel extends javax.swing.JPanel {
         educationalServicesPanel.setVisible(false);
 
         weeklyScheduleButton.setText("weekly schedule");
-        weeklyScheduleButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                weeklyScheduleButtonActionPerformed(evt);
-            }
-        });
+        weeklyScheduleButton.addActionListener(this::weeklyScheduleButtonActionPerformed);
 
         examListButton.setText("list of exams");
-        examListButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                examListButtonActionPerformed(evt);
-            }
-        });
+        examListButton.addActionListener(this::examListButtonActionPerformed);
 
         recommendationButton.setText("recommendation request");
-        recommendationButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                recommendationButtonActionPerformed(evt);
-            }
-        });
+        recommendationButton.addActionListener(this::recommendationButtonActionPerformed);
 
         enrollmentCertificateButton.setText("enrollment certificate");
-        enrollmentCertificateButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enrollmentCertificateButtonActionPerformed(evt);
-            }
-        });
+        enrollmentCertificateButton.addActionListener(this::enrollmentCertificateButtonActionPerformed);
 
         minorButton.setText("minor");
-        minorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                minorButtonActionPerformed(evt);
-            }
-        });
+        minorButton.addActionListener(this::minorButtonActionPerformed);
 
         dropoutButton.setText("dropout from education");
-        dropoutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dropoutButtonActionPerformed(evt);
-            }
-        });
+        dropoutButton.addActionListener(this::dropoutButtonActionPerformed);
 
         dormitoryButton.setText("dormitory request");
-        dormitoryButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dormitoryButtonActionPerformed(evt);
-            }
-        });
+        dormitoryButton.addActionListener(this::dormitoryButtonActionPerformed);
 
         defendingButton.setText("defending the dissertation");
-        defendingButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                defendingButtonActionPerformed(evt);
-            }
-        });
+        defendingButton.addActionListener(this::defendingButtonActionPerformed);
 
         javax.swing.GroupLayout educationalServicesPanelLayout = new javax.swing.GroupLayout(educationalServicesPanel);
         educationalServicesPanel.setLayout(educationalServicesPanelLayout);
@@ -255,18 +194,10 @@ public class StudentPanel extends javax.swing.JPanel {
         recordAffairsPanel.setVisible(false);
 
         educationalStatusButton.setText("educational status");
-        educationalStatusButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                educationalStatusButtonActionPerformed(evt);
-            }
-        });
+        educationalStatusButton.addActionListener(this::educationalStatusButtonActionPerformed);
 
         temporaryScoreButton.setText("temporary scores");
-        temporaryScoreButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                temporaryScoreButtonActionPerformed(evt);
-            }
-        });
+        temporaryScoreButton.addActionListener(this::temporaryScoreButtonActionPerformed);
 
         javax.swing.GroupLayout recordAffairsPanelLayout = new javax.swing.GroupLayout(recordAffairsPanel);
         recordAffairsPanel.setLayout(recordAffairsPanelLayout);
@@ -290,22 +221,22 @@ public class StudentPanel extends javax.swing.JPanel {
         );
 
         timeLabel.setBackground(new java.awt.Color(200, 200, 200));
-        timeLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
+        timeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
         timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         timeLabel.setOpaque(true);
 
         currentTimeLabel.setBackground(new java.awt.Color(200, 200, 200));
-        currentTimeLabel.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+        currentTimeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 17)); // NOI18N
         currentTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         currentTimeLabel.setOpaque(true);
 
         emailLabel.setBackground(new java.awt.Color(200, 200, 200));
-        emailLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
+        emailLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
         emailLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         emailLabel.setOpaque(true);
 
         nameLabel.setBackground(new java.awt.Color(200, 200, 200));
-        nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
+        nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
         nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         nameLabel.setOpaque(true);
 
@@ -396,7 +327,7 @@ public class StudentPanel extends javax.swing.JPanel {
         recordAffairsPanel.setVisible(false);
     }
 
-    private void educationalServicesButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    private void educationalServicesButtonActionPerformed() {
         registrationMattersPanel.setVisible(false);
         educationalServicesPanel.setVisible(!educationalServicesPanel.isVisible());
         recordAffairsPanel.setVisible(false);
@@ -469,12 +400,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void minorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        if (student.getGrade() != null && student.getGrade().equals(Student.Grade.underGraduate)) {
-//            mainFrame.setContentPane(new StudentPanel(mainFrame, student, new MinorRequestPanel(mainFrame,student)));
-//            mainFrame.repaintFrame();
-//        } else {
-//            JOptionPane.showMessageDialog(mainFrame, "this section is only for undergraduate students");
-//        }
+        client.changePanel(PanelName.MinorRequestPanel, null);
     }
 
     public void update(int id, String lastLogin, String email, String name, String currentTime) {
