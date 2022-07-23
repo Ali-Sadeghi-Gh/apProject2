@@ -51,17 +51,27 @@ public class ServerController {
     printStream.flush();
   }
 
+  private Response scanResponse() {
+    Response response = null;
+    try {
+      response = gson.fromJson(scanner.nextLine(), Response.class);
+    } catch (Exception e) {
+      System.out.println("scanning error");
+    }
+    return response;
+  }
+
   public Response sendUpdateRequest(PanelName panelName) {
     Request request = new Request(RequestType.UPDATE);
     request.addData("panelName", panelName);
     sendRequest(request);
-    return gson.fromJson(scanner.nextLine(), Response.class);
+    return scanResponse();
   }
 
   public Response sendUpdateRequest(PanelName panelName, Request request) {
     request.addData("panelName", panelName);
     sendRequest(request);
-    return gson.fromJson(scanner.nextLine(), Response.class);
+    return scanResponse();
   }
 
   public Response sendLoginRequest(int id, String password) {
@@ -69,29 +79,26 @@ public class ServerController {
     request.addData("id", id);
     request.addData("password", password);
     sendRequest(request);
-
-    return gson.fromJson(scanner.nextLine(), Response.class);
+    return scanResponse();
   }
 
   public Response sendChangePhoneNumberRequest(String phoneNumber) {
     Request request = new Request(RequestType.CHANGE_PHONE_NUMBER);
     request.addData("phoneNumber", phoneNumber);
     sendRequest(request);
-
-    return gson.fromJson(scanner.nextLine(), Response.class);
+    return scanResponse();
   }
 
   public Response sendChangeEmailRequest(String email) {
     Request request = new Request(RequestType.CHANGE_EMAIL);
     request.addData("email", email);
     sendRequest(request);
-
-    return gson.fromJson(scanner.nextLine(), Response.class);
+    return scanResponse();
   }
 
   public Response sendIsDeanRequest() {
     sendRequest(new Request(RequestType.IS_DEAN));
-    return gson.fromJson(scanner.nextLine(), Response.class);
+    return scanResponse();
   }
 
   public Response sendAddTemporaryScoreRequest(String courseId, String objection, String answer, String score) {
@@ -101,6 +108,6 @@ public class ServerController {
     request.addData("answer", answer);
     request.addData("score", score);
     sendRequest(request);
-    return gson.fromJson(scanner.nextLine(), Response.class);
+    return scanResponse();
   }
 }
