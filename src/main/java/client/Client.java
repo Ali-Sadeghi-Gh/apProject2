@@ -35,7 +35,7 @@ public class Client {
   }
 
   private void loginCLI() {
-    mainFrame.setContentPane(new LogInPanel(this, mainFrame));
+    mainFrame.setContentPane(new LogInPanel(mainFrame, this));
   }
 
   public void login(int id, String password) {
@@ -123,6 +123,9 @@ public class Client {
         break;
       case MinorRequestPanel:
         changeToMinorRequestPanel();
+        break;
+      case DropoutRequestPanel:
+        changeToDropoutRequestPanel();
         break;
     }
   }
@@ -506,5 +509,26 @@ public class Client {
               ((ArrayList<String>) response.getData("faculties")).toArray(new String[0]));
     }
     mainFrame.showMessage(response.getErrorMessage());
+  }
+
+  private void changeToDropoutRequestPanel() {
+    DropoutRequestPanel dropoutRequestPanel = new DropoutRequestPanel(mainFrame, this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, dropoutRequestPanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+    new Loop(1, () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.DropoutRequestPanel);
+      dropoutRequestPanel.update((String) response.getData("result"));
+
+      updateStudentPanel(studentPanel);
+    }).start();
+  }
+
+  public void dropoutRequest(DropoutRequestPanel dropoutRequestPanel) {
+    Response response = serverController.sendDropoutRequest();
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      dropoutRequestPanel.update((String) response.getData("result"));
+    }
   }
 }

@@ -130,4 +130,9 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendDropoutRequest() {
+    sendRequest(new Request(RequestType.DROPOUT_REQUEST));
+    return scanResponse();
+  }
 }

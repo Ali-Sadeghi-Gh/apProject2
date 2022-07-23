@@ -27,7 +27,7 @@ public class ClientHandler implements Runnable {
 
   private User user;
 
-  public ClientHandler(Server server, Socket socket, int id) throws IOException {
+  public ClientHandler(Server server, Socket socket) throws IOException {
     this.server = server;
     this.socket = socket;
     printStream = new PrintStream(socket.getOutputStream());
@@ -134,6 +134,15 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case DROPOUT_REQUEST:
+        student = (Student) user;
+        response = new Response(ResponseStatus.OK);
+        EducationalRequest educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()),
+                null, student.getFacultyName(), null, EducationalRequest.Type.dropout);
+        response.addData("result", educationalRequest.getResult());
+        response.setErrorMessage("your request submitted");
+        sendResponse(response);
+        break;
     }
   }
 
@@ -225,6 +234,15 @@ public class ClientHandler implements Runnable {
         } else {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage("this section is only for undergraduate students");
+        }
+        break;
+      case DropoutRequestPanel:
+        student = (Student) user;
+        EducationalRequest educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.dropout);
+        if (educationalRequest != null) {
+          response.addData("result", educationalRequest.getResult());
+        } else {
+          response.addData("result", "");
         }
         break;
     }

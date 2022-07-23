@@ -49,7 +49,7 @@ public class MinorRequestPanel extends javax.swing.JPanel {
     facultyBox.setMaximumRowCount(10);
 
     requestButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-    requestButton.setText("minor request");
+    requestButton.setText("request minor");
     requestButton.addActionListener(this::requestButtonActionPerformed);
 
     resultLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N

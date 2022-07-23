@@ -10,7 +10,6 @@ public class Server {
   private static Server instance;
   private final int port;
   private final List<ClientHandler> clientHandlers = new ArrayList<>();
-  private int previousClientHandlerId = 1000;
 
   public Server(int port) {
     instance = this;
@@ -24,7 +23,7 @@ public class Server {
       while (true) {
         Socket socket = serverSocket.accept();
 
-        ClientHandler clientHandler = new ClientHandler(this, socket, previousClientHandlerId++);
+        ClientHandler clientHandler = new ClientHandler(this, socket);
         clientHandlers.add(clientHandler);
         new Thread(clientHandler).start();
       }

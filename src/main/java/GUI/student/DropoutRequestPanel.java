@@ -6,8 +6,7 @@ package GUI.student;
  */
 
 import GUI.MainFrame;
-import shared.model.EducationalRequest;
-import shared.model.users.Student;
+import client.Client;
 
 import javax.swing.*;
 
@@ -17,13 +16,13 @@ import javax.swing.*;
  */
 public class DropoutRequestPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Student student;
+  Client client;
 
   /**
    * Creates new form DropoutRequestPanel
    */
-  public DropoutRequestPanel(MainFrame mainFrame, Student student) {
-    this.student = student;
+  public DropoutRequestPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -43,19 +42,11 @@ public class DropoutRequestPanel extends javax.swing.JPanel {
 
     requestButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
     requestButton.setText("request dropout");
-    requestButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        changeButtonActionPerformed(evt);
-      }
-    });
+    requestButton.addActionListener(this::changeButtonActionPerformed);
 
     resultLabel.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
     resultLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     resultLabel.setText("");
-//    EducationalRequest educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.dropout);
-//    if (educationalRequest != null) {
-//      resultLabel.setText(educationalRequest.getResult());
-//    }
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -84,12 +75,14 @@ public class DropoutRequestPanel extends javax.swing.JPanel {
 
   private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (resultLabel.getText().equals("")) {
-//      EducationalRequest educationalRequest = Controller.getInstance().addRequest(String.valueOf(student.getId()), null,
-//              student.getFacultyName(), null, EducationalRequest.Type.dropout);
-
-      JOptionPane.showMessageDialog(mainFrame, "your request submitted");
-//      resultLabel.setText(educationalRequest.getResult());
+      client.dropoutRequest(this);
+    } else {
+      mainFrame.showMessage("you can't request more than once");
     }
+  }
+
+  public void  update(String result) {
+    resultLabel.setText(result);
   }
 
 

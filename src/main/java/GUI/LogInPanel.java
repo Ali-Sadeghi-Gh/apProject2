@@ -25,7 +25,7 @@ public class LogInPanel extends JPanel {
   int rand;
   int[] captchaArray = {1569985, 1596889, 1746776, 1629661, 1568002, 1724641};
 
-  public LogInPanel(Client client, MainFrame mainFrame) {
+  public LogInPanel( MainFrame mainFrame, Client client) {
     this.client = client;
     this.mainFrame = mainFrame;
 
@@ -100,46 +100,37 @@ public class LogInPanel extends JPanel {
   }
 
   private void setListener() {
-    changeCaptcha.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
+    changeCaptcha.addActionListener(e -> {
+      setCaptcha();
+      mainFrame.repaintFrame();
+    });
+
+    showPass.addActionListener(e -> {
+      if (showPass.isSelected()) {
+        passwordField.setEchoChar((char) 0);
+      } else {
+        passwordField.setEchoChar('*');
+      }
+    });
+
+    logInButton.addActionListener(e -> {
+      int id;
+      try {
+        id = Integer.parseInt(idField.getText());
+      } catch (Exception exception) {
+        JOptionPane.showMessageDialog(mainFrame, "id must be number");
+        return;
+      }
+
+      if (captchaField.getText().hashCode() != captchaArray[rand]) {
+        JOptionPane.showMessageDialog(mainFrame, "wrong captcha input");
         setCaptcha();
         mainFrame.repaintFrame();
+        return;
       }
-    });
 
-    showPass.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (showPass.isSelected()) {
-          passwordField.setEchoChar((char) 0);
-        } else {
-          passwordField.setEchoChar('*');
-        }
-      }
-    });
-
-    logInButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int id;
-        try {
-          id = Integer.parseInt(idField.getText());
-        } catch (Exception exception) {
-          JOptionPane.showMessageDialog(mainFrame, "id must be number");
-          return;
-        }
-
-        if (captchaField.getText().hashCode() != captchaArray[rand]) {
-          JOptionPane.showMessageDialog(mainFrame, "wrong captcha input");
-          setCaptcha();
-          mainFrame.repaintFrame();
-          return;
-        }
-
-        String password = passwordField.getText();
-        client.login(id, password);
-      }
+      String password = passwordField.getText();
+      client.login(id, password);
     });
   }
 }

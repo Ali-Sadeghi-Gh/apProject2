@@ -16,5 +16,7 @@ public enum PanelName {
   ExamListPanel,
   RecommendationRequestPanel,
   EnrollmentCertificatePanel,
-  MinorRequestPanel
+  MinorRequestPanel,
+  DropoutRequestPanel,
+
 }

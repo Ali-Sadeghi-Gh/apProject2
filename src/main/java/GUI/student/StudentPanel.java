@@ -22,12 +22,14 @@ import java.io.File;
 public class StudentPanel extends javax.swing.JPanel {
     MainFrame mainFrame;
     Client client;
+    JPanel innerPanel;
 
     /**
      * Creates new form NewJPanel
      */
     public StudentPanel(MainFrame mainFrame, JPanel panel, Client client) {
         this.client = client;
+        this.innerPanel = panel;
         this.add(panel);
         this.mainFrame = mainFrame;
         initComponents();
@@ -395,8 +397,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void dropoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        mainFrame.setContentPane(new StudentPanel(mainFrame, student, new DropoutRequestPanel(mainFrame,student)));
-//        mainFrame.repaintFrame();
+        client.changePanel(PanelName.DropoutRequestPanel, null);
     }
 
     private void minorButtonActionPerformed(java.awt.event.ActionEvent evt) {
