@@ -278,6 +278,19 @@ public class ClientHandler implements Runnable {
           response.setErrorMessage("this section is only for phd students");
         }
         break;
+      case ProfessorsCourseList:
+        professor = (Professor) user;
+        response.addData("data", Controller.getInstance().getCoursesDataByProfessor(professor));
+        break;
+      case ProfessorTemporaryScoreList:
+        Course course = Controller.getInstance().findCourse(Integer.parseInt((String) request.getData("courseId")));
+        response.addData("data", Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course));
+        response.addData("courseName", course.getName()==null ? "-" : course.getName());
+        response.addData("courseId", String.valueOf(course.getId()));
+        response.addData("faculty", course.getFacultyName()==null ? "-" : course.getFacultyName());
+        response.addData("credit", String.valueOf(course.getCredit()));
+        response.addData("grade", course.getGrade()==null ? "-" : course.getGrade().name());
+        break;
     }
     sendResponse(response);
   }

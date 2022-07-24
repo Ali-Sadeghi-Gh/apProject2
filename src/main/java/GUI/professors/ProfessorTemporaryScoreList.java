@@ -12,6 +12,7 @@ import shared.model.users.Professor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /**
  *
@@ -20,16 +21,13 @@ import javax.swing.table.DefaultTableModel;
 public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Professor professor;
-  Course course;
 
   /**
-   * Creates new form ProfessorTemporaryScoureList
+   * Creates new form ProfessorTemporaryScoreList
    */
-  public ProfessorTemporaryScoreList(MainFrame mainFrame, Professor professor, Course course) {
+  public ProfessorTemporaryScoreList(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.professor = professor;
-    this.course = course;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -55,31 +53,22 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
     finalButton = new javax.swing.JButton();
 
     backButton.setText("back");
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
-    nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    nameLabel.setText("name: " + (course.getName()==null ? "" : course.getName()));
 
-    idLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    idLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     idLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    idLabel.setText("id: " + course.getId());
 
-    facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    facultyLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    facultyLabel.setText("faculty: " + (course.getFacultyName()==null ? "" : course.getFacultyName()));
 
-    creditLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    creditLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     creditLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    creditLabel.setText("credit: " + course.getCredit());
 
-    gradeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    gradeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     gradeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    gradeLabel.setText("grade: " + (course.getGrade()==null ? "" : course.getGrade().name()));
 
     studentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -93,27 +82,15 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
     studentTable.setModel(new DefaultTableModel() {
       @Override
       public boolean isCellEditable(int row, int column) {
-        if (column == 5 || column == 6) {
-          return true;
-        }
-        return false;
+        return column == 5 || column == 6;
       }
     });
-    showData();
 
     temporaryButton.setText("temporary submit");
-    temporaryButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        temporaryButtonActionPerformed(evt);
-      }
-    });
+    temporaryButton.addActionListener(this::temporaryButtonActionPerformed);
 
     finalButton.setText("final submit");
-    finalButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        finalButtonActionPerformed(evt);
-      }
-    });
+    finalButton.addActionListener(this::finalButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -169,21 +146,11 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void showData() {
-    DefaultTableModel model = (DefaultTableModel) studentTable.getModel();
-    String[] cols = {"id", "name", "faculty", "grade", "objection", "answer", "score"};
-//    String[][] data = Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course);
-//    model.setDataVector(data, cols);
-  }
-
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
+//    if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
 //   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorsCourseList(mainFrame, professor)));
-      mainFrame.repaintFrame();
-      return;
-    }
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsCourseList(mainFrame, professor), client));
-    mainFrame.repaintFrame();
+//    }
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsCourseList(mainFrame, professor), client));
   }
 
   private void temporaryButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,13 +184,10 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
 //                      .getValueAt(i, 6)==null ? "" : studentTable.getModel().getValueAt(i, 6).toString());
     }
 
-    if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
+//    if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
 //   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorTemporaryScoreList(mainFrame, professor, course)));
-      mainFrame.repaintFrame();
-      return;
-    }
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorTemporaryScoreList(mainFrame, professor, course), client));
-    mainFrame.repaintFrame();
+//    }
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorTemporaryScoreList(mainFrame, professor, course), client));
   }
 
   private void finalButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,6 +206,21 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
 //    }
   }
 
+  private void showData(String[][] data) {
+    DefaultTableModel model = (DefaultTableModel) studentTable.getModel();
+    String[] cols = {"id", "name", "faculty", "grade", "objection", "answer", "score"};
+//    String[][] data = Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course);
+    model.setDataVector(data, cols);
+  }
+
+  public void update(String[][] data, String courseName, String courseId, String faculty, String credit, String grade) {
+    showData(data);
+    nameLabel.setText("name: " + courseName);
+    idLabel.setText("id: " + courseId);
+    facultyLabel.setText("faculty: " + faculty);
+    creditLabel.setText("credit: " + credit);
+    gradeLabel.setText("grade: " + grade);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JButton backButton;

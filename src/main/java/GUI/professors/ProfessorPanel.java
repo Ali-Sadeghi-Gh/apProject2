@@ -364,8 +364,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void temporaryScoreActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsCourseList(mainFrame, professor), 0));
-//    mainFrame.repaintFrame();
+    client.changePanel(PanelName.ProfessorsCourseList, UserRole.Professor);
   }
 
   public void update(int id, String lastLogin, String email, String name, String currentTime) {

@@ -54,8 +54,9 @@ public class ServerController {
 
   private Response scanResponse() {
     Response response = null;
+    response = gson.fromJson(scanner.nextLine(), Response.class);
     try {
-      response = gson.fromJson(scanner.nextLine(), Response.class);
+
     } catch (Exception e) {
       System.out.println("scanning error");
     }

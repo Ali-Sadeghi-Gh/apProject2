@@ -19,5 +19,7 @@ public enum PanelName {
   MinorRequestPanel,
   DropoutRequestPanel,
   DormitoryRequestPanel,
-  DefendingRequestPanel
+  DefendingRequestPanel,
+  ProfessorsCourseList,
+  ProfessorTemporaryScoreList
 }

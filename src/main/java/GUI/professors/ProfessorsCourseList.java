@@ -7,7 +7,7 @@ package GUI.professors;
 
 import GUI.MainFrame;
 import client.Client;
-import shared.model.users.Professor;
+import shared.model.users.UserRole;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -21,13 +21,15 @@ import java.awt.event.MouseEvent;
 public class ProfessorsCourseList extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Professor professor;
+  UserRole userRole;
+
   /**
    * Creates new form ProfessorsCourseList
    */
-  public ProfessorsCourseList(MainFrame mainFrame, Professor professor) {
+  public ProfessorsCourseList(MainFrame mainFrame, Client client, UserRole userRole) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.professor = professor;
+    this.userRole = userRole;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -60,20 +62,12 @@ public class ProfessorsCourseList extends javax.swing.JPanel {
         return false;
       }
     });
-    showData();
 
     courseTable.addMouseListener(new MouseAdapter () {
       public void mouseClicked(MouseEvent e) {
         JTable jTable = (JTable) e.getSource();
-        int courseId = Integer.parseInt((String) courseTable.getModel().getValueAt(jTable.getSelectedRow(), 0));
-        if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
-//    todo      mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorTemporaryScoreList(mainFrame,professor, Controller.getInstance().findCourse(courseId))));
-          mainFrame.repaintFrame();
-          return;
-        }
-//        mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorTemporaryScoreList(mainFrame,
-//                professor, Controller.getInstance().findCourse(courseId)), client));
-        mainFrame.repaintFrame();
+        String courseId = (String) courseTable.getModel().getValueAt(jTable.getSelectedRow(), 0);
+        client.changeToProfessorTemporaryScoreList(userRole, courseId);
       }
     });
 
@@ -99,11 +93,14 @@ public class ProfessorsCourseList extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void showData() {
+  private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) courseTable.getModel();
     String[] cols = {"id", "name", "credit", "faculty", "grade"};
-//    String[][] data = Controller.getInstance().getCoursesDataByProfessor(professor);
-//    model.setDataVector(data, cols);
+    model.setDataVector(data, cols);
+  }
+
+  public void update(String[][] data) {
+    showData(data);
   }
 
   // Variables declaration - do not modify
