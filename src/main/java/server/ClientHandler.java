@@ -82,16 +82,34 @@ public class ClientHandler implements Runnable {
         Professor professor = (Professor) user;
         sendResponse(new Response(professor.getPosition().equals(Professor.Position.dean) ? ResponseStatus.OK : ResponseStatus.ERROR));
         break;
-      case ADD_TEMPORARY_SCORE:
+      case ADD_TEMPORARY_SCORE_BY_STUDENT:
         Controller.getInstance().addTemporaryScore(String.valueOf(user.getId()),
                 (String) request.getData("courseId"), (String) request.getData("objection"),
                 (String) request.getData("answer"), (String) request.getData("score"));
         sendResponse(new Response(ResponseStatus.OK));
         break;
+      case ADD_TEMPORARY_SCORE_BY_PROFESSOR:
+        Controller.getInstance().addTemporaryScore((String) request.getData("studentId"),
+                (String) request.getData("courseId"), (String) request.getData("objection"),
+                (String) request.getData("answer"), (String) request.getData("score"));
+        sendResponse(new Response(ResponseStatus.OK));
+        break;
+      case ADD_SCORE:
+        Response response = null;
+        Course course = Controller.getInstance().findCourse(Integer.parseInt(String.valueOf(request.getData("courseId"))));
+        if (Integer.parseInt(String.valueOf(request.getData("studentsCount"))) == Controller.getInstance().findTemporaryScoreByCourse(course).length) {
+          Controller.getInstance().setFinalScores(course);
+          response = new Response(ResponseStatus.OK);
+          response.setErrorMessage("scores submitted");
+        } else {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("scores must submit temporary first");
+        }
+        sendResponse(response);
+        break;
       case GET_RECOMMENDATION_RESULT:
         Student student = (Student) user;
         professor = Controller.getInstance().findProfessorById(Integer.parseInt((String) request.getData("professorId")));
-        Response response;
         if (professor == null) {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage("professor id not found");

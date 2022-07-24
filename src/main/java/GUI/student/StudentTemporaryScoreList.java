@@ -99,7 +99,7 @@ public class StudentTemporaryScoreList extends javax.swing.JPanel {
 
   private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {
     for (int i = 0; i < courseTable.getModel().getRowCount(); i++) {
-      client.addTemporaryScore(courseTable.getModel().getValueAt(i, 0).toString(),
+      client.addTemporaryScoreByStudent(courseTable.getModel().getValueAt(i, 0).toString(),
               courseTable.getModel().getValueAt(i, 4)==null ? "" : courseTable.getModel().getValueAt(i, 4).toString(),
               null, null);
     }

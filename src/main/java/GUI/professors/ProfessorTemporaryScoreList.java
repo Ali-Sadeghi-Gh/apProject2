@@ -7,10 +7,9 @@ package GUI.professors;
 
 import GUI.MainFrame;
 import client.Client;
-import shared.model.*;
-import shared.model.users.Professor;
+import shared.model.PanelName;
+import shared.model.users.UserRole;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
@@ -21,13 +20,16 @@ import java.awt.*;
 public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
+  UserRole userRole;
+  String courseId;
 
   /**
    * Creates new form ProfessorTemporaryScoreList
    */
-  public ProfessorTemporaryScoreList(MainFrame mainFrame, Client client) {
+  public ProfessorTemporaryScoreList(MainFrame mainFrame, Client client, UserRole userRole) {
     this.client = client;
     this.mainFrame = mainFrame;
+    this.userRole = userRole;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -147,17 +149,18 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
+    if (userRole.equals(UserRole.EduAssistant)) {
 //   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorsCourseList(mainFrame, professor)));
-//    }
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsCourseList(mainFrame, professor), client));
+    } else {
+      client.changePanel(PanelName.ProfessorsCourseList, UserRole.Professor);
+    }
   }
 
   private void temporaryButtonActionPerformed(java.awt.event.ActionEvent evt) {
     for (int i = 0; i < studentTable.getModel().getRowCount(); i++) {
       if (studentTable.getModel().getValueAt(i, 6) == null ||
               studentTable.getModel().getValueAt(i, 6).toString().equals("")) {
-        JOptionPane.showMessageDialog(mainFrame, "input all scores");
+        mainFrame.showMessage("input all scores");
         return;
       }
     }
@@ -165,51 +168,33 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
       try {
         Double.parseDouble(studentTable.getModel().getValueAt(i, 6).toString());
       } catch (Exception e) {
-        JOptionPane.showMessageDialog(mainFrame, "scores must be numbers");
+        mainFrame.showMessage("scores must be numbers");
         return;
       }
     }
     for (int i = 0; i < studentTable.getModel().getRowCount(); i++) {
       double score = Double.parseDouble(studentTable.getModel().getValueAt(i, 6).toString());
       if (score < 0 || score > 20) {
-        JOptionPane.showMessageDialog(mainFrame, "scores must be between 0 and 20");
+        mainFrame.showMessage("scores must be between 0 and 20");
         return;
       }
     }
 
     for (int i = 0; i < studentTable.getModel().getRowCount(); i++) {
-//      Controller.getInstance().addTemporaryScore(studentTable.getModel().getValueAt(i, 0).toString(),
-//              String.valueOf(course.getId()), null, studentTable.getModel().getValueAt(i, 5)==null
-//                      ? "" : studentTable.getModel().getValueAt(i, 5).toString(), studentTable.getModel()
-//                      .getValueAt(i, 6)==null ? "" : studentTable.getModel().getValueAt(i, 6).toString());
+      client.addTemporaryScoreByProfessor(userRole, studentTable.getModel().getValueAt(i, 0).toString(),
+              courseId, null, studentTable.getModel().getValueAt(i, 5)==null
+                      ? "" : studentTable.getModel().getValueAt(i, 5).toString(), studentTable.getModel()
+                      .getValueAt(i, 6)==null ? "" : studentTable.getModel().getValueAt(i, 6).toString());
     }
-
-//    if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
-//   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorTemporaryScoreList(mainFrame, professor, course)));
-//    }
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorTemporaryScoreList(mainFrame, professor, course), client));
   }
 
   private void finalButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    if (studentTable.getModel().getRowCount() == Controller.getInstance().findTemporaryScoreByCourse(course).length) {
-//      Controller.getInstance().setFinalScores(course);
-//      JOptionPane.showMessageDialog(mainFrame, "scores submitted");
-//      if (professor.getPosition()!=null && professor.getPosition().equals(Professor.Position.eduAssistant)) {
-//    todo    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorsCourseList(mainFrame, professor)));
-//        mainFrame.repaintFrame();
-//        return;
-//      }
-//      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsCourseList(mainFrame, professor), client));
-//      mainFrame.repaintFrame();
-//    } else {
-//      JOptionPane.showMessageDialog(mainFrame, "scores must submit temporary first");
-//    }
+    client.addScore(userRole, courseId, studentTable.getModel().getRowCount());
   }
 
   private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) studentTable.getModel();
     String[] cols = {"id", "name", "faculty", "grade", "objection", "answer", "score"};
-//    String[][] data = Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course);
     model.setDataVector(data, cols);
   }
 
@@ -220,6 +205,7 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
     facultyLabel.setText("faculty: " + faculty);
     creditLabel.setText("credit: " + credit);
     gradeLabel.setText("grade: " + grade);
+    this.courseId = courseId;
   }
 
   // Variables declaration - do not modify

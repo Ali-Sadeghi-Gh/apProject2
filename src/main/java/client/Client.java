@@ -374,10 +374,27 @@ public class Client {
     }).start();
   }
 
-  public void addTemporaryScore(String courseId, String objection, String answer, String score) {
-    Response response = serverController.sendAddTemporaryScoreRequest(courseId, objection, answer, score);
+  public void addTemporaryScoreByStudent(String courseId, String objection, String answer, String score) {
+    Response response = serverController.sendAddTemporaryScoreByStudentRequest(courseId, objection, answer, score);
     if (response.getStatus().equals(ResponseStatus.OK)) {
       changePanel(PanelName.StudentTemporaryScoreList, null);
+    }
+  }
+
+  public void addTemporaryScoreByProfessor(UserRole userRole, String studentId, String courseId, String objection, String answer, String score) {
+    Response response = serverController.sendAddTemporaryScoreByProfessorRequest(studentId, courseId, objection, answer, score);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      changeToProfessorTemporaryScoreList(userRole, courseId);
+    }
+  }
+
+  public void addScore(UserRole userRole, String courseId, int studentsCount) {
+    Response response = serverController.sendAddScoreRequest(courseId, studentsCount);
+    mainFrame.showMessage(response.getErrorMessage());
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      changePanel(PanelName.ProfessorsCourseList, userRole);
+    } else {
+      changeToProfessorTemporaryScoreList(userRole, courseId);
     }
   }
 
@@ -626,9 +643,8 @@ public class Client {
     Request request = new Request(RequestType.UPDATE);
     request.addData("courseId", courseId);
     Response response = serverController.sendUpdateRequest(PanelName.ProfessorTemporaryScoreList, request);
-    System.out.println(response);
 
-    ProfessorTemporaryScoreList professorTemporaryScoreList =  new ProfessorTemporaryScoreList(mainFrame, this);
+    ProfessorTemporaryScoreList professorTemporaryScoreList =  new ProfessorTemporaryScoreList(mainFrame, this, userRole);
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
     for (ArrayList<String> arrayList1 : arrayList) {

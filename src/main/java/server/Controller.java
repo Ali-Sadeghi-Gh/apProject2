@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Controller {
-  static Controller instance = new Controller();
+  private static final Controller instance = new Controller();
   static Logger logger = LogManager.getLogger(Controller.class);
   static Data data = new Data();
 

@@ -103,12 +103,31 @@ public class ServerController {
     return scanResponse();
   }
 
-  public Response sendAddTemporaryScoreRequest(String courseId, String objection, String answer, String score) {
-    Request request = new Request(RequestType.ADD_TEMPORARY_SCORE);
+  public Response sendAddTemporaryScoreByStudentRequest(String courseId, String objection, String answer, String score) {
+    Request request = new Request(RequestType.ADD_TEMPORARY_SCORE_BY_STUDENT);
     request.addData("courseId", courseId);
     request.addData("objection", objection);
     request.addData("answer", answer);
     request.addData("score", score);
+    sendRequest(request);
+    return scanResponse();
+  }
+
+  public Response sendAddTemporaryScoreByProfessorRequest(String studentId, String courseId, String objection, String answer, String score) {
+    Request request = new Request(RequestType.ADD_TEMPORARY_SCORE_BY_PROFESSOR);
+    request.addData("studentId", studentId);
+    request.addData("courseId", courseId);
+    request.addData("objection", objection);
+    request.addData("answer", answer);
+    request.addData("score", score);
+    sendRequest(request);
+    return scanResponse();
+  }
+
+  public Response sendAddScoreRequest(String courseId, int studentsCount) {
+    Request request = new Request(RequestType.ADD_SCORE);
+    request.addData("courseId", courseId);
+    request.addData("studentsCount", String.valueOf(studentsCount));
     sendRequest(request);
     return scanResponse();
   }
