@@ -143,6 +143,13 @@ public class ClientHandler implements Runnable {
         response.setErrorMessage("your request submitted");
         sendResponse(response);
         break;
+      case DORMITORY_REQUEST:
+        student = (Student) user;
+        response = new Response(ResponseStatus.OK);
+        response.addData("result", Controller.getInstance().getDormitoryRequest(student));
+        response.setErrorMessage("your request submitted");
+        sendResponse(response);
+        break;
     }
   }
 
@@ -243,6 +250,15 @@ public class ClientHandler implements Runnable {
           response.addData("result", educationalRequest.getResult());
         } else {
           response.addData("result", "");
+        }
+        break;
+      case DormitoryRequestPanel:
+        student = (Student) user;
+        if (student.getGrade() != null && student.getGrade().equals(Student.Grade.masters)) {
+          response.addData("result", student.getDormitoryRequest()==null ? "" : student.getDormitoryRequest());
+        } else {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("this section is only for masters students");
         }
         break;
     }

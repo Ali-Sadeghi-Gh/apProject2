@@ -5,20 +5,23 @@ package GUI.student;
  * and open the template in the editor.
  */
 
-import shared.model.users.Student;
+import GUI.MainFrame;
+import client.Client;
 
 /**
  *
  * @author HP
  */
 public class DormitoryRequestPanel extends javax.swing.JPanel {
-  Student student;
+  MainFrame mainFrame;
+  Client client;
 
   /**
    * Creates new form DormitoryPanel
    */
-  public DormitoryRequestPanel(Student student) {
-    this.student = student;
+  public DormitoryRequestPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
+    this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -36,15 +39,10 @@ public class DormitoryRequestPanel extends javax.swing.JPanel {
     resultLabel = new javax.swing.JLabel();
 
     requestButton.setText("request dormitory");
-    requestButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        requestButtonActionPerformed(evt);
-      }
-    });
+    requestButton.addActionListener(this::requestButtonActionPerformed);
 
     resultLabel.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
     resultLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    resultLabel.setText(student.getDormitoryRequest()==null ? "" : "your request " + student.getDormitoryRequest());
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -72,12 +70,16 @@ public class DormitoryRequestPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (student.getDormitoryRequest() == null) {
-//      student.setDormitoryRequest(Controller.getInstance().getDormitoryRequest(student));
-      resultLabel.setText("your request " + student.getDormitoryRequest());
+    if (resultLabel.getText().equals("")) {
+      client.dormitoryRequest(this);
+    } else {
+      mainFrame.showMessage("you can't request more than once");
     }
   }
 
+  public void update(String result) {
+    resultLabel.setText((result.equals("") ? "" : "your request ") + result);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JButton requestButton;

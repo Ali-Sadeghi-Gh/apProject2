@@ -135,4 +135,9 @@ public class ServerController {
     sendRequest(new Request(RequestType.DROPOUT_REQUEST));
     return scanResponse();
   }
+
+  public Response sendDormitoryRequest() {
+    sendRequest(new Request(RequestType.DORMITORY_REQUEST));
+    return scanResponse();
+  }
 }

@@ -753,12 +753,14 @@ public class Controller {
 
   public String getDormitoryRequest(Student student) {
     logger.info("student with id " + student.getId() + " request dormitory");
-    Random random = new Random();
-    if (random.nextInt(2) == 0) {
-      return "rejected";
+    String result;
+    if (new Random().nextInt(2) == 0) {
+      result = "rejected";
     } else {
-      return "accepted";
+      result = "accepted";
     }
+    student.setDormitoryRequest(result);
+    return result;
   }
 
   public void answerRecommendation(EducationalRequest request, boolean accepted) {

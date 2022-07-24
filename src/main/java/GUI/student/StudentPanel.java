@@ -375,21 +375,16 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void defendingButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        if (student.getGrade() != null && student.getGrade().equals(Student.Grade.phd)) {
-//            mainFrame.setContentPane(new StudentPanel(mainFrame, student, new DefendingRequestPanel(student)));
-//            mainFrame.repaintFrame();
-//        } else {
-//            JOptionPane.showMessageDialog(mainFrame, "this section is only for phd students");
-//        }
+// if (student.getGrade() != null && student.getGrade().equals(Student.Grade.phd)) {
+//     mainFrame.setContentPane(new StudentPanel(mainFrame, student, new DefendingRequestPanel(student)));
+//     mainFrame.repaintFrame();
+// } else {
+//     JOptionPane.showMessageDialog(mainFrame, "this section is only for phd students");
+// }
     }
 
     private void dormitoryButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//        if (student.getGrade() != null && student.getGrade().equals(Student.Grade.masters)) {
-//            mainFrame.setContentPane(new StudentPanel(mainFrame, student, new DormitoryRequestPanel(student)));
-//            mainFrame.repaintFrame();
-//        } else {
-//            JOptionPane.showMessageDialog(mainFrame, "this section is only for masters students");
-//        }
+        client.changePanel(PanelName.DormitoryRequestPanel, null);
     }
 
     private void recommendationButtonActionPerformed(java.awt.event.ActionEvent evt) {

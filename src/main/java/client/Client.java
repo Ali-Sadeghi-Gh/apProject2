@@ -86,7 +86,6 @@ public class Client {
   }
 
   public void changePanel(PanelName panelName, UserRole userRole) {
-    Loop.stopCurrent();
     switch (panelName) {
       case StudentMainPanel:
         changeToStudentMainPanel();
@@ -126,6 +125,9 @@ public class Client {
         break;
       case DropoutRequestPanel:
         changeToDropoutRequestPanel();
+        break;
+      case DormitoryRequestPanel:
+        changeToDormitoryRequestPanel();
         break;
     }
   }
@@ -529,6 +531,31 @@ public class Client {
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       dropoutRequestPanel.update((String) response.getData("result"));
+    }
+  }
+
+  private void changeToDormitoryRequestPanel() {
+    Response response = serverController.sendUpdateRequest(PanelName.DormitoryRequestPanel);
+    if (!response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      return;
+    }
+    DormitoryRequestPanel dormitoryRequestPanel = new DormitoryRequestPanel(mainFrame, this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, dormitoryRequestPanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+    dormitoryRequestPanel.update((String) response.getData("result"));
+
+    new Loop(1, () -> {
+      updateStudentPanel(studentPanel);
+    }).start();
+  }
+
+  public void dormitoryRequest(DormitoryRequestPanel dormitoryRequestPanel) {
+    Response response = serverController.sendDormitoryRequest();
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      dormitoryRequestPanel.update((String) response.getData("result"));
     }
   }
 }
