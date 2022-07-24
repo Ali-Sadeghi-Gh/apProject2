@@ -81,7 +81,7 @@ public class DropoutRequestPanel extends javax.swing.JPanel {
     }
   }
 
-  public void  update(String result) {
+  public void update(String result) {
     resultLabel.setText(result);
   }
 

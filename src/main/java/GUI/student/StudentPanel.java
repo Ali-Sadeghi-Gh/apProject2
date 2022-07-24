@@ -375,12 +375,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void defendingButtonActionPerformed(java.awt.event.ActionEvent evt) {
-// if (student.getGrade() != null && student.getGrade().equals(Student.Grade.phd)) {
-//     mainFrame.setContentPane(new StudentPanel(mainFrame, student, new DefendingRequestPanel(student)));
-//     mainFrame.repaintFrame();
-// } else {
-//     JOptionPane.showMessageDialog(mainFrame, "this section is only for phd students");
-// }
+        client.changePanel(PanelName.DefendingRequestPanel, null);
     }
 
     private void dormitoryButtonActionPerformed(java.awt.event.ActionEvent evt) {

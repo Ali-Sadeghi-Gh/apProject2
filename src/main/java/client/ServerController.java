@@ -140,4 +140,9 @@ public class ServerController {
     sendRequest(new Request(RequestType.DORMITORY_REQUEST));
     return scanResponse();
   }
+
+  public Response sendDefendingRequest() {
+    sendRequest(new Request(RequestType.DEFENDING_REQUEST));
+    return scanResponse();
+  }
 }

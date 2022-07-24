@@ -6,19 +6,25 @@ package GUI.student;
  * and open the template in the editor.
  */
 
-import shared.model.users.Student;
+import GUI.MainFrame;
+import client.Client;
+
+import java.awt.*;
 
 /**
  *
  * @author HP
  */
 public class DefendingRequestPanel extends javax.swing.JPanel {
-  Student student;
+  MainFrame mainFrame;
+  Client client;
+
   /**
    * Creates new form defendingPanel
    */
-  public DefendingRequestPanel(Student student) {
-    this.student = student;
+  public DefendingRequestPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
+    this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -35,16 +41,11 @@ public class DefendingRequestPanel extends javax.swing.JPanel {
     resultLabel = new javax.swing.JLabel();
     requestButton = new javax.swing.JButton();
 
-    resultLabel.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    resultLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     resultLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    resultLabel.setText(student.getDefendingTurn()==null ? "" : "your defending turn is " + student.getDefendingTurn());
 
     requestButton.setText("request defending turn");
-    requestButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        requestButtonActionPerformed(evt);
-      }
-    });
+    requestButton.addActionListener(this::requestButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -72,12 +73,16 @@ public class DefendingRequestPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (student.getDefendingTurn() == null) {
-//      student.setDefendingTurn(Controller.getInstance().getDefendingTurn(student));
-      resultLabel.setText("your defending turn is " + student.getDefendingTurn());
+    if (resultLabel.getText().equals("")) {
+      client.defendingRequest(this);
+    } else {
+      mainFrame.showMessage("you can't request more than once");
     }
   }
 
+  public void update(String result) {
+    resultLabel.setText((result.equals("") ? "" : "your defending turn is ") + result);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JButton requestButton;

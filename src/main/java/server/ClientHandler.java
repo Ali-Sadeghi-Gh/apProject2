@@ -150,6 +150,14 @@ public class ClientHandler implements Runnable {
         response.setErrorMessage("your request submitted");
         sendResponse(response);
         break;
+      case DEFENDING_REQUEST:
+        student = (Student) user;
+        response = new Response(ResponseStatus.OK);
+        student.setDefendingTurn(Controller.getInstance().getDefendingTurn(student));
+        response.addData("result", student.getDefendingTurn());
+        response.setErrorMessage("your request submitted");
+        sendResponse(response);
+        break;
     }
   }
 
@@ -259,6 +267,15 @@ public class ClientHandler implements Runnable {
         } else {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage("this section is only for masters students");
+        }
+        break;
+      case DefendingRequestPanel:
+        student = (Student) user;
+        if (student.getGrade() != null && student.getGrade().equals(Student.Grade.phd)) {
+          response.addData("result", student.getDefendingTurn()==null ? "" : student.getDefendingTurn());
+        } else {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("this section is only for phd students");
         }
         break;
     }

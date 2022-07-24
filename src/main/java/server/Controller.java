@@ -742,8 +742,12 @@ public class Controller {
 
   public String getDefendingTurn(Student student) {
     try {
-      University.getInstance().setDefendingTurn(Time.convertDateToStringExam(new Date(Time
-              .convertStringToDateExam(University.getInstance().getDefendingTurn()).getTime() + 1000L * 3600 * 24 * 7)));
+      long time = Time.convertStringToDateExam(University.getInstance().getDefendingTurn()).getTime();
+      do {
+        time += 1000L * 3600 * 24 * 7;
+      } while (time < new Date().getTime());
+
+      University.getInstance().setDefendingTurn(Time.convertDateToStringExam(new Date(time)));
       logger.info("student with id " + student.getId() + " request defending turn");
     } catch (Exception e) {
       logger.error("parse error in getDefendingTurn");

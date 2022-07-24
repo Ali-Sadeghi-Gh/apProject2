@@ -129,6 +129,9 @@ public class Client {
       case DormitoryRequestPanel:
         changeToDormitoryRequestPanel();
         break;
+      case DefendingRequestPanel:
+        changeToDefendingRequestPanel();
+        break;
     }
   }
 
@@ -556,6 +559,31 @@ public class Client {
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       dormitoryRequestPanel.update((String) response.getData("result"));
+    }
+  }
+
+  private void changeToDefendingRequestPanel() {
+    Response response = serverController.sendUpdateRequest(PanelName.DefendingRequestPanel);
+    if (!response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      return;
+    }
+    DefendingRequestPanel defendingRequestPanel = new DefendingRequestPanel(mainFrame, this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, defendingRequestPanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+    defendingRequestPanel.update((String) response.getData("result"));
+
+    new Loop(1, () -> {
+      updateStudentPanel(studentPanel);
+    }).start();
+  }
+
+  public void defendingRequest(DefendingRequestPanel defendingRequestPanel) {
+    Response response = serverController.sendDefendingRequest();
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      defendingRequestPanel.update((String) response.getData("result"));
     }
   }
 }
