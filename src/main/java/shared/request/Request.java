@@ -23,4 +23,13 @@ public class Request {
   public Object getData(String dataName) {
     return this.data.get(dataName);
   }
+
+  @Override
+  public String toString() {
+    String str = requestType.name();
+    for (String string : data.keySet()) {
+      str += " " + string;
+    }
+    return str;
+  }
 }

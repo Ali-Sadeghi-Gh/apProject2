@@ -3,6 +3,7 @@ package client;
 import GUI.*;
 import GUI.professors.*;
 import GUI.professors.dean.AddProfessorDeanPanel;
+import GUI.professors.dean.ChangeProfessorPanel;
 import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.dean.RemoveProfessorPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
@@ -147,6 +148,10 @@ public class Client {
         break;
       case AddProfessorDeanPanel:
         changeToAddProfessorDeanPanel();
+        break;
+      case ChangeProfessorPanel:
+        changeToChangeProfessorPanel();
+        break;
     }
   }
 
@@ -204,7 +209,7 @@ public class Client {
     JPanel jPanel = null;
     if (userRole.equals(UserRole.EduAssistant)) {
       jPanel = new EduAssistantPanel(mainFrame, professorProfilePanel, this);
-    } else if (userRole.equals(UserRole.Professor)){
+    } else if (userRole.equals(UserRole.Professor)) {
       jPanel = new ProfessorPanel(mainFrame, professorProfilePanel, this);
     }
     mainFrame.setContentPane(jPanel);
@@ -220,7 +225,7 @@ public class Client {
       if (userRole.equals(UserRole.EduAssistant)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
-      } else if (userRole.equals(UserRole.Professor)){
+      } else if (userRole.equals(UserRole.Professor)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
       }
@@ -654,7 +659,7 @@ public class Client {
     request.addData("courseId", courseId);
     Response response = serverController.sendUpdateRequest(PanelName.ProfessorTemporaryScoreList, request);
 
-    ProfessorTemporaryScoreList professorTemporaryScoreList =  new ProfessorTemporaryScoreList(mainFrame, this, userRole);
+    ProfessorTemporaryScoreList professorTemporaryScoreList = new ProfessorTemporaryScoreList(mainFrame, this, userRole);
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
     for (ArrayList<String> arrayList1 : arrayList) {
@@ -776,5 +781,40 @@ public class Client {
             password, roomNumber, degree, position);
     mainFrame.showMessage(response.getErrorMessage());
     changePanel(PanelName.AddProfessorDeanPanel, null);
+  }
+
+  private void changeToChangeProfessorPanel() {
+    ChangeProfessorPanel changeProfessorPanel = new ChangeProfessorPanel(mainFrame, this);
+    ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, changeProfessorPanel, this);
+    mainFrame.setContentPane(professorPanel);
+
+    new Loop(1, () -> {
+      updateProfessorPanel(professorPanel);
+    }).start();
+  }
+
+  public void findProfessorForChange(ChangeProfessorPanel changeProfessorPanel, String professorId) {
+    Request request = new Request(RequestType.UPDATE);
+    request.addData("professorId", professorId);
+    Response response = serverController.sendUpdateRequest(PanelName.ChangeProfessorPanel, request);
+    if (!response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      changeProfessorPanel.update();
+      return;
+    }
+    changeProfessorPanel.update((String) response.getData("id"), (String) response.getData("name"),
+            (String) response.getData("melliCode"), (String) response.getData("email"),
+            (String) response.getData("phoneNumber"), (String) response.getData("roomNumber"),
+            ((ArrayList<String>) response.getData("degrees")).toArray(new String[0]),
+            ((ArrayList<String>) response.getData("positions")).toArray(new String[0]));
+  }
+
+  public void changeProfessor(ChangeProfessorPanel changeProfessorPanel, String professorId, String name, String email, String melliCode,
+                              String phoneNumber, String password, String roomNumber, String degree, String position) {
+    Response response = serverController.sendChangeProfessorRequest(professorId, name, email,
+            melliCode, phoneNumber, password, roomNumber, degree, position);
+
+    mainFrame.showMessage(response.getErrorMessage());
+    changeProfessorPanel.update();
   }
 }

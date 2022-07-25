@@ -186,7 +186,7 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
   }
 
   private void changeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
+    client.changePanel(PanelName.ChangeProfessorPanel, null);
   }
 
   public void showData(String[][] data) {

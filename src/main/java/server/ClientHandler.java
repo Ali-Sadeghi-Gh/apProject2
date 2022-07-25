@@ -211,6 +211,22 @@ public class ClientHandler implements Runnable {
         response.setErrorMessage("professor with id " + id + " added");
         sendResponse(response);
         break;
+      case CHANGE_PROFESSOR:
+        Professor changingProfessor = Controller.getInstance().findProfessorById(Integer.parseInt(String.valueOf(request.getData("professorId"))));
+        if (changingProfessor == null || !changingProfessor.getFacultyName().equals(user.getFacultyName())) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("professor not found");
+        } else {
+          Controller.getInstance().changeProfessor(changingProfessor, (String) request.getData("name"),
+                  (String) request.getData("email"), (String) request.getData("melliCode"),
+                  (String) request.getData("phoneNumber"), (String) request.getData("password"),
+                  (String) request.getData("roomNumber"), (String) request.getData("degree"),
+                  (String) request.getData("position"));
+          response = new Response(ResponseStatus.OK);
+          response.setErrorMessage("professor's information changed");
+        }
+        sendResponse(response);
+        break;
     }
   }
 
@@ -355,6 +371,41 @@ public class ClientHandler implements Runnable {
           positions = new String[]{Professor.Position.professor.name()};
         }
         response.addData("positions", positions);
+        break;
+      case ChangeProfessorPanel:
+        Professor changingProfessor = Controller.getInstance().findProfessorById(Integer.parseInt(String.valueOf(request.getData("professorId"))));
+        if (changingProfessor == null || !changingProfessor.getFacultyName().equals(user.getFacultyName())) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("professor not found");
+        } else {
+          response.addData("id", String.valueOf(changingProfessor.getId()));
+          response.addData("name", changingProfessor.getName()==null ? "" : changingProfessor.getName());
+          response.addData("melliCode", changingProfessor.getMelliCode()==null ? "" : changingProfessor.getMelliCode());
+          response.addData("email", changingProfessor.getEmail()==null ? "" : changingProfessor.getEmail());
+          response.addData("phoneNumber", changingProfessor.getPhoneNumber()==null ? "" : changingProfessor.getPhoneNumber());
+          response.addData("roomNumber", changingProfessor.getRoomNumber()==null ? "" : changingProfessor.getRoomNumber());
+          String[] degrees;
+          if (changingProfessor.getDegree() == null || changingProfessor.getDegree().equals(Professor.Degree.assistant)) {
+            degrees = new String[]{Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name()};
+          } else if (changingProfessor.getDegree().equals(Professor.Degree.associate)) {
+            degrees = new String[]{Professor.Degree.associate.name(), Professor.Degree.assistant.name(), Professor.Degree.full.name()};
+          } else {
+            degrees = new String[]{Professor.Degree.full.name(), Professor.Degree.assistant.name(), Professor.Degree.associate.name()};
+          }
+          response.addData("degrees", degrees);
+          if (changingProfessor.getPosition() == null || changingProfessor.getPosition().equals(Professor.Position.professor)) {
+            if (Controller.getInstance().findEduAssistantByFaculty(user.getFacultyName()) == null) {
+              positions = new String[]{Professor.Position.professor.name(), Professor.Position.eduAssistant.name()};
+            } else {
+              positions = new String[]{Professor.Position.professor.name()};
+            }
+          } else if (changingProfessor.getPosition().equals(Professor.Position.eduAssistant)) {
+            positions = new String[]{Professor.Position.eduAssistant.name(), Professor.Position.professor.name()};
+          } else {
+            positions = new String[]{Professor.Position.dean.name()};
+          }
+          response.addData("positions", positions);
+        }
         break;
     }
     sendResponse(response);

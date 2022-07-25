@@ -6,11 +6,12 @@ package GUI.professors.dean;
  */
 
 import GUI.MainFrame;
-import GUI.professors.ProfessorPanel;
 import client.Client;
-import shared.model.users.Professor;
+import shared.model.PanelName;
+import shared.model.users.UserRole;
 
-import javax.swing.*;
+import java.awt.*;
+import java.util.Objects;
 
 /**
  *
@@ -19,14 +20,12 @@ import javax.swing.*;
 public class ChangeProfessorPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Professor professor;
-  Professor changingProfessor = null;
 
   /**
    * Creates new form ChangeProfessorPanel
    */
-  public ChangeProfessorPanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public ChangeProfessorPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -63,47 +62,39 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
     idLabel = new javax.swing.JLabel();
     findButton = new javax.swing.JButton();
 
-    nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     nameLabel.setText("name:");
 
-    melliCodeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    melliCodeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     melliCodeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     melliCodeLabel.setText("code melli:");
 
-    positionLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    positionLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     positionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     positionLabel.setText("position:");
 
     backButton.setText("back");
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
     positionBox.setMaximumRowCount(10);
     positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"none"}));
 
     emailField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    emailLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    emailLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     emailLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     emailLabel.setText("email:");
 
-    changeButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+    changeButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 24)); // NOI18N
     changeButton.setText("change");
-    changeButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        changeButtonActionPerformed(evt);
-      }
-    });
+    changeButton.addActionListener(this::changeButtonActionPerformed);
 
     phoneField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
     nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    phoneLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    phoneLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     phoneLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     phoneLabel.setText("phone number:");
 
@@ -111,17 +102,17 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
 
     roomNumberField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    passwordLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    passwordLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     passwordLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     passwordLabel.setText("password:");
 
-    roomNumberLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    roomNumberLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     roomNumberLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     roomNumberLabel.setText("room number");
 
     melliCodeField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    degreeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    degreeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     degreeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     degreeLabel.setText("degree:");
 
@@ -130,17 +121,13 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
 
     idField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    idLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    idLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     idLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     idLabel.setText("id:");
 
-    findButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    findButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     findButton.setText("find");
-    findButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        findButtonActionPerformed(evt);
-      }
-    });
+    findButton.addActionListener(this::findButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -248,98 +235,88 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsListDeanPanel(mainFrame, client), client));
-    mainFrame.repaintFrame();
-  }
-
-  private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (changingProfessor == null) {
-      JOptionPane.showMessageDialog(mainFrame, "choose a professor");
-      return;
-    }
-
-    if (nameField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "name can't be empty");
-      return;
-    }
-    if (melliCodeField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "code melli can't be empty");
-      return;
-    }
-    if (roomNumberField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "room number can't be empty");
-      return;
-    }
-
-    try {
-      Integer.parseInt(melliCodeField.getText());
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "code melli must be a number");
-      return;
-    }
-    try {
-      Integer.parseInt(roomNumberField.getText());
-    } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "year of entry must be a number");
-      return;
-    }
-
-//    Controller.getInstance().changeProfessor(changingProfessor, nameField.getText(), emailField.getText(), melliCodeField.getText(),
-//            phoneField.getText(), passwordField.getText(),
-//            roomNumberField.getText(), degreeBox.getSelectedItem().toString(), positionBox.getSelectedItem().toString());
-
-    JOptionPane.showMessageDialog(mainFrame, "professor's information changed");
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
-    mainFrame.repaintFrame();
+    client.changeToProfessorsListPanel(UserRole.Professor, "all", "", "all");
   }
 
   private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {
     try {
       Integer.parseInt(idField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "professor id must be a number");
-      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
-      mainFrame.repaintFrame();
-      return;
-    }
-//    changingProfessor = Controller.getInstance().findProfessorById(Integer.parseInt(idField.getText()));
-
-    idField.setText("");
-    if (changingProfessor == null || !changingProfessor.getFacultyName().equals(professor.getFacultyName())) {
-      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
-      mainFrame.repaintFrame();
-      JOptionPane.showMessageDialog(mainFrame, "professor not found");
+      mainFrame.showMessage("professor id must be a number");
+      client.changePanel(PanelName.ChangeProfessorPanel, null);
       return;
     }
 
-    nameField.setText(changingProfessor.getName()==null ? "" : changingProfessor.getName());
-    passwordField.setText("");
-    melliCodeField.setText(changingProfessor.getMelliCode()==null ? "" : changingProfessor.getMelliCode());
-    emailField.setText(changingProfessor.getEmail()==null ? "" : changingProfessor.getEmail());
-    phoneField.setText(changingProfessor.getPhoneNumber()==null ? "" : changingProfessor.getPhoneNumber());
-    roomNumberField.setText(changingProfessor.getRoomNumber()==null ? "" : changingProfessor.getRoomNumber());
-
-    if (changingProfessor.getDegree() == null || changingProfessor.getDegree().equals(Professor.Degree.assistant)) {
-      degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name()}));
-    } else if (changingProfessor.getDegree().equals(Professor.Degree.associate)) {
-      degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Degree.associate.name(), Professor.Degree.assistant.name(), Professor.Degree.full.name()}));
-    } else {
-      degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Degree.full.name(), Professor.Degree.assistant.name(), Professor.Degree.associate.name()}));
-    }
-
-    if (changingProfessor.getPosition() == null || changingProfessor.getPosition().equals(Professor.Position.professor)) {
-//      if (Controller.getInstance().findEduAssistantByFaculty(professor.getFacultyName()) == null) {
-//        positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.professor.name(), Professor.Position.eduAssistant.name()}));
-//      } else {
-//        positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.professor.name()}));
-//      }
-    } else if (changingProfessor.getPosition().equals(Professor.Position.eduAssistant)) {
-      positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.eduAssistant.name(), Professor.Position.professor.name()}));
-    } else {
-      positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Professor.Position.dean.name()}));
-    }
+    client.findProfessorForChange(this, idField.getText());
   }
 
+  private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    if (idField.getText().equals("")) {
+      mainFrame.showMessage("choose a professor");
+      return;
+    }
+    try {
+      Integer.parseInt(idField.getText());
+    } catch (Exception e) {
+      mainFrame.showMessage("professor id must be a number");
+      client.changePanel(PanelName.ChangeProfessorPanel, null);
+      return;
+    }
+    if (nameField.getText().equals("")) {
+      mainFrame.showMessage("name can't be empty");
+      return;
+    }
+    if (melliCodeField.getText().equals("")) {
+      mainFrame.showMessage("code melli can't be empty");
+      return;
+    }
+    if (roomNumberField.getText().equals("")) {
+      mainFrame.showMessage("room number can't be empty");
+      return;
+    }
+
+    try {
+      Integer.parseInt(melliCodeField.getText());
+    } catch (Exception e) {
+      mainFrame.showMessage("code melli must be a number");
+      return;
+    }
+    try {
+      Integer.parseInt(roomNumberField.getText());
+    } catch (Exception e) {
+      mainFrame.showMessage("year of entry must be a number");
+      return;
+    }
+
+    client.changeProfessor(this, idField.getText(), nameField.getText(), emailField.getText(),
+            melliCodeField.getText(), phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
+            Objects.requireNonNull(degreeBox.getSelectedItem()).toString(), Objects.requireNonNull(positionBox.getSelectedItem()).toString());
+  }
+
+  public void update(String id, String name, String melliCode, String email, String phoneNumber, String roomNumber,
+                     String[] degrees, String[] positions) {
+    idField.setText(id);
+    nameField.setText(name);
+    passwordField.setText("");
+    melliCodeField.setText(melliCode);
+    emailField.setText(email);
+    phoneField.setText(phoneNumber);
+    roomNumberField.setText(roomNumber);
+    degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(degrees));
+    positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(positions));
+  }
+
+  public void update() {
+    idField.setText("");
+    nameField.setText("");
+    passwordField.setText("");
+    melliCodeField.setText("");
+    emailField.setText("");
+    phoneField.setText("");
+    roomNumberField.setText("");
+    degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"none"}));
+    positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"none"}));
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JButton backButton;
