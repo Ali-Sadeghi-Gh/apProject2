@@ -2,6 +2,7 @@ package client;
 
 import GUI.*;
 import GUI.professors.*;
+import GUI.professors.dean.AddProfessorDeanPanel;
 import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.dean.RemoveProfessorPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
@@ -144,6 +145,8 @@ public class Client {
       case RemoveProfessorPanel:
         changeToRemoveProfessorPanel();
         break;
+      case AddProfessorDeanPanel:
+        changeToAddProfessorDeanPanel();
     }
   }
 
@@ -751,5 +754,27 @@ public class Client {
   public void removeProfessor(String professorId) {
     Response response = serverController.sendRemoveProfessorRequest(professorId);
     mainFrame.showMessage(response.getErrorMessage());
+  }
+
+  private void changeToAddProfessorDeanPanel() {
+    AddProfessorDeanPanel addProfessorDeanPanel = new AddProfessorDeanPanel(mainFrame, this);
+    ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, addProfessorDeanPanel, this);
+    mainFrame.setContentPane(professorPanel);
+
+    Response response = serverController.sendUpdateRequest(PanelName.AddProfessorDeanPanel);
+    addProfessorDeanPanel.update(((ArrayList<String>) response.getData("positions")).toArray(new String[0]));
+
+    new Loop(1, () -> {
+      updateProfessorPanel(professorPanel);
+    }).start();
+  }
+
+  public void addProfessor(String name, String email,
+                           String melliCode, String phoneNumber, String password, String roomNumber,
+                           String degree, String position) {
+    Response response = serverController.sendAddProfessorRequest(name, email, melliCode, phoneNumber,
+            password, roomNumber, degree, position);
+    mainFrame.showMessage(response.getErrorMessage());
+    changePanel(PanelName.AddProfessorDeanPanel, null);
   }
 }

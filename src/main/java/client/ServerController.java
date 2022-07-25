@@ -54,9 +54,8 @@ public class ServerController {
 
   private Response scanResponse() {
     Response response = null;
-    response = gson.fromJson(scanner.nextLine(), Response.class);
     try {
-
+      response = gson.fromJson(scanner.nextLine(), Response.class);
     } catch (Exception e) {
       System.out.println("scanning error");
     }
@@ -177,6 +176,21 @@ public class ServerController {
   public Response sendRemoveProfessorRequest(String professorId) {
     Request request = new Request(RequestType.REMOVE_PROFESSOR);
     request.addData("professorId", professorId);
+    sendRequest(request);
+    return scanResponse();
+  }
+
+  public Response sendAddProfessorRequest(String name, String email, String melliCode, String phoneNumber,
+                                          String password, String roomNumber, String degree, String position) {
+    Request request = new Request(RequestType.ADD_PROFESSOR);
+    request.addData("name", name);
+    request.addData("email", email);
+    request.addData("melliCode", melliCode);
+    request.addData("phoneNumber", phoneNumber);
+    request.addData("password", password);
+    request.addData("roomNumber", roomNumber);
+    request.addData("degree", degree);
+    request.addData("position", position);
     sendRequest(request);
     return scanResponse();
   }

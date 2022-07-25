@@ -203,6 +203,14 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case ADD_PROFESSOR:
+        id = Controller.getInstance().addProfessor((String) request.getData("name"), (String) request.getData("email"), (String) request.getData("melliCode"),
+                user.getFacultyName(), (String) request.getData("phoneNumber"), (String) request.getData("password"), (String) request.getData("roomNumber"),
+                (String) request.getData("degree"), (String) request.getData("position"));
+        response = new Response(ResponseStatus.OK);
+        response.setErrorMessage("professor with id " + id + " added");
+        sendResponse(response);
+        break;
     }
   }
 
@@ -338,6 +346,15 @@ public class ClientHandler implements Runnable {
         break;
       case RecommendationListPanel:
         response.addData("data", Controller.getInstance().getRecommendationData((Professor) user, EducationalRequest.Type.recommendation));
+        break;
+      case AddProfessorDeanPanel:
+        String[] positions;
+        if (Controller.getInstance().findEduAssistantByFaculty(user.getFacultyName()) == null) {
+          positions = new String[]{Professor.Position.professor.name(), Professor.Position.eduAssistant.name()};
+        } else {
+          positions = new String[]{Professor.Position.professor.name()};
+        }
+        response.addData("positions", positions);
         break;
     }
     sendResponse(response);

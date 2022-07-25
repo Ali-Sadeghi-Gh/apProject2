@@ -24,5 +24,6 @@ public enum PanelName {
   ProfessorTemporaryScoreList,
   RecommendationListPanel,
   AnswerRecommendationPanel,
-  RemoveProfessorPanel
+  RemoveProfessorPanel,
+  AddProfessorDeanPanel
 }
