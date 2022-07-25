@@ -19,4 +19,5 @@ public enum RequestType {
   REMOVE_PROFESSOR,
   ADD_PROFESSOR,
   CHANGE_PROFESSOR,
+  ADD_COURSE,
 }

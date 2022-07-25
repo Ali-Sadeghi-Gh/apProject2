@@ -6,12 +6,13 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
+import client.Client;
 import shared.model.Time;
-import shared.model.users.Professor;
 import shared.model.users.Student;
 
-import javax.swing.*;
+import java.awt.*;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  *
@@ -19,12 +20,13 @@ import java.util.Date;
  */
 public class AddCoursePanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
+
   /**
    * Creates new form AddCoursePanel
    */
-  public AddCoursePanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public AddCoursePanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -62,11 +64,11 @@ public class AddCoursePanel extends javax.swing.JPanel {
     jLabel3 = new javax.swing.JLabel();
     examMinuteField = new javax.swing.JTextField();
 
-    gradeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    gradeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     gradeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     gradeLabel.setText("grade:");
 
-    nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     nameLabel.setText("name:");
 
@@ -76,21 +78,17 @@ public class AddCoursePanel extends javax.swing.JPanel {
 
     creditField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    professorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    professorLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     professorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     professorLabel.setText("professor id:");
 
-    creditLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    creditLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     creditLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     creditLabel.setText("credit:");
 
-    addButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+    addButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 24)); // NOI18N
     addButton.setText("add");
-    addButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        addButtonActionPerformed(evt);
-      }
-    });
+    addButton.addActionListener(this::addButtonActionPerformed);
 
     gradeBox.setMaximumRowCount(10);
     gradeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()}));
@@ -101,34 +99,30 @@ public class AddCoursePanel extends javax.swing.JPanel {
     examHourField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
     examMinuteField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    examDateLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    examDateLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     examDateLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     examDateLabel.setText("exam date:");
 
     backButton.setText("back");
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
     classTimeField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    classTimeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    classTimeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     classTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     classTimeLabel.setText("class time");
 
-    jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    jLabel1.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     jLabel1.setText("/");
 
-    jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    jLabel2.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     jLabel2.setText("/");
 
-    examTimeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    examTimeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     examTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     examTimeLabel.setText("exam time:");
 
-    jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    jLabel3.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     jLabel3.setText(":");
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -244,56 +238,53 @@ public class AddCoursePanel extends javax.swing.JPanel {
 
   private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (nameField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "name can't be empty");
+      mainFrame.showMessage("name can't be empty");
       return;
     }
     if (professorField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "professor id can't be empty");
+      mainFrame.showMessage("professor id can't be empty");
       return;
     }
     if (creditField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "credit can't be empty");
+      mainFrame.showMessage("credit can't be empty");
       return;
     }
     if (classTimeField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "class time can't be empty");
+      mainFrame.showMessage("class time can't be empty");
       return;
     }
     if (examYearField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "exam year can't be empty");
+      mainFrame.showMessage("exam year can't be empty");
       return;
     }
     if (examMonthField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "exam month can't be empty");
+      mainFrame.showMessage("exam month can't be empty");
       return;
     }
     if (examDayField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "exam day can't be empty");
+      mainFrame.showMessage("exam day can't be empty");
       return;
     }
     if (examHourField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "exam hour can't be empty");
+      mainFrame.showMessage("exam hour can't be empty");
       return;
     }
     if (examMinuteField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "exam minute can't be empty");
+      mainFrame.showMessage("exam minute can't be empty");
       return;
     }
 
     try {
       Integer.parseInt(professorField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "professor id must be a number");
+      mainFrame.showMessage("professor id must be a number");
       return;
     }
-//    if (Controller.getInstance().findProfessorById(Integer.parseInt(professorField.getText())) == null) {
-//      JOptionPane.showMessageDialog(mainFrame, "professor not found");
-//      return;
-//    }
+
     try {
       Integer.parseInt(creditField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "credit must be a number");
+      mainFrame.showMessage("credit must be a number");
       return;
     }
     try {
@@ -301,30 +292,30 @@ public class AddCoursePanel extends javax.swing.JPanel {
       Integer.parseInt(examMonthField.getText());
       Integer.parseInt(examDayField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "exam date must be a number");
+      mainFrame.showMessage("exam date must be a number");
       return;
     }
     try {
       Integer.parseInt(examHourField.getText());
       Integer.parseInt(examMinuteField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "exam time must be a number");
+      mainFrame.showMessage("exam time must be a number");
       return;
     }
     if (Integer.parseInt(examMonthField.getText())<0 || Integer.parseInt(examMonthField.getText())>12) {
-      JOptionPane.showMessageDialog(mainFrame, "invalid exam month");
+      mainFrame.showMessage("invalid exam month");
       return;
     }
     if (Integer.parseInt(examDayField.getText())<0 || Integer.parseInt(examDayField.getText())>31) {
-      JOptionPane.showMessageDialog(mainFrame, "invalid exam day");
+      mainFrame.showMessage("invalid exam day");
       return;
     }
     if (Integer.parseInt(examHourField.getText())<0 || Integer.parseInt(examHourField.getText())>23) {
-      JOptionPane.showMessageDialog(mainFrame, "invalid exam hour");
+      mainFrame.showMessage("invalid exam hour");
       return;
     }
     if (Integer.parseInt(examMinuteField.getText())<0 || Integer.parseInt(examMinuteField.getText())>59) {
-      JOptionPane.showMessageDialog(mainFrame, "invalid exam minute");
+      mainFrame.showMessage("invalid exam minute");
       return;
     }
     Date examDate;
@@ -332,21 +323,16 @@ public class AddCoursePanel extends javax.swing.JPanel {
       examDate = Time.convertStringToDateExam(examYearField.getText() + "/" + examMonthField.getText() + "/" +
               examDayField.getText() + " " + examHourField.getText() + ":" + examMinuteField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "invalid exam Date or time");
+      mainFrame.showMessage("invalid exam Date or time");
       return;
     }
 
-//    int id = Controller.getInstance().addCourse(nameField.getText(), professor.getFacultyName(), gradeBox.getSelectedItem().toString(),
-//            creditField.getText(), Time.convertDateToStringExam(examDate), classTimeField.getText(), professorField.getText());
-
-//    JOptionPane.showMessageDialog(mainFrame, "course with id: " + id + " added");
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddCoursePanel(mainFrame,professor)));
-    mainFrame.repaintFrame();
+    client.addCourse(nameField.getText(), Objects.requireNonNull(gradeBox.getSelectedItem()).toString(),
+            creditField.getText(), Time.convertDateToStringExam(examDate), classTimeField.getText(), professorField.getText());
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new CoursesListEduPanel(mainFrame,professor)));
-    mainFrame.repaintFrame();
+    client.changeToCoursesListEduPanel("all", "", "all");
   }
 
   // Variables declaration - do not modify

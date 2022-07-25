@@ -227,6 +227,20 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case ADD_COURSE:
+        if (Controller.getInstance().findProfessorById(Integer.parseInt(String.valueOf(request.getData("professorId")))) == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("professor not found");
+        } else {
+          response = new Response(ResponseStatus.OK);
+          id = Controller.getInstance().addCourse((String) request.getData("name"), user.getFacultyName(),
+                  (String) request.getData("grade"), (String) request.getData("credit"),
+                  (String) request.getData("examTime"), (String) request.getData("classTime"),
+                  (String) request.getData("professorId"));
+          response.setErrorMessage("course with id: " + id + " added");
+        }
+        sendResponse(response);
+        break;
     }
   }
 

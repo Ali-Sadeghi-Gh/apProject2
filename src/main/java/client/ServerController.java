@@ -210,4 +210,16 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendAddCourseRequest(String name, String grade, String credit, String examTime, String classTime, String professorId) {
+    Request request = new Request(RequestType.ADD_COURSE);
+    request.addData("name", name);
+    request.addData("grade", grade);
+    request.addData("credit", credit);
+    request.addData("examTime", examTime);
+    request.addData("classTime", classTime);
+    request.addData("professorId", professorId);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

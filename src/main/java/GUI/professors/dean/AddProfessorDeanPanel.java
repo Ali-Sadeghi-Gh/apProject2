@@ -244,7 +244,8 @@ public class AddProfessorDeanPanel extends javax.swing.JPanel {
 
     client.addProfessor(nameField.getText(), emailField.getText(), melliCodeField.getText(),
             phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
-            Objects.requireNonNull(degreeBox.getSelectedItem()).toString(), Objects.requireNonNull(positionBox.getSelectedItem()).toString());
+            Objects.requireNonNull(degreeBox.getSelectedItem()).toString(),
+            Objects.requireNonNull(positionBox.getSelectedItem()).toString());
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -616,7 +616,7 @@ public class Controller {
     return student.getId();
   }
 
-  public int addCourse(String name, String facultyName, String grade, String  credit, String examTime, String classTime, String professorId) {
+  public int addCourse(String name, String facultyName, String grade, String credit, String examTime, String classTime, String professorId) {
     Course course = new Course(name, facultyName, Student.Grade.valueOf(grade), Integer.parseInt(credit), examTime, classTime);
     University.getInstance().addCourse(course);
     findProfessorById(Integer.parseInt(professorId)).addCourse(String.valueOf(course.getId()));

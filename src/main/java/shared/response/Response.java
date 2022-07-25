@@ -31,4 +31,14 @@ public class Response {
   public String getErrorMessage() {
     return errorMessage;
   }
+
+  @Override
+  public String toString() {
+    String str = status.name();
+    str += " -" + errorMessage + "- ";
+    for (String string : data.keySet()) {
+      str += " " + string;
+    }
+    return str;
+  }
 }

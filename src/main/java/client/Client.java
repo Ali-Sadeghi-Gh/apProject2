@@ -6,6 +6,7 @@ import GUI.professors.dean.AddProfessorDeanPanel;
 import GUI.professors.dean.ChangeProfessorPanel;
 import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.dean.RemoveProfessorPanel;
+import GUI.professors.eduAssistant.AddCoursePanel;
 import GUI.professors.eduAssistant.CoursesListEduPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
 import GUI.student.*;
@@ -152,6 +153,9 @@ public class Client {
         break;
       case ChangeProfessorPanel:
         changeToChangeProfessorPanel();
+        break;
+      case AddCoursePanel:
+        changeToAddCoursePanel();
         break;
     }
   }
@@ -775,9 +779,8 @@ public class Client {
     }).start();
   }
 
-  public void addProfessor(String name, String email,
-                           String melliCode, String phoneNumber, String password, String roomNumber,
-                           String degree, String position) {
+  public void addProfessor(String name, String email, String melliCode, String phoneNumber, String password,
+                           String roomNumber, String degree, String position) {
     Response response = serverController.sendAddProfessorRequest(name, email, melliCode, phoneNumber,
             password, roomNumber, degree, position);
     mainFrame.showMessage(response.getErrorMessage());
@@ -838,8 +841,23 @@ public class Client {
     coursesListEduPanel.update((((ArrayList<String>) response.getData("faculties")).toArray(new String[0])),
             ((strings.toArray(new String[0][0]))));
 
-    new Loop(1, () -> {
-      updateEduAssistantPanel(eduAssistantPanel);
-    }).start();
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  private void changeToAddCoursePanel() {
+    AddCoursePanel addCoursePanel = new AddCoursePanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addCoursePanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  public void addCourse(String name, String grade, String credit, String examTime, String classTime, String professorId) {
+    Response response = serverController.sendAddCourseRequest(name, grade, credit, examTime, classTime, professorId);
+    System.out.println(response);
+    mainFrame.showMessage(response.getErrorMessage());
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      changePanel(PanelName.AddCoursePanel, null);
+    }
   }
 }
