@@ -165,4 +165,12 @@ public class ServerController {
     sendRequest(new Request(RequestType.DEFENDING_REQUEST));
     return scanResponse();
   }
+
+  public Response sendAnswerRecommendationRequest(String requestId, boolean accepted) {
+    Request request = new Request(RequestType.ANSWER_RECOMMENDATION);
+    request.addData("requestId", requestId);
+    request.addData("accepted", accepted);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

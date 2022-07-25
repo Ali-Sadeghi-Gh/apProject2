@@ -7,9 +7,9 @@ package GUI.professors;
 
 import GUI.MainFrame;
 import client.Client;
+import shared.model.PanelName;
 import shared.model.users.UserRole;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -119,28 +119,16 @@ public class AnswerRecommendationPanel extends javax.swing.JPanel {
     try {
       Integer.parseInt(idField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "request id must be a number");
+      mainFrame.showMessage("request id must be a number");
       return;
     }
 
-//    EducationalRequest educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(idField.getText()));
-//    if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.recommendation) && educationalRequest.getProfessorId()
-//            .equals(String.valueOf(professor.getId())) && !educationalRequest.isFinished()) {
-//      Controller.getInstance().answerRecommendation(educationalRequest, accepted);
-//      JOptionPane.showMessageDialog(mainFrame, "answer submitted");
-//      idField.setText("");
-//    } else {
-//      JOptionPane.showMessageDialog(mainFrame, "request not found");
-//    }
+    client.answerRecommendation(idField.getText(), accepted);
+    idField.setText("");
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
-////   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new RecommendationListPanel(mainFrame, professor)));
-//    }  else {
-//      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RecommendationListPanel(mainFrame, professor), client));
-//    }
-//    mainFrame.repaintFrame();
+    client.changePanel(PanelName.RecommendationListPanel, userRole);
   }
 
 

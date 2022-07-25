@@ -176,6 +176,20 @@ public class ClientHandler implements Runnable {
         response.setErrorMessage("your request submitted");
         sendResponse(response);
         break;
+      case ANSWER_RECOMMENDATION:
+        educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(String.valueOf(request.getData("requestId"))));
+        if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.recommendation)
+                && educationalRequest.getProfessorId().equals(String.valueOf(user.getId()))
+                && !educationalRequest.isFinished()) {
+          Controller.getInstance().answerRecommendation(educationalRequest, (Boolean) request.getData("accepted"));
+          response = new Response(ResponseStatus.OK);
+          response.setErrorMessage("answer submitted");
+        } else {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("request not found");
+        }
+        sendResponse(response);
+        break;
     }
   }
 

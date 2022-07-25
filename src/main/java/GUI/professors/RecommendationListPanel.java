@@ -62,6 +62,12 @@ public class RecommendationListPanel extends javax.swing.JPanel {
             }
     ));
     requestTable.setCellSelectionEnabled(true);
+    requestTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
     jScrollPane1.setViewportView(requestTable);
 
     answerButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 16)); // NOI18N

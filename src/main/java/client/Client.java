@@ -708,6 +708,29 @@ public class Client {
   }
 
   private void changeToAnswerRecommendationPanel(UserRole userRole) {
+    AnswerRecommendationPanel answerRecommendationPanel = new AnswerRecommendationPanel(mainFrame, this, userRole);
+    JPanel jPanel = null;
+    if ((userRole.equals(UserRole.Professor))) {
+      jPanel = new ProfessorPanel(mainFrame, answerRecommendationPanel, this);
+    } else if (userRole.equals(UserRole.EduAssistant)) {
+      jPanel = new EduAssistantPanel(mainFrame, answerRecommendationPanel, this);
+    }
+    mainFrame.setContentPane(jPanel);
 
+    JPanel finalJPanel = jPanel;
+    new Loop(1, () -> {
+      if (userRole.equals(UserRole.Professor)) {
+        ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
+        updateProfessorPanel(professorPanel);
+      } else if (userRole.equals(UserRole.EduAssistant)) {
+        EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
+        updateEduAssistantPanel(eduAssistantPanel);
+      }
+    }).start();
+  }
+
+  public void answerRecommendation(String requestId, boolean accepted) {
+    Response response = serverController.sendAnswerRecommendationRequest(requestId, accepted);
+    mainFrame.showMessage(response.getErrorMessage());
   }
 }
