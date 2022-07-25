@@ -6,14 +6,12 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.*;
-import GUI.professors.ProfessorProfilePanel;
 import client.Client;
 import shared.model.PanelName;
-import shared.model.Time;
-import shared.model.users.Professor;
 import shared.model.users.UserRole;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 /**
@@ -68,40 +66,24 @@ public class EduAssistantPanel extends javax.swing.JPanel {
 
 
     educationalServicesButton.setText("educational services");
-    educationalServicesButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        educationalServicesButtonActionPerformed(evt);
-      }
-    });
+    educationalServicesButton.addActionListener(this::educationalServicesButtonActionPerformed);
 
     nameLabel.setBackground(new java.awt.Color(200, 200, 200));
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
     nameLabel.setOpaque(true);
 
     registrationMattersPanel.setBackground(new java.awt.Color(100, 100, 240));
     registrationMattersPanel.setVisible(false);
 
     coursesListButton.setText("list of courses");
-    coursesListButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        coursesListButtonActionPerformed(evt);
-      }
-    });
+    coursesListButton.addActionListener(this::coursesListButtonActionPerformed);
 
     professorsListButton.setText("list of professors");
-    professorsListButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        professorsListButtonActionPerformed(evt);
-      }
-    });
+    professorsListButton.addActionListener(this::professorsListButtonActionPerformed);
 
     addStudentButton.setText("add user");
-    addStudentButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        addStudentButtonActionPerformed(evt);
-      }
-    });
+    addStudentButton.addActionListener(this::addStudentButtonActionPerformed);
 
     javax.swing.GroupLayout registrationMattersPanelLayout = new javax.swing.GroupLayout(registrationMattersPanel);
     registrationMattersPanel.setLayout(registrationMattersPanelLayout);
@@ -130,66 +112,38 @@ public class EduAssistantPanel extends javax.swing.JPanel {
     imgLabel.setText("ax");
 
     mainPageButton.setText("main page");
-    mainPageButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        mainPageButtonActionPerformed(evt);
-      }
-    });
+    mainPageButton.addActionListener(this::mainPageButtonActionPerformed);
 
     profileButton.setText("profile");
-    profileButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        profileButtonActionPerformed(evt);
-      }
-    });
+    profileButton.addActionListener(this::profileButtonActionPerformed);
 
     recordAffairsButton.setText("record affairs");
-    recordAffairsButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        recordAffairsButtonActionPerformed(evt);
-      }
-    });
+    recordAffairsButton.addActionListener(this::recordAffairsButtonActionPerformed);
 
     timeLabel.setBackground(new java.awt.Color(200, 200, 200));
-    timeLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
+    timeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
     timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     timeLabel.setOpaque(true);
 
     currentTimeLabel.setBackground(new java.awt.Color(200, 200, 200));
-    currentTimeLabel.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
+    currentTimeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 17)); // NOI18N
     currentTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     currentTimeLabel.setOpaque(true);
 
     logoutButton.setText("log out");
-    logoutButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        logoutButtonActionPerformed(evt);
-      }
-    });
+    logoutButton.addActionListener(this::logoutButtonActionPerformed);
 
     educationalServicesPanel.setBackground(new java.awt.Color(100, 100, 240));
     educationalServicesPanel.setVisible(false);
 
     weeklyScheduleButton.setText("weekly schedule");
-    weeklyScheduleButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        weeklyScheduleButtonActionPerformed(evt);
-      }
-    });
+    weeklyScheduleButton.addActionListener(this::weeklyScheduleButtonActionPerformed);
 
     examListButton.setText("list of exams");
-    examListButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        examListButtonActionPerformed(evt);
-      }
-    });
+    examListButton.addActionListener(this::examListButtonActionPerformed);
 
     requestButton.setText("requests");
-    requestButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        requestButtonActionPerformed(evt);
-      }
-    });
+    requestButton.addActionListener(this::requestButtonActionPerformed);
 
     javax.swing.GroupLayout educationalServicesPanelLayout = new javax.swing.GroupLayout(educationalServicesPanel);
     educationalServicesPanel.setLayout(educationalServicesPanelLayout);
@@ -217,32 +171,20 @@ public class EduAssistantPanel extends javax.swing.JPanel {
 
     emailLabel.setBackground(new java.awt.Color(200, 200, 200));
     emailLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    emailLabel.setFont(new java.awt.Font("Tahoma", 0, 18));
+    emailLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
     emailLabel.setOpaque(true);
 
     registrationMattersButton.setText("registration matters");
-    registrationMattersButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        registrationMattersButtonActionPerformed(evt);
-      }
-    });
+    registrationMattersButton.addActionListener(this::registrationMattersButtonActionPerformed);
 
     recordAffairsPanel.setBackground(new java.awt.Color(100, 100, 240));
     recordAffairsPanel.setVisible(false);
 
     educationalStatusButton.setText("educational status");
-    educationalStatusButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        educationalStatusButtonActionPerformed(evt);
-      }
-    });
+    educationalStatusButton.addActionListener(this::educationalStatusButtonActionPerformed);
 
     temporaryScoreButton.setText("temporary scores");
-    temporaryScoreButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        temporaryScoreButtonActionPerformed(evt);
-      }
-    });
+    temporaryScoreButton.addActionListener(this::temporaryScoreButtonActionPerformed);
 
     javax.swing.GroupLayout recordAffairsPanelLayout = new javax.swing.GroupLayout(recordAffairsPanel);
     recordAffairsPanel.setLayout(recordAffairsPanelLayout);

@@ -7,10 +7,11 @@ package GUI.professors;
 
 import GUI.MainFrame;
 import client.Client;
-import shared.model.EducationalRequest;
-import shared.model.users.Professor;
+import shared.model.PanelName;
+import shared.model.users.UserRole;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /**
  *
@@ -19,14 +20,15 @@ import javax.swing.table.DefaultTableModel;
 public class RecommendationListPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Professor professor;
+  UserRole userRole;
 
   /**
    * Creates new form RecommendationListPanel
    */
-  public RecommendationListPanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public RecommendationListPanel(MainFrame mainFrame, Client client, UserRole userRole) {
+    this.client = client;
     this.mainFrame = mainFrame;
+    this.userRole = userRole;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -46,14 +48,10 @@ public class RecommendationListPanel extends javax.swing.JPanel {
     answerButton = new javax.swing.JButton();
 
     backButton.setText("back");
-    if (!professor.getPosition().equals(Professor.Position.eduAssistant)) {
+    if (!userRole.equals(UserRole.EduAssistant)) {
       backButton.setVisible(false);
     }
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
     requestTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -65,15 +63,10 @@ public class RecommendationListPanel extends javax.swing.JPanel {
     ));
     requestTable.setCellSelectionEnabled(true);
     jScrollPane1.setViewportView(requestTable);
-    showData();
 
-    answerButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+    answerButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 16)); // NOI18N
     answerButton.setText("answer request");
-    answerButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        answerButtonActionPerformed(evt);
-      }
-    });
+    answerButton.addActionListener(this::answerButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -106,26 +99,22 @@ public class RecommendationListPanel extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void showData() {
-    DefaultTableModel model = (DefaultTableModel) requestTable.getModel();
-    String[] cols = {"request id", "student id", "name", "faculty", "grade", "average score", "passed credits"};
-//    String[][] data = Controller.getInstance().getRecommendationData(professor, EducationalRequest.Type.recommendation);
-
-//    model.setDataVector(data, cols);
+  private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    client.changePanel(PanelName.AnswerRecommendationPanel, userRole);
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
 //  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduRequestPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
   }
 
-  private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
-//   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AnswerRecommendationPanel(mainFrame, professor)));
-    }  else {
-      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new AnswerRecommendationPanel(mainFrame, professor), client));
-    }
-    mainFrame.repaintFrame();
+  private void showData(String[][] data) {
+    DefaultTableModel model = (DefaultTableModel) requestTable.getModel();
+    String[] cols = {"request id", "student id", "name", "faculty", "grade", "average score", "passed credits"};
+    model.setDataVector(data, cols);
+  }
+
+  public void update(String[][] data) {
+    showData(data);
   }
 
   // Variables declaration - do not modify

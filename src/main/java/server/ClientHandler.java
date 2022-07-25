@@ -309,6 +309,9 @@ public class ClientHandler implements Runnable {
         response.addData("credit", String.valueOf(course.getCredit()));
         response.addData("grade", course.getGrade()==null ? "-" : course.getGrade().name());
         break;
+      case RecommendationListPanel:
+        response.addData("data", Controller.getInstance().getRecommendationData((Professor) user, EducationalRequest.Type.recommendation));
+        break;
     }
     sendResponse(response);
   }

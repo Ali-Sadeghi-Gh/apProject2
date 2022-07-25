@@ -21,5 +21,7 @@ public enum PanelName {
   DormitoryRequestPanel,
   DefendingRequestPanel,
   ProfessorsCourseList,
-  ProfessorTemporaryScoreList
+  ProfessorTemporaryScoreList,
+  RecommendationListPanel,
+  AnswerRecommendationPanel
 }

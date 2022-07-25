@@ -7,10 +7,10 @@ package GUI.professors;
 
 import GUI.MainFrame;
 import client.Client;
-import shared.model.EducationalRequest;
-import shared.model.users.Professor;
+import shared.model.users.UserRole;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -19,14 +19,15 @@ import javax.swing.*;
 public class AnswerRecommendationPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Professor professor;
+  UserRole userRole;
 
   /**
    * Creates new form AnswerRecommendationPanel
    */
-  public AnswerRecommendationPanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public AnswerRecommendationPanel(MainFrame mainFrame, Client client, UserRole userRole) {
+    this.client = client;
     this.mainFrame = mainFrame;
+    this.userRole = userRole;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -46,35 +47,23 @@ public class AnswerRecommendationPanel extends javax.swing.JPanel {
     acceptButton = new javax.swing.JButton();
     backButton = new javax.swing.JButton();
 
-    rejectButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    rejectButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     rejectButton.setText("reject");
-    rejectButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        rejectButtonActionPerformed(evt);
-      }
-    });
+    rejectButton.addActionListener(this::rejectButtonActionPerformed);
 
-    requestLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    requestLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     requestLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     requestLabel.setText("request id:");
 
-    idField.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    idField.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     idField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    acceptButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    acceptButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     acceptButton.setText("accept");
-    acceptButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        acceptButtonActionPerformed(evt);
-      }
-    });
+    acceptButton.addActionListener(this::acceptButtonActionPerformed);
 
     backButton.setText("back");
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -146,12 +135,12 @@ public class AnswerRecommendationPanel extends javax.swing.JPanel {
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
-//   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new RecommendationListPanel(mainFrame, professor)));
-    }  else {
-      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RecommendationListPanel(mainFrame, professor), client));
-    }
-    mainFrame.repaintFrame();
+//    if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
+////   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new RecommendationListPanel(mainFrame, professor)));
+//    }  else {
+//      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RecommendationListPanel(mainFrame, professor), client));
+//    }
+//    mainFrame.repaintFrame();
   }
 
 
