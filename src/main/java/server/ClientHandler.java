@@ -22,7 +22,6 @@ public class ClientHandler implements Runnable {
   private final Socket socket;
   private final PrintStream printStream;
   private final String authToken;
-  private final GsonBuilder gsonBuilder = new GsonBuilder();
   private final Gson gson;
 
   private User user;
@@ -34,7 +33,7 @@ public class ClientHandler implements Runnable {
     authToken = String.valueOf(new SecureRandom().nextInt());
     printStream.println(authToken);
     printStream.flush();
-    gson = gsonBuilder.create();
+    gson = new GsonBuilder().create();
   }
 
   @Override
@@ -95,7 +94,7 @@ public class ClientHandler implements Runnable {
         sendResponse(new Response(ResponseStatus.OK));
         break;
       case ADD_SCORE:
-        Response response = null;
+        Response response;
         Course course = Controller.getInstance().findCourse(Integer.parseInt(String.valueOf(request.getData("courseId"))));
         if (Integer.parseInt(String.valueOf(request.getData("studentsCount"))) == Controller.getInstance().findTemporaryScoreByCourse(course).length) {
           Controller.getInstance().setFinalScores(course);
@@ -190,6 +189,20 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case REMOVE_PROFESSOR:
+        int id = Integer.parseInt(String.valueOf(request.getData("professorId")));
+        response = new Response(ResponseStatus.OK);
+        if(user.getId() == id) {
+          response.setErrorMessage("you can't remove yourself");
+        } else {
+          if (Controller.getInstance().removeProfessor(id, user.getFacultyName())) {
+            response.setErrorMessage("professor with id: " + id + " removed");
+          } else {
+            response.setErrorMessage("professor not found");
+          }
+        }
+        sendResponse(response);
+        break;
     }
   }
 
@@ -238,8 +251,8 @@ public class ClientHandler implements Runnable {
         response.addData("data", Controller.getInstance().getCoursesData((String) request.getData("faculty"),
                 (String) request.getData("professor"), (String) request.getData("grade")));
         break;
-      case ProfessorListPanel:
-      case ProfessorListDeanPanel:
+      case ProfessorsListPanel:
+      case ProfessorsListDeanPanel:
         response.addData("faculties", Controller.getInstance().getFacultiesName());
         response.addData("data", Controller.getInstance().getProfessorsData((String) request.getData("faculty"),
                 (String) request.getData("name"), (String) request.getData("grade")));

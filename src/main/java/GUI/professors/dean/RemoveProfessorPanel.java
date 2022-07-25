@@ -7,11 +7,10 @@ package GUI.professors.dean;
  */
 
 import GUI.MainFrame;
-import GUI.professors.ProfessorPanel;
 import client.Client;
-import shared.model.users.Professor;
+import shared.model.users.UserRole;
 
-import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -20,12 +19,12 @@ import javax.swing.*;
 public class RemoveProfessorPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  Professor professor;
+
   /**
    * Creates new form RemoveProfessorPanel
    */
-  public RemoveProfessorPanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public RemoveProfessorPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -46,26 +45,18 @@ public class RemoveProfessorPanel extends javax.swing.JPanel {
     removeButton = new javax.swing.JButton();
 
     backButton.setText("back");
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
-    idLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    idLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     idLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     idLabel.setText("professor id:");
 
     idField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
 
-    removeButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    removeButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     removeButton.setText("remove");
-    removeButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        removeButtonActionPerformed(evt);
-      }
-    });
+    removeButton.addActionListener(this::removeButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -103,36 +94,24 @@ public class RemoveProfessorPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ProfessorsListDeanPanel(mainFrame, client), client));
-    mainFrame.repaintFrame();
+    client.changeToProfessorsListPanel(UserRole.Professor, "all", "", "all");
   }
 
   private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (idField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "enter id");
+      mainFrame.showMessage("enter id");
       return;
     }
 
-    int id;
     try {
-      id = Integer.parseInt(idField.getText());
+      Integer.parseInt(idField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "id must be a number");
+      mainFrame.showMessage("id must be a number");
       return;
     }
 
-    if(professor.getId() == id) {
-      JOptionPane.showMessageDialog(mainFrame, "you can't remove yourself");
-      return;
-    }
-
-//    if (Controller.getInstance().removeProfessor(id, professor.getFacultyName())) {
-//      JOptionPane.showMessageDialog(mainFrame, "professor with id: " + idField.getText() + " removed");
-//      mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RemoveProfessorPanel(mainFrame, professor), client));
-//      mainFrame.repaintFrame();
-//    } else {
-//      JOptionPane.showMessageDialog(mainFrame, "professor not found");
-//    }
+    client.removeProfessor(idField.getText());
+    idField.setText("");
   }
 
 

@@ -8,8 +8,8 @@ public enum PanelName {
   StudentProfilePanel,
   ProfessorProfilePanel,
   CoursesListPanel,
-  ProfessorListPanel,
-  ProfessorListDeanPanel,
+  ProfessorsListPanel,
+  ProfessorsListDeanPanel,
   StudentEducationalOutPanel,
   StudentTemporaryScoreList,
   WeeklySchedulePanel,
@@ -23,5 +23,6 @@ public enum PanelName {
   ProfessorsCourseList,
   ProfessorTemporaryScoreList,
   RecommendationListPanel,
-  AnswerRecommendationPanel
+  AnswerRecommendationPanel,
+  RemoveProfessorPanel
 }

@@ -173,4 +173,11 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendRemoveProfessorRequest(String professorId) {
+    Request request = new Request(RequestType.REMOVE_PROFESSOR);
+    request.addData("professorId", professorId);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

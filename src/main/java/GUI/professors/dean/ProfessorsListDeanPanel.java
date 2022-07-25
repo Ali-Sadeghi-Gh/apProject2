@@ -7,10 +7,13 @@ package GUI.professors.dean;
 
 import GUI.MainFrame;
 import client.Client;
+import shared.model.PanelName;
 import shared.model.users.Professor;
 import shared.model.users.UserRole;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.Objects;
 
 /**
  *
@@ -64,20 +67,20 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
     professorsTable.setCellSelectionEnabled(true);
     jScrollPane1.setViewportView(professorsTable);
 
-    facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    facultyLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     facultyLabel.setText("faculty:");
 
     facultyBox.setMaximumRowCount(10);
 
-    nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     nameLabel.setText("name:");
 
     nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
 
-    degreeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    degreeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     degreeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     degreeLabel.setText("degree:");
 
@@ -85,34 +88,18 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
     degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "all", Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name() }));
 
 
-    searchButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    searchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     searchButton.setText("search");
-    searchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        searchButtonActionPerformed(evt);
-      }
-    });
+    searchButton.addActionListener(this::searchButtonActionPerformed);
 
     removeProfessorButton.setText("remove professor");
-    removeProfessorButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        removeProfessorButtonActionPerformed(evt);
-      }
-    });
+    removeProfessorButton.addActionListener(this::removeProfessorButtonActionPerformed);
 
     addProfessorButton.setText("add new professor");
-    addProfessorButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        addProfessorButtonActionPerformed(evt);
-      }
-    });
+    addProfessorButton.addActionListener(this::addProfessorButtonActionPerformed);
 
     changeProfessorButton.setText("change professor");
-    changeProfessorButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        changeProfessorButtonActionPerformed(evt);
-      }
-    });
+    changeProfessorButton.addActionListener(this::changeProfessorButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -187,28 +174,25 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changeToProfessorsListPanel(UserRole.Professor, facultyBox.getSelectedItem().toString(), nameField.getText(), degreeBox.getSelectedItem().toString());
+    client.changeToProfessorsListPanel(UserRole.Professor, Objects.requireNonNull(facultyBox.getSelectedItem()).toString(), nameField.getText(), Objects.requireNonNull(degreeBox.getSelectedItem()).toString());
+  }
+
+  private void removeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    client.changePanel(PanelName.RemoveProfessorPanel, null);
+  }
+
+  private void addProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new AddProfessorDeanPanel(mainFrame, professor), client));
+  }
+
+  private void changeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
+//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
   }
 
   public void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) professorsTable.getModel();
     String[] cols = {"id", "name", "faculty", "email", "degree"};
     model.setDataVector(data, cols);
-  }
-
-  private void removeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new RemoveProfessorPanel(mainFrame, professor), client));
-//    mainFrame.repaintFrame();
-  }
-
-  private void addProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new AddProfessorDeanPanel(mainFrame, professor), client));
-//    mainFrame.repaintFrame();
-  }
-
-  private void changeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new ChangeProfessorPanel(mainFrame, professor), client));
-//    mainFrame.repaintFrame();
   }
 
   public void update(String[] faculties, String[][] data) {

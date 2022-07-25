@@ -3,6 +3,7 @@ package client;
 import GUI.*;
 import GUI.professors.*;
 import GUI.professors.dean.ProfessorsListDeanPanel;
+import GUI.professors.dean.RemoveProfessorPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
 import GUI.student.*;
 import shared.model.PanelName;
@@ -139,6 +140,9 @@ public class Client {
         break;
       case AnswerRecommendationPanel:
         changeToAnswerRecommendationPanel(userRole);
+        break;
+      case RemoveProfessorPanel:
+        changeToRemoveProfessorPanel();
         break;
     }
   }
@@ -282,7 +286,7 @@ public class Client {
         request.addData("faculty", faculty);
         request.addData("name", name);
         request.addData("grade", grade);
-        Response response1 = serverController.sendUpdateRequest(PanelName.ProfessorListDeanPanel, request);
+        Response response1 = serverController.sendUpdateRequest(PanelName.ProfessorsListDeanPanel, request);
 
         ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response1.getData("data");
         ArrayList<String[]> strings = new ArrayList<>();
@@ -314,7 +318,7 @@ public class Client {
     request.addData("faculty", faculty);
     request.addData("name", name);
     request.addData("grade", grade);
-    Response response = serverController.sendUpdateRequest(PanelName.ProfessorListPanel, request);
+    Response response = serverController.sendUpdateRequest(PanelName.ProfessorsListPanel, request);
 
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
@@ -731,6 +735,21 @@ public class Client {
 
   public void answerRecommendation(String requestId, boolean accepted) {
     Response response = serverController.sendAnswerRecommendationRequest(requestId, accepted);
+    mainFrame.showMessage(response.getErrorMessage());
+  }
+
+  private void changeToRemoveProfessorPanel() {
+    RemoveProfessorPanel removeProfessorPanel = new RemoveProfessorPanel(mainFrame, this);
+    ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, removeProfessorPanel, this);
+    mainFrame.setContentPane(professorPanel);
+
+    new Loop(1, () -> {
+      updateProfessorPanel(professorPanel);
+    }).start();
+  }
+
+  public void removeProfessor(String professorId) {
+    Response response = serverController.sendRemoveProfessorRequest(professorId);
     mainFrame.showMessage(response.getErrorMessage());
   }
 }
