@@ -271,6 +271,7 @@ public class ClientHandler implements Runnable {
         response.addData("roomNumber", professor.getRoomNumber());
         break;
       case CoursesListPanel:
+      case CoursesListEduPanel:
         response.addData("faculties", Controller.getInstance().getFacultiesName());
         response.addData("data", Controller.getInstance().getCoursesData((String) request.getData("faculty"),
                 (String) request.getData("professor"), (String) request.getData("grade")));

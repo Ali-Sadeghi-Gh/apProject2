@@ -5,6 +5,8 @@ import shared.model.users.Student;
 import shared.model.users.UserRole;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.Objects;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -71,34 +73,30 @@ public class CoursesListPanel extends javax.swing.JPanel {
       }
     });
 
-    facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    facultyLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     facultyLabel.setText("faculty:");
 
     facultyBox.setMaximumRowCount(10);
 
 
-    professorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    professorLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     professorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     professorLabel.setText("professor:");
 
     professorField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
 
-    gradeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    gradeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     gradeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     gradeLabel.setText("grade:");
 
     gradeBox.setMaximumRowCount(10);
     gradeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"all", Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()}));
 
-    searchButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    searchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     searchButton.setText("search");
-    searchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        searchButtonActionPerformed(evt);
-      }
-    });
+    searchButton.addActionListener(this::searchButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -148,7 +146,8 @@ public class CoursesListPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changeToCoursesListPanel(userRole, facultyBox.getSelectedItem().toString(), professorField.getText(), gradeBox.getSelectedItem().toString());
+    client.changeToCoursesListPanel(userRole, Objects.requireNonNull(facultyBox.getSelectedItem()).toString(),
+            professorField.getText(), Objects.requireNonNull(gradeBox.getSelectedItem()).toString());
   }
 
   private void showData(String[][] data) {

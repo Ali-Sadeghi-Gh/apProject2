@@ -6,11 +6,13 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import shared.model.users.Professor;
+import client.Client;
 import shared.model.users.Student;
 
-import javax.swing.*;
+
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.Objects;
 
 /**
  *
@@ -18,13 +20,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CoursesListEduPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
   /**
    * Creates new form CoursesListEduPanel
    */
-  public CoursesListEduPanel(MainFrame mainFrame, Professor professor) {
+  public CoursesListEduPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.professor = professor;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -64,58 +66,45 @@ public class CoursesListEduPanel extends javax.swing.JPanel {
     courseTable.setCellSelectionEnabled(true);
     jScrollPane1.setViewportView(courseTable);
     courseTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-    showData("none", "", "none");
+    courseTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
 
-    facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    facultyLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     facultyLabel.setText("faculty:");
 
     facultyBox.setMaximumRowCount(10);
-//    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(Controller.getInstance().getFacultiesName()));
 
-
-    professorLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    professorLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     professorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     professorLabel.setText("professor:");
 
     professorField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
 
-    gradeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    gradeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     gradeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     gradeLabel.setText("grade:");
 
     gradeBox.setMaximumRowCount(10);
-    gradeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"none", Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()}));
+    gradeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"all", Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()}));
 
-    searchButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    searchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     searchButton.setText("search");
-    searchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        searchButtonActionPerformed(evt);
-      }
-    });
+    searchButton.addActionListener(this::searchButtonActionPerformed);
 
     addCourseButton.setText("add new course");
-    addCourseButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        addCourseButtonActionPerformed(evt);
-      }
-    });
+    addCourseButton.addActionListener(this::addCourseButtonActionPerformed);
 
     changeCourseButton.setText("change course");
-    changeCourseButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        changeCourseButtonActionPerformed(evt);
-      }
-    });
+    changeCourseButton.addActionListener(this::changeCourseButtonActionPerformed);
 
     removeCourseButton.setText("remove course");
-    removeCourseButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        removeCourseButtonActionPerformed(evt);
-      }
-    });
+    removeCourseButton.addActionListener(this::removeCourseButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -184,10 +173,6 @@ public class CoursesListEduPanel extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    showData(facultyBox.getSelectedItem().toString(), professorField.getText(), gradeBox.getSelectedItem().toString());
-  }
-
   private void addCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {
 //  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddCoursePanel(mainFrame,professor)));
     mainFrame.repaintFrame();
@@ -203,17 +188,20 @@ public class CoursesListEduPanel extends javax.swing.JPanel {
     mainFrame.repaintFrame();
   }
 
-  private void showData(String faculty, String professor, String grade) {
+  private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    client.changeToCoursesListEduPanel(Objects.requireNonNull(facultyBox.getSelectedItem()).toString(),
+            professorField.getText(), Objects.requireNonNull(gradeBox.getSelectedItem()).toString());}
+
+  private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) courseTable.getModel();
     String[] cols = {"id", "name", "credit", "professor", "faculty", "grade", "time of class"};
-//    String[][] data = Controller.getInstance().getCoursesData(faculty, professor, grade);
-//
-//    if (data.length == 0) {
-//      JOptionPane.showMessageDialog(mainFrame, "no course found");
-//    }
-//    model.setDataVector(data, cols);
+    model.setDataVector(data, cols);
   }
 
+  public void update(String[] faculties, String[][] data) {
+    facultyBox.setModel(new javax.swing.DefaultComboBoxModel<>(faculties));
+    showData(data);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JButton addCourseButton;

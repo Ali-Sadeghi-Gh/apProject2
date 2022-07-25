@@ -6,6 +6,7 @@ import GUI.professors.dean.AddProfessorDeanPanel;
 import GUI.professors.dean.ChangeProfessorPanel;
 import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.dean.RemoveProfessorPanel;
+import GUI.professors.eduAssistant.CoursesListEduPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
 import GUI.student.*;
 import shared.model.PanelName;
@@ -816,5 +817,29 @@ public class Client {
 
     mainFrame.showMessage(response.getErrorMessage());
     changeProfessorPanel.update();
+  }
+
+  public void changeToCoursesListEduPanel(String faculty, String professor, String grade) {
+    CoursesListEduPanel coursesListEduPanel = new CoursesListEduPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, coursesListEduPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    Request request = new Request(RequestType.UPDATE);
+    request.addData("faculty", faculty);
+    request.addData("professor", professor);
+    request.addData("grade", grade);
+    Response response = serverController.sendUpdateRequest(PanelName.CoursesListEduPanel, request);
+
+    ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+    ArrayList<String[]> strings = new ArrayList<>();
+    for (ArrayList<String> arrayList1 : arrayList) {
+      strings.add(arrayList1.toArray(new String[0]));
+    }
+    coursesListEduPanel.update((((ArrayList<String>) response.getData("faculties")).toArray(new String[0])),
+            ((strings.toArray(new String[0][0]))));
+
+    new Loop(1, () -> {
+      updateEduAssistantPanel(eduAssistantPanel);
+    }).start();
   }
 }

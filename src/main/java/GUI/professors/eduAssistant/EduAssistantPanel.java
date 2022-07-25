@@ -309,8 +309,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new CoursesListEduPanel(mainFrame,professor)));
-//    mainFrame.repaintFrame();
+    client.changeToCoursesListEduPanel("all", "", "all");
   }
 
   private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {
