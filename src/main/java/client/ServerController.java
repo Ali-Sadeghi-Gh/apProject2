@@ -222,4 +222,11 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendRemoveCourseRequest(String courseId) {
+    Request request = new Request(RequestType.REMOVE_COURSE);
+    request.addData("courseId", courseId);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

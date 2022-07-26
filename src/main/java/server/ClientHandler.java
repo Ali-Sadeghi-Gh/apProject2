@@ -241,6 +241,16 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case REMOVE_COURSE:
+        id = Integer.parseInt(String.valueOf(request.getData("courseId")));
+        response = new Response(ResponseStatus.OK);
+        if(Controller.getInstance().removeCourse(id, user.getFacultyName())) {
+          response.setErrorMessage("course with id: " + id + " removed");
+        } else {
+          response.setErrorMessage("course not found");
+        }
+        sendResponse(response);
+        break;
     }
   }
 

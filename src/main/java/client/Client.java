@@ -9,6 +9,7 @@ import GUI.professors.dean.RemoveProfessorPanel;
 import GUI.professors.eduAssistant.AddCoursePanel;
 import GUI.professors.eduAssistant.CoursesListEduPanel;
 import GUI.professors.eduAssistant.EduAssistantPanel;
+import GUI.professors.eduAssistant.RemoveCoursePanel;
 import GUI.student.*;
 import shared.model.PanelName;
 import shared.model.users.*;
@@ -156,6 +157,9 @@ public class Client {
         break;
       case AddCoursePanel:
         changeToAddCoursePanel();
+        break;
+      case RemoveCoursePanel:
+        changeToRemoveCoursePanel();
         break;
     }
   }
@@ -859,5 +863,20 @@ public class Client {
     if (response.getStatus().equals(ResponseStatus.OK)) {
       changePanel(PanelName.AddCoursePanel, null);
     }
+  }
+
+  private void changeToRemoveCoursePanel() {
+    RemoveCoursePanel removeCoursePanel = new RemoveCoursePanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, removeCoursePanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> {
+      updateEduAssistantPanel(eduAssistantPanel);
+    }).start();
+  }
+
+  public void removeCourse(String courseId) {
+    Response response = serverController.sendRemoveCourseRequest(courseId);
+    mainFrame.showMessage(response.getErrorMessage());
   }
 }

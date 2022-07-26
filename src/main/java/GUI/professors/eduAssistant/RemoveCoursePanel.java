@@ -6,9 +6,9 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import shared.model.users.Professor;
+import client.Client;
 
-import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -16,12 +16,13 @@ import javax.swing.*;
  */
 public class RemoveCoursePanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
+
   /**
    * Creates new form RemoveCoursePanel
    */
-  public RemoveCoursePanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public RemoveCoursePanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -42,25 +43,17 @@ public class RemoveCoursePanel extends javax.swing.JPanel {
     removeButton = new javax.swing.JButton();
 
     backButton.setText("back");
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
-    idLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    idLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     idLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     idLabel.setText("course id:");
 
     idField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    removeButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    removeButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     removeButton.setText("remove");
-    removeButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        removeButtonActionPerformed(evt);
-      }
-    });
+    removeButton.addActionListener(this::removeButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -98,31 +91,24 @@ public class RemoveCoursePanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new CoursesListEduPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changeToCoursesListEduPanel("all", "", "all");
   }
 
   private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (idField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "enter id");
+      mainFrame.showMessage("enter id");
       return;
     }
 
-    int id;
     try {
-      id = Integer.parseInt(idField.getText());
+      Integer.parseInt(idField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "id must be a number");
+      mainFrame.showMessage("id must be a number");
       return;
     }
 
-//    if (Controller.getInstance().removeCourse(id, professor.getFacultyName())) {
-//      JOptionPane.showMessageDialog(mainFrame, "course with id: " + idField.getText() + " removed");
-//   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new RemoveCoursePanel(mainFrame, professor)));
-//      mainFrame.repaintFrame();
-//    } else {
-//      JOptionPane.showMessageDialog(mainFrame, "course not found");
-//    }
+    client.removeCourse(idField.getText());
+    idField.setText("");
   }
 
 
