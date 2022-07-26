@@ -259,7 +259,6 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
       Integer.parseInt(idField.getText());
     } catch (Exception e) {
       mainFrame.showMessage("professor id must be a number");
-      client.changePanel(PanelName.ChangeProfessorPanel, null);
       return;
     }
     if (nameField.getText().equals("")) {
@@ -288,8 +287,8 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
       return;
     }
 
-    client.changeProfessor(this, idField.getText(), nameField.getText(), emailField.getText(),
-            melliCodeField.getText(), phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
+    client.changeProfessor(idField.getText(), nameField.getText(), emailField.getText(), melliCodeField.getText(),
+            phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
             Objects.requireNonNull(degreeBox.getSelectedItem()).toString(), Objects.requireNonNull(positionBox.getSelectedItem()).toString());
   }
 
@@ -304,18 +303,6 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
     roomNumberField.setText(roomNumber);
     degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(degrees));
     positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(positions));
-  }
-
-  public void update() {
-    idField.setText("");
-    nameField.setText("");
-    passwordField.setText("");
-    melliCodeField.setText("");
-    emailField.setText("");
-    phoneField.setText("");
-    roomNumberField.setText("");
-    degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"none"}));
-    positionBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"none"}));
   }
 
   // Variables declaration - do not modify

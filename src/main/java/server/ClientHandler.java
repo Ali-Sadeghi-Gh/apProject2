@@ -251,6 +251,26 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case CHANGE_COURSE:
+        Course changingCourse = Controller.getInstance().findCourse(Integer.parseInt(String.valueOf(request.getData("courseId"))));
+        if (changingCourse == null || !changingCourse.getFacultyName().equals(user.getFacultyName())) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("course not found");
+        } else {
+          if (Controller.getInstance().findProfessorById(Integer.parseInt((String) request.getData("professorId"))) == null) {
+            response = new Response(ResponseStatus.ERROR);
+            response.setErrorMessage("professor not found");
+          } else {
+            Controller.getInstance().changeCourse(changingCourse, (String) request.getData("name"),
+                    (String) request.getData("grade"), (String) request.getData("credit"),
+                    (String) request.getData("examDate"), (String) request.getData("classTime"),
+                    (String) request.getData("professorId"));
+            response = new Response(ResponseStatus.OK);
+            response.setErrorMessage("course's information changed");
+          }
+        }
+        sendResponse(response);
+        break;
     }
   }
 
@@ -430,6 +450,45 @@ public class ClientHandler implements Runnable {
             positions = new String[]{Professor.Position.dean.name()};
           }
           response.addData("positions", positions);
+        }
+        break;
+      case ChangeCoursePanel:
+        Course changingCourse = Controller.getInstance().findCourse(Integer.parseInt(String.valueOf(request.getData("courseId"))));
+        if (changingCourse == null || !changingCourse.getFacultyName().equals(user.getFacultyName())) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("course not found");
+        } else {
+          response.addData("id", String.valueOf(changingCourse.getId()));
+          response.addData("name", changingCourse.getName()==null ? "" : changingCourse.getName());
+          response.addData("professorId", Controller.getInstance().findProfessorByCourse(changingCourse.getId())==null ?
+                  "" : String.valueOf(Controller.getInstance().findProfessorByCourse(changingCourse.getId()).getId()));
+          response.addData("credit", String.valueOf(changingCourse.getCredit()));
+          response.addData("classTime", changingCourse.getClassTime()==null ? "" : changingCourse.getClassTime());
+          if (changingCourse.getExamTime() != null) {
+            String[] exam = changingCourse.getExamTime().split(" ");
+            String[] examDate = exam[0].split("/");
+            String[] examTime = exam[1].split(":");
+            response.addData("examYear", examDate[0]);
+            response.addData("examMonth", examDate[1]);
+            response.addData("examDay", examDate[2]);
+            response.addData("examHour", examTime[0]);
+            response.addData("examMinute", examTime[1]);
+          } else {
+            response.addData("examYear", "");
+            response.addData("examMonth", "");
+            response.addData("examDay", "");
+            response.addData("examHour", "");
+            response.addData("examMinute", "");
+          }
+          String[] grades;
+          if (changingCourse.getGrade() == null || changingCourse.getGrade().equals(Student.Grade.underGraduate)) {
+            grades = new String[] {Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()};
+          } else if (changingCourse.getGrade().equals(Student.Grade.masters)) {
+            grades = new String[] {Student.Grade.masters.name(), Student.Grade.phd.name(), Student.Grade.underGraduate.name()};
+          } else {
+            grades = new String[] {Student.Grade.phd.name(), Student.Grade.underGraduate.name(), Student.Grade.masters.name()};
+          }
+          response.addData("grades", grades);
         }
         break;
     }

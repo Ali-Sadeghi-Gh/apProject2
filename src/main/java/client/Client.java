@@ -6,10 +6,7 @@ import GUI.professors.dean.AddProfessorDeanPanel;
 import GUI.professors.dean.ChangeProfessorPanel;
 import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.dean.RemoveProfessorPanel;
-import GUI.professors.eduAssistant.AddCoursePanel;
-import GUI.professors.eduAssistant.CoursesListEduPanel;
-import GUI.professors.eduAssistant.EduAssistantPanel;
-import GUI.professors.eduAssistant.RemoveCoursePanel;
+import GUI.professors.eduAssistant.*;
 import GUI.student.*;
 import shared.model.PanelName;
 import shared.model.users.*;
@@ -160,6 +157,9 @@ public class Client {
         break;
       case RemoveCoursePanel:
         changeToRemoveCoursePanel();
+        break;
+      case ChangeCoursePanel:
+        changeToChangeCoursePanel();
         break;
     }
   }
@@ -807,7 +807,7 @@ public class Client {
     Response response = serverController.sendUpdateRequest(PanelName.ChangeProfessorPanel, request);
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
-      changeProfessorPanel.update();
+      changePanel(PanelName.ChangeProfessorPanel, null);
       return;
     }
     changeProfessorPanel.update((String) response.getData("id"), (String) response.getData("name"),
@@ -817,13 +817,13 @@ public class Client {
             ((ArrayList<String>) response.getData("positions")).toArray(new String[0]));
   }
 
-  public void changeProfessor(ChangeProfessorPanel changeProfessorPanel, String professorId, String name, String email, String melliCode,
-                              String phoneNumber, String password, String roomNumber, String degree, String position) {
+  public void changeProfessor(String professorId, String name, String email, String melliCode, String phoneNumber,
+                              String password, String roomNumber, String degree, String position) {
     Response response = serverController.sendChangeProfessorRequest(professorId, name, email,
             melliCode, phoneNumber, password, roomNumber, degree, position);
 
     mainFrame.showMessage(response.getErrorMessage());
-    changeProfessorPanel.update();
+    changePanel(PanelName.ChangeProfessorPanel, null);
   }
 
   public void changeToCoursesListEduPanel(String faculty, String professor, String grade) {
@@ -878,5 +878,40 @@ public class Client {
   public void removeCourse(String courseId) {
     Response response = serverController.sendRemoveCourseRequest(courseId);
     mainFrame.showMessage(response.getErrorMessage());
+  }
+
+  private void changeToChangeCoursePanel() {
+    ChangeCoursePanel changeCoursePanel = new ChangeCoursePanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, changeCoursePanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> {
+      updateEduAssistantPanel(eduAssistantPanel);
+    }).start();
+  }
+
+  public void findCourseForChange(ChangeCoursePanel changeCoursePanel, String courseId) {
+    Request request = new Request(RequestType.UPDATE);
+    request.addData("courseId", courseId);
+    Response response = serverController.sendUpdateRequest(PanelName.ChangeCoursePanel, request);
+    if (!response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      changePanel(PanelName.ChangeCoursePanel, null);
+      return;
+    }
+    changeCoursePanel.update((String) response.getData("id"), (String) response.getData("name"),
+            (String) response.getData("professorId"), (String) response.getData("credit"),
+            (String) response.getData("classTime"), (String) response.getData("examYear"),
+            (String) response.getData("examMonth"), (String) response.getData("examDay"),
+            (String) response.getData("examHour"), (String) response.getData("examMinute"),
+            ((ArrayList<String>) response.getData("grades")).toArray(new String[0]));
+  }
+
+  public void changeCourse(String courseId, String name, String professorId, String credit, String classTime, String examDate, String grade) {
+    Response response = serverController.sendChangeCourseRequest(courseId, name, professorId,
+            credit, classTime, examDate, grade);
+
+    mainFrame.showMessage(response.getErrorMessage());
+    changePanel(PanelName.ChangeCoursePanel, null);
   }
 }

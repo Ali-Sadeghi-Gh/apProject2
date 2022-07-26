@@ -29,5 +29,6 @@ public enum PanelName {
   ChangeProfessorPanel,
   CoursesListEduPanel,
   AddCoursePanel,
-  RemoveCoursePanel
+  RemoveCoursePanel,
+  ChangeCoursePanel
 }
