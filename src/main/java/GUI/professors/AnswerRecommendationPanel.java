@@ -7,6 +7,7 @@ package GUI.professors;
 
 import GUI.MainFrame;
 import client.Client;
+import shared.model.EducationalRequest;
 import shared.model.PanelName;
 import shared.model.users.UserRole;
 
@@ -123,7 +124,7 @@ public class AnswerRecommendationPanel extends javax.swing.JPanel {
       return;
     }
 
-    client.answerRecommendation(idField.getText(), accepted);
+    client.answerEducationalRequest(EducationalRequest.Type.recommendation, idField.getText(), accepted);
     idField.setText("");
   }
 

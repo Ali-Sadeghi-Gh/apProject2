@@ -102,7 +102,7 @@ public class RecommendationRequestPanel extends javax.swing.JPanel {
     try {
       Integer.parseInt(idField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "professor id must be a number");
+      mainFrame.showMessage("professor id must be a number");
       idField.setText("");
       resultArea.setText("");
       return;

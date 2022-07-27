@@ -8,6 +8,7 @@ import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.dean.RemoveProfessorPanel;
 import GUI.professors.eduAssistant.*;
 import GUI.student.*;
+import shared.model.EducationalRequest;
 import shared.model.PanelName;
 import shared.model.users.*;
 import shared.request.*;
@@ -175,6 +176,9 @@ public class Client {
         break;
       case DropoutListPanel:
         changeToDropoutListPanel();
+        break;
+      case AnswerDropoutPanel:
+        changeToAnswerDropoutPanel();
         break;
     }
   }
@@ -514,7 +518,6 @@ public class Client {
 
   public void getRecommendationResult(RecommendationRequestPanel recommendationRequestPanel, String professorId) {
     Response response = serverController.sendGetRecommendationResultRequest(professorId);
-
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       recommendationRequestPanel.update((String) response.getData("result"));
@@ -747,8 +750,8 @@ public class Client {
     }).start();
   }
 
-  public void answerRecommendation(String requestId, boolean accepted) {
-    Response response = serverController.sendAnswerRecommendationRequest(requestId, accepted);
+  public void answerEducationalRequest(EducationalRequest.Type type, String requestId, boolean accepted) {
+    Response response = serverController.sendAnswerEducationalRequestRequest(type, requestId, accepted);
     mainFrame.showMessage(response.getErrorMessage());
   }
 
@@ -965,5 +968,13 @@ public class Client {
 
       updateEduAssistantPanel(eduAssistantPanel);
     }).start();
+  }
+
+  private void changeToAnswerDropoutPanel() {
+    AnswerDropoutPanel answerDropoutPanel = new AnswerDropoutPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, answerDropoutPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 }

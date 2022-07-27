@@ -105,14 +105,12 @@ public class DropoutListPanel extends javax.swing.JPanel {
   }
 
   private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AnswerDropoutPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.AnswerDropoutPanel, null);
   }
 
   private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) requestTable.getModel();
     String[] cols = {"request id", "student id", "name", "grade", "average score", "passed credits"};
-//    String[][] data = Controller.getInstance().getDropoutData(professor.getFacultyName(), EducationalRequest.Type.dropout);
     model.setDataVector(data, cols);
   }
 

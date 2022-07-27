@@ -520,8 +520,8 @@ public class Controller {
 
   public EducationalRequest findRequestByProfessor(Student student, Professor professor, EducationalRequest.Type type) {
     for (EducationalRequest request : University.getInstance().getRequests()) {
-      if (request.getStudentId().equals(String.valueOf(student.getId())) && request.getProfessorId().equals(String.valueOf(professor.getId()))
-              &&request.getType().equals(type)) {
+      if (request.getStudentId().equals(String.valueOf(student.getId())) && String.valueOf(professor.getId()).equals(request.getProfessorId())
+              && request.getType().equals(type)) {
         return request;
       }
     }

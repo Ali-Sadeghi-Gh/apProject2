@@ -2,6 +2,7 @@ package client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import shared.model.EducationalRequest;
 import shared.model.PanelName;
 import shared.request.*;
 import shared.response.Response;
@@ -166,8 +167,9 @@ public class ServerController {
     return scanResponse();
   }
 
-  public Response sendAnswerRecommendationRequest(String requestId, boolean accepted) {
-    Request request = new Request(RequestType.ANSWER_RECOMMENDATION);
+  public Response sendAnswerEducationalRequestRequest(EducationalRequest.Type type, String requestId, boolean accepted) {
+    Request request = new Request(RequestType.ANSWER_EDUCATIONAL_REQUEST);
+    request.addData("type", type);
     request.addData("requestId", requestId);
     request.addData("accepted", accepted);
     sendRequest(request);

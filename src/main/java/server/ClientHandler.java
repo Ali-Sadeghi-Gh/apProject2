@@ -175,14 +175,32 @@ public class ClientHandler implements Runnable {
         response.setErrorMessage("your request submitted");
         sendResponse(response);
         break;
-      case ANSWER_RECOMMENDATION:
+      case ANSWER_EDUCATIONAL_REQUEST:
+        response = new Response(ResponseStatus.OK);
         educationalRequest = Controller.getInstance().findRequestById(Integer.parseInt(String.valueOf(request.getData("requestId"))));
-        if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.recommendation)
-                && educationalRequest.getProfessorId().equals(String.valueOf(user.getId()))
-                && !educationalRequest.isFinished()) {
-          Controller.getInstance().answerRecommendation(educationalRequest, (Boolean) request.getData("accepted"));
-          response = new Response(ResponseStatus.OK);
-          response.setErrorMessage("answer submitted");
+        if (educationalRequest != null && educationalRequest.getType().equals(EducationalRequest.Type.valueOf((String) request.getData("type"))) && !educationalRequest.isFinished()) {
+          switch (educationalRequest.getType()) {
+            case recommendation:
+              if (educationalRequest.getProfessorId().equals(String.valueOf(user.getId()))) {
+                Controller.getInstance().answerRecommendation(educationalRequest, (Boolean) request.getData("accepted"));
+                response = new Response(ResponseStatus.OK);
+                response.setErrorMessage("answer submitted");
+              } else {
+                response = new Response(ResponseStatus.ERROR);
+                response.setErrorMessage("request not found");
+              }
+              break;
+            case dropout:
+              if (educationalRequest.getFaculty().equals(user.getFacultyName())) {
+                Controller.getInstance().answerDropout(educationalRequest, Boolean.parseBoolean(String.valueOf(request.getData("accepted"))));
+                response = new Response(ResponseStatus.OK);
+                response.setErrorMessage("answer submitted");
+              } else {
+                response = new Response(ResponseStatus.ERROR);
+                response.setErrorMessage("request not found");
+              }
+              break;
+          }
         } else {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage("request not found");
