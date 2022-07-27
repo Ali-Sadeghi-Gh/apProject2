@@ -170,6 +170,9 @@ public class Client {
       case AddStudentPanel:
         changeToAddStudentPanel();
         break;
+      case EduRequestPanel:
+        changeToEduRequestPanel();
+        break;
     }
   }
 
@@ -933,5 +936,13 @@ public class Client {
     if (response.getStatus().equals(ResponseStatus.OK)) {
       changePanel(PanelName.AddStudentPanel, null);
     }
+  }
+
+  private void changeToEduRequestPanel() {
+    EduRequestPanel eduRequestPanel = new EduRequestPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduRequestPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 }

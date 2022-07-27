@@ -110,7 +110,7 @@ public class RecommendationListPanel extends javax.swing.JPanel {
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduRequestPanel(mainFrame, professor)));
+    client.changePanel(PanelName.EduRequestPanel, null);
   }
 
   private void showData(String[][] data) {

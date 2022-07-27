@@ -339,8 +339,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduRequestPanel(mainFrame, professor)));
-//    mainFrame.repaintFrame();
+    client.changePanel(PanelName.EduRequestPanel, null);
   }
 
   public void update(int id, String lastLogin, String email, String name, String currentTime) {

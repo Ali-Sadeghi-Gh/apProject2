@@ -6,8 +6,11 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import GUI.professors.RecommendationListPanel;
-import shared.model.users.Professor;
+import client.Client;
+import shared.model.PanelName;
+import shared.model.users.UserRole;
+
+import java.awt.*;
 
 /**
  *
@@ -15,12 +18,13 @@ import shared.model.users.Professor;
  */
 public class EduRequestPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
+
   /**
    * Creates new form EduRequestPanel
    */
-  public EduRequestPanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public EduRequestPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -39,29 +43,17 @@ public class EduRequestPanel extends javax.swing.JPanel {
     dropoutButton = new javax.swing.JButton();
     minorButton = new javax.swing.JButton();
 
-    recommendationButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    recommendationButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     recommendationButton.setText("recommendation");
-    recommendationButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        recommendationButtonActionPerformed(evt);
-      }
-    });
+    recommendationButton.addActionListener(this::recommendationButtonActionPerformed);
 
-    dropoutButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    dropoutButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     dropoutButton.setText("dropout");
-    dropoutButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        dropoutButtonActionPerformed(evt);
-      }
-    });
+    dropoutButton.addActionListener(this::dropoutButtonActionPerformed);
 
-    minorButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    minorButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     minorButton.setText("minor");
-    minorButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        minorButtonActionPerformed(evt);
-      }
-    });
+    minorButton.addActionListener(this::minorButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -89,8 +81,7 @@ public class EduRequestPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void recommendationButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new RecommendationListPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.RecommendationListPanel, UserRole.EduAssistant);
   }
 
   private void dropoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
