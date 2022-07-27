@@ -506,6 +506,9 @@ public class ClientHandler implements Runnable {
           response.addData("grades", grades);
         }
         break;
+      case DropoutListPanel:
+        response.addData("data", Controller.getInstance().getDropoutData(user.getFacultyName(), EducationalRequest.Type.dropout));
+        break;
     }
     sendResponse(response);
   }

@@ -34,5 +34,6 @@ public enum PanelName {
   AddStudentOrProfessorPanel,
   AddProfessorPanel,
   AddStudentPanel,
-  EduRequestPanel
+  EduRequestPanel,
+  DropoutListPanel
 }

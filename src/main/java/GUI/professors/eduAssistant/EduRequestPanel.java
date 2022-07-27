@@ -85,8 +85,7 @@ public class EduRequestPanel extends javax.swing.JPanel {
   }
 
   private void dropoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new DropoutListPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.DropoutListPanel, null);
   }
 
   private void minorButtonActionPerformed(java.awt.event.ActionEvent evt) {

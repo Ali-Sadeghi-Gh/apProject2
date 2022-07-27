@@ -173,6 +173,9 @@ public class Client {
       case EduRequestPanel:
         changeToEduRequestPanel();
         break;
+      case DropoutListPanel:
+        changeToDropoutListPanel();
+        break;
     }
   }
 
@@ -944,5 +947,23 @@ public class Client {
     mainFrame.setContentPane(eduAssistantPanel);
 
     new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  private void changeToDropoutListPanel() {
+    DropoutListPanel dropoutListPanel = new DropoutListPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, dropoutListPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.DropoutListPanel);
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      dropoutListPanel.update(strings.toArray(new String[0][0]));
+
+      updateEduAssistantPanel(eduAssistantPanel);
+    }).start();
   }
 }

@@ -8,7 +8,7 @@ package GUI.student;
 import GUI.MainFrame;
 import client.Client;
 
-import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -40,11 +40,11 @@ public class DropoutRequestPanel extends javax.swing.JPanel {
     requestButton = new javax.swing.JButton();
     resultLabel = new javax.swing.JLabel();
 
-    requestButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+    requestButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 24)); // NOI18N
     requestButton.setText("request dropout");
     requestButton.addActionListener(this::changeButtonActionPerformed);
 
-    resultLabel.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    resultLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     resultLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     resultLabel.setText("");
 
