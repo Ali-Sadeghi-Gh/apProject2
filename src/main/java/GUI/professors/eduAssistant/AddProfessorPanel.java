@@ -6,9 +6,13 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
+import client.Client;
+import shared.model.PanelName;
 import shared.model.users.Professor;
+import shared.model.users.UserRole;
 
-import javax.swing.*;
+import java.awt.*;
+import java.util.Objects;
 
 /**
  *
@@ -16,12 +20,13 @@ import javax.swing.*;
  */
 public class AddProfessorPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
+
   /**
    * Creates new form AddProfessor
    */
-  public AddProfessorPanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public AddProfessorPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -55,35 +60,31 @@ public class AddProfessorPanel extends javax.swing.JPanel {
 
     emailField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    emailLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    emailLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     emailLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     emailLabel.setText("email:");
 
-    addButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+    addButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 24)); // NOI18N
     addButton.setText("add");
-    addButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        addButtonActionPerformed(evt);
-      }
-    });
+    addButton.addActionListener(this::addButtonActionPerformed);
 
     phoneField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    phoneLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    phoneLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     phoneLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     phoneLabel.setText("phone number:");
 
     roomNumberField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    roomNumberLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    roomNumberLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     roomNumberLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     roomNumberLabel.setText("room number");
 
-    degreeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    degreeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     degreeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     degreeLabel.setText("degree:");
 
-    nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     nameLabel.setText("name:");
 
@@ -91,7 +92,7 @@ public class AddProfessorPanel extends javax.swing.JPanel {
 
     passwordField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    passwordLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    passwordLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     passwordLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     passwordLabel.setText("password:");
 
@@ -100,16 +101,12 @@ public class AddProfessorPanel extends javax.swing.JPanel {
     degreeBox.setMaximumRowCount(10);
     degreeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name()}));
 
-    melliCodeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    melliCodeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     melliCodeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     melliCodeLabel.setText("code melli:");
 
     backButton.setText("back");
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -195,47 +192,42 @@ public class AddProfessorPanel extends javax.swing.JPanel {
 
   private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (nameField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "name can't be empty");
+      mainFrame.showMessage("name can't be empty");
       return;
     }
     if (passwordField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "password can't be empty");
+      mainFrame.showMessage("password can't be empty");
       return;
     }
     if (melliCodeField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "code melli can't be empty");
+      mainFrame.showMessage("code melli can't be empty");
       return;
     }
     if (roomNumberField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "room number can't be empty");
+      mainFrame.showMessage("room number can't be empty");
       return;
     }
 
     try {
       Integer.parseInt(melliCodeField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "code melli must be a number");
+      mainFrame.showMessage("code melli must be a number");
       return;
     }
     try {
       Integer.parseInt(roomNumberField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "year of entry must be a number");
+      mainFrame.showMessage("room number must be a number");
       return;
     }
 
-//    int id = Controller.getInstance().addProfessor(nameField.getText(), emailField.getText(), melliCodeField.getText(),
-//            professor.getFacultyName(), phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
-//            degreeBox.getSelectedItem().toString(), Professor.Position.professor.name());
-//    JOptionPane.showMessageDialog(mainFrame, "professor with id " + id + " added");
-
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddProfessorPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.addProfessor(UserRole.EduAssistant, nameField.getText(), emailField.getText(), melliCodeField.getText(),
+            phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
+            Objects.requireNonNull(degreeBox.getSelectedItem()).toString(), Professor.Position.professor.name());
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-// todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddStudentOrProfessorPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.AddStudentOrProfessorPanel, null);
   }
 
 

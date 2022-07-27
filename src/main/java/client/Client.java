@@ -161,6 +161,11 @@ public class Client {
       case ChangeCoursePanel:
         changeToChangeCoursePanel();
         break;
+      case AddStudentOrProfessorPanel:
+        changeToAddStudentOrProfessorPanel();
+        break;
+      case AddProfessorPanel:
+        changeToAddProfessorPanel();
     }
   }
 
@@ -182,18 +187,14 @@ public class Client {
     ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, new JPanel(), this);
     mainFrame.setContentPane(professorPanel);
 
-    new Loop(1, () -> {
-      updateProfessorPanel(professorPanel);
-    }).start();
+    new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
   }
 
   private void changeToEduAssistantPanel() {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, new JPanel(), this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> {
-      updateEduAssistantPanel(eduAssistantPanel);
-    }).start();
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToStudentProfilePanel() {
@@ -276,7 +277,7 @@ public class Client {
     for (ArrayList<String> arrayList1 : arrayList) {
       strings.add(arrayList1.toArray(new String[0]));
     }
-    coursesListPanel.update((((ArrayList<String>) response.getData("faculties")).toArray(new String[0])),
+    coursesListPanel.update(((ArrayList<String>) response.getData("faculties")).toArray(new String[0]),
             ((strings.toArray(new String[0][0]))));
 
     JPanel finalJPanel = jPanel;
@@ -313,9 +314,7 @@ public class Client {
         professorsListDeanPanel.update((((ArrayList<String>) response1.getData("faculties")).toArray(new String[0])),
                 ((strings.toArray(new String[0][0]))));
 
-        new Loop(1, () -> {
-          updateProfessorPanel(professorPanel);
-        }).start();
+        new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
         return;
       }
     }
@@ -393,9 +392,7 @@ public class Client {
     }
     studentTemporaryScoreList.update(strings.toArray(new String[0][0]));
 
-    new Loop(1, () -> {
-      updateStudentPanel(studentPanel);
-    }).start();
+    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void addTemporaryScoreByStudent(String courseId, String objection, String answer, String score) {
@@ -502,9 +499,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, recommendationRequestPanel, this);
     mainFrame.setContentPane(studentPanel);
 
-    new Loop(1, () -> {
-      updateStudentPanel(studentPanel);
-    }).start();
+    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void getRecommendationResult(RecommendationRequestPanel recommendationRequestPanel, String professorId) {
@@ -523,9 +518,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, enrollmentCertificatePanel, this);
     mainFrame.setContentPane(studentPanel);
 
-    new Loop(1, () -> {
-      updateStudentPanel(studentPanel);
-    }).start();
+    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void enrollmentCertificate(EnrollmentCertificatePanel enrollmentCertificatePanel) {
@@ -548,9 +541,7 @@ public class Client {
     minorRequestPanel.update((String) response.getData("result"), (String) response.getData("targetFaculty"),
             ((ArrayList<String>) response.getData("faculties")).toArray(new String[0]));
 
-    new Loop(1, () -> {
-      updateStudentPanel(studentPanel);
-    }).start();
+    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void requestMinor(MinorRequestPanel minorRequestPanel, String faculty) {
@@ -595,9 +586,7 @@ public class Client {
 
     dormitoryRequestPanel.update((String) response.getData("result"));
 
-    new Loop(1, () -> {
-      updateStudentPanel(studentPanel);
-    }).start();
+    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void dormitoryRequest(DormitoryRequestPanel dormitoryRequestPanel) {
@@ -620,9 +609,7 @@ public class Client {
 
     defendingRequestPanel.update((String) response.getData("result"));
 
-    new Loop(1, () -> {
-      updateStudentPanel(studentPanel);
-    }).start();
+    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void defendingRequest(DefendingRequestPanel defendingRequestPanel) {
@@ -760,9 +747,7 @@ public class Client {
     ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, removeProfessorPanel, this);
     mainFrame.setContentPane(professorPanel);
 
-    new Loop(1, () -> {
-      updateProfessorPanel(professorPanel);
-    }).start();
+    new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
   }
 
   public void removeProfessor(String professorId) {
@@ -778,17 +763,19 @@ public class Client {
     Response response = serverController.sendUpdateRequest(PanelName.AddProfessorDeanPanel);
     addProfessorDeanPanel.update(((ArrayList<String>) response.getData("positions")).toArray(new String[0]));
 
-    new Loop(1, () -> {
-      updateProfessorPanel(professorPanel);
-    }).start();
+    new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
   }
 
-  public void addProfessor(String name, String email, String melliCode, String phoneNumber, String password,
+  public void addProfessor(UserRole userRole, String name, String email, String melliCode, String phoneNumber, String password,
                            String roomNumber, String degree, String position) {
     Response response = serverController.sendAddProfessorRequest(name, email, melliCode, phoneNumber,
             password, roomNumber, degree, position);
     mainFrame.showMessage(response.getErrorMessage());
-    changePanel(PanelName.AddProfessorDeanPanel, null);
+    if (userRole.equals(UserRole.Dean)) {
+      changePanel(PanelName.AddProfessorDeanPanel, null);
+    } else if (userRole.equals(UserRole.EduAssistant)) {
+      changePanel(PanelName.AddProfessorPanel, null);
+    }
   }
 
   private void changeToChangeProfessorPanel() {
@@ -796,9 +783,7 @@ public class Client {
     ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, changeProfessorPanel, this);
     mainFrame.setContentPane(professorPanel);
 
-    new Loop(1, () -> {
-      updateProfessorPanel(professorPanel);
-    }).start();
+    new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
   }
 
   public void findProfessorForChange(ChangeProfessorPanel changeProfessorPanel, String professorId) {
@@ -870,9 +855,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, removeCoursePanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> {
-      updateEduAssistantPanel(eduAssistantPanel);
-    }).start();
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void removeCourse(String courseId) {
@@ -885,9 +868,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, changeCoursePanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> {
-      updateEduAssistantPanel(eduAssistantPanel);
-    }).start();
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void findCourseForChange(ChangeCoursePanel changeCoursePanel, String courseId) {
@@ -920,8 +901,14 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addStudentOrProfessorPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> {
-      updateEduAssistantPanel(eduAssistantPanel);
-    }).start();
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  private void changeToAddProfessorPanel() {
+    AddProfessorPanel addProfessorPanel = new AddProfessorPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addProfessorPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 }

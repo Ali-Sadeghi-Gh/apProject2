@@ -242,7 +242,7 @@ public class AddProfessorDeanPanel extends javax.swing.JPanel {
       return;
     }
 
-    client.addProfessor(nameField.getText(), emailField.getText(), melliCodeField.getText(),
+    client.addProfessor(UserRole.Dean, nameField.getText(), emailField.getText(), melliCodeField.getText(),
             phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
             Objects.requireNonNull(degreeBox.getSelectedItem()).toString(),
             Objects.requireNonNull(positionBox.getSelectedItem()).toString());

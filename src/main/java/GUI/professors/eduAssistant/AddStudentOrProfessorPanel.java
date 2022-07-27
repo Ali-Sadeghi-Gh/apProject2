@@ -7,6 +7,7 @@ package GUI.professors.eduAssistant;
 
 import GUI.MainFrame;
 import client.Client;
+import shared.model.PanelName;
 
 import java.awt.*;
 
@@ -75,8 +76,7 @@ public class AddStudentOrProfessorPanel extends javax.swing.JPanel {
   }
 
   private void addProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddProfessorPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.AddProfessorPanel, null);
   }
 
 
