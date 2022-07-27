@@ -836,8 +836,8 @@ public class Controller {
       } else {
         request.setTargetFacultyResult("rejected");
       }
-      logger.info("professor whit id " + professor.getId() + " reject " + request.getType().name() + " request with id " + request.getId());
 
+      logger.info("professor whit id " + professor.getId() + " reject " + request.getType().name() + " request with id " + request.getId());
     }
 
     Student student = findStudentById(Integer.parseInt(request.getStudentId()));

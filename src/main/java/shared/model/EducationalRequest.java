@@ -10,7 +10,7 @@ public class EducationalRequest {
   private String professor2Result;
   private String result;
   private Type type;
-  private int id;
+  private final int id;
 
   public EducationalRequest(String studentId, String professorId, String faculty, String targetFaculty, Type type) {
     this.studentId = studentId;

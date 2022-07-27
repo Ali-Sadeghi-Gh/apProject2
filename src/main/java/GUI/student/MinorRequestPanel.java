@@ -8,7 +8,8 @@ package GUI.student;
 import GUI.MainFrame;
 import client.Client;
 
-import javax.swing.*;
+import java.awt.*;
+import java.util.Objects;
 
 /**
  *
@@ -42,17 +43,17 @@ public class MinorRequestPanel extends javax.swing.JPanel {
     requestButton = new javax.swing.JButton();
     resultLabel = new javax.swing.JLabel();
 
-    facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    facultyLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     facultyLabel.setText("target faculty:");
 
     facultyBox.setMaximumRowCount(10);
 
-    requestButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    requestButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     requestButton.setText("request minor");
     requestButton.addActionListener(this::requestButtonActionPerformed);
 
-    resultLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    resultLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     resultLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -92,7 +93,7 @@ public class MinorRequestPanel extends javax.swing.JPanel {
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (resultLabel.getText().equals("")) {
-      client.requestMinor(this, facultyBox.getSelectedItem().toString());
+      client.requestMinor(this, Objects.requireNonNull(facultyBox.getSelectedItem()).toString());
     } else {
       mainFrame.showMessage("you can't request more than once");
     }

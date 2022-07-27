@@ -200,6 +200,16 @@ public class ClientHandler implements Runnable {
                 response.setErrorMessage("request not found");
               }
               break;
+            case minor:
+              if (educationalRequest.getFaculty().equals(user.getFacultyName()) || educationalRequest.getTargetFaculty().equals(user.getFacultyName())) {
+                Controller.getInstance().answerMinor(educationalRequest, user.getFacultyName(), Boolean.parseBoolean(String.valueOf(request.getData("accepted"))));
+                response = new Response(ResponseStatus.OK);
+                response.setErrorMessage("answer submitted");
+              } else {
+                response = new Response(ResponseStatus.ERROR);
+                response.setErrorMessage("request not found");
+              }
+              break;
           }
         } else {
           response = new Response(ResponseStatus.ERROR);

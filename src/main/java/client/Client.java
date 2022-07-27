@@ -183,6 +183,9 @@ public class Client {
       case MinorListPanel:
         changeToMinorListPanel();
         break;
+      case AnswerMinorPanel:
+        changeToAnswerMinorPanel();
+        break;
     }
   }
 
@@ -997,5 +1000,13 @@ public class Client {
 
       updateEduAssistantPanel(eduAssistantPanel);
     }).start();
+  }
+
+  private void changeToAnswerMinorPanel() {
+    AnswerMinorPanel answerMinorPanel = new AnswerMinorPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, answerMinorPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 }
