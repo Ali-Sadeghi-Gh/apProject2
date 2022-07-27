@@ -166,6 +166,10 @@ public class Client {
         break;
       case AddProfessorPanel:
         changeToAddProfessorPanel();
+        break;
+      case AddStudentPanel:
+        changeToAddStudentPanel();
+        break;
     }
   }
 
@@ -910,5 +914,24 @@ public class Client {
     mainFrame.setContentPane(eduAssistantPanel);
 
     new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  private void changeToAddStudentPanel() {
+    AddStudentPanel addStudentPanel = new AddStudentPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addStudentPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  public void addStudent(String name, String email, String melliCode, String supervisorId, String phoneNumber,
+                         String password, String enteringYear, String status, String grade) {
+    Response response = serverController.sendAddStudentRequest(name, email, melliCode, supervisorId, phoneNumber,
+            password, enteringYear, status, grade);
+
+    mainFrame.showMessage(response.getErrorMessage());
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      changePanel(PanelName.AddStudentPanel, null);
+    }
   }
 }

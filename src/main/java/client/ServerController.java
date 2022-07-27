@@ -244,4 +244,20 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendAddStudentRequest(String name, String email, String melliCode, String supervisorId, String phoneNumber,
+                                    String password, String enteringYear, String status, String grade) {
+    Request request = new Request(RequestType.ADD_STUDENT);
+    request.addData("name", name);
+    request.addData("email", email);
+    request.addData("melliCode", melliCode);
+    request.addData("supervisorId", supervisorId);
+    request.addData("phoneNumber", phoneNumber);
+    request.addData("password", password);
+    request.addData("enteringYear", enteringYear);
+    request.addData("status", status);
+    request.addData("grade", grade);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

@@ -271,6 +271,21 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case ADD_STUDENT:
+        Professor supervisor = Controller.getInstance().findProfessorById(Integer.parseInt((String) request.getData("supervisorId")));
+        if (supervisor == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("invalid supervisor id");
+        } else {
+          id = Controller.getInstance().addStudent((String) request.getData("name"), (String) request.getData("email"),
+          (String) request.getData("melliCode"), user.getFacultyName(), (String) request.getData("phoneNumber"),
+                  (String) request.getData("password"), String.valueOf(supervisor.getId()), (String) request.getData("enteringYear"),
+                  (String) request.getData("status"), (String) request.getData("grade"));
+          response = new Response(ResponseStatus.OK);
+          response.setErrorMessage("student with id " + id + " added");
+        }
+        sendResponse(response);
+        break;
     }
   }
 

@@ -71,8 +71,7 @@ public class AddStudentOrProfessorPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void addStudentButtonActionPerformed(java.awt.event.ActionEvent evt) {
-// todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddStudentPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.AddStudentPanel, null);
   }
 
   private void addProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
