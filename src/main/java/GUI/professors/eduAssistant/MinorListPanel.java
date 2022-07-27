@@ -6,10 +6,11 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import shared.model.EducationalRequest;
-import shared.model.users.Professor;
+import client.Client;
+import shared.model.PanelName;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /**
  *
@@ -17,13 +18,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MinorListPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
 
   /**
    * Creates new form MinorListPanel
    */
-  public MinorListPanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public MinorListPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -52,24 +53,21 @@ public class MinorListPanel extends javax.swing.JPanel {
             }
     ));
     requestTable.setCellSelectionEnabled(true);
-    jScrollPane1.setViewportView(requestTable);
-    showData();
-
-    answerButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-    answerButton.setText("answer request");
-    answerButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        answerButtonActionPerformed(evt);
+    requestTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
       }
     });
+    jScrollPane1.setViewportView(requestTable);
+
+    answerButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 16)); // NOI18N
+    answerButton.setText("answer request");
+    answerButton.addActionListener(this::answerButtonActionPerformed);
 
     backButton.setText("back");
     backButton.setOpaque(false);
-    backButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        backButtonActionPerformed(evt);
-      }
-    });
+    backButton.addActionListener(this::backButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -102,12 +100,10 @@ public class MinorListPanel extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void showData() {
+  private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) requestTable.getModel();
     String[] cols = {"request id", "student id", "name", "faculty", "target faculty", "grade", "average score", "passed credits"};
-//    String[][] data = Controller.getInstance().getMinorData(professor.getFacultyName(), EducationalRequest.Type.minor);
-
-//    model.setDataVector(data, cols);
+    model.setDataVector(data, cols);
   }
 
   private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,10 +112,12 @@ public class MinorListPanel extends javax.swing.JPanel {
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduRequestPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.EduRequestPanel, null);
   }
 
+  public void update(String[][] data) {
+    showData(data);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JButton answerButton;

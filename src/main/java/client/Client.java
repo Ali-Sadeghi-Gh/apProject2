@@ -180,6 +180,9 @@ public class Client {
       case AnswerDropoutPanel:
         changeToAnswerDropoutPanel();
         break;
+      case MinorListPanel:
+        changeToMinorListPanel();
+        break;
     }
   }
 
@@ -976,5 +979,23 @@ public class Client {
     mainFrame.setContentPane(eduAssistantPanel);
 
     new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  private void changeToMinorListPanel() {
+    MinorListPanel minorListPanel = new MinorListPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, minorListPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.MinorListPanel);
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      minorListPanel.update(strings.toArray(new String[0][0]));
+
+      updateEduAssistantPanel(eduAssistantPanel);
+    }).start();
   }
 }

@@ -89,8 +89,7 @@ public class EduRequestPanel extends javax.swing.JPanel {
   }
 
   private void minorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-// todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new MinorListPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.MinorListPanel, null);
   }
 
 
