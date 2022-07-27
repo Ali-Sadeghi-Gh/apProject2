@@ -83,7 +83,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
     professorsListButton.addActionListener(this::professorsListButtonActionPerformed);
 
     addStudentButton.setText("add user");
-    addStudentButton.addActionListener(this::addStudentButtonActionPerformed);
+    addStudentButton.addActionListener(this::addUserButtonActionPerformed);
 
     javax.swing.GroupLayout registrationMattersPanelLayout = new javax.swing.GroupLayout(registrationMattersPanel);
     registrationMattersPanel.setLayout(registrationMattersPanelLayout);
@@ -326,9 +326,8 @@ public class EduAssistantPanel extends javax.swing.JPanel {
 //    mainFrame.repaintFrame();
   }
 
-  private void addStudentButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new AddStudentOrProfessorPanel(mainFrame, professor)));
-//    mainFrame.repaintFrame();
+  private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    client.changePanel(PanelName.AddStudentOrProfessorPanel, null);
   }
 
   private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {

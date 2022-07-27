@@ -6,7 +6,9 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import shared.model.users.Professor;
+import client.Client;
+
+import java.awt.*;
 
 /**
  *
@@ -14,13 +16,13 @@ import shared.model.users.Professor;
  */
 public class AddStudentOrProfessorPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
   /**
    * Creates new form AddStudentOrProfessorPanel
    */
-  public AddStudentOrProfessorPanel(MainFrame mainFrame, Professor professor) {
+  public AddStudentOrProfessorPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.professor = professor;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -37,21 +39,13 @@ public class AddStudentOrProfessorPanel extends javax.swing.JPanel {
     addStudentButton = new javax.swing.JButton();
     addProfessorButton = new javax.swing.JButton();
 
-    addStudentButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    addStudentButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     addStudentButton.setText("add student");
-    addStudentButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        addStudentButtonActionPerformed(evt);
-      }
-    });
+    addStudentButton.addActionListener(this::addStudentButtonActionPerformed);
 
-    addProfessorButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    addProfessorButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     addProfessorButton.setText("add professor");
-    addProfessorButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        addProfessorButtonActionPerformed(evt);
-      }
-    });
+    addProfessorButton.addActionListener(this::addProfessorButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);

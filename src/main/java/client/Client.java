@@ -914,4 +914,14 @@ public class Client {
     mainFrame.showMessage(response.getErrorMessage());
     changePanel(PanelName.ChangeCoursePanel, null);
   }
+
+  private void changeToAddStudentOrProfessorPanel() {
+    AddStudentOrProfessorPanel addStudentOrProfessorPanel = new AddStudentOrProfessorPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addStudentOrProfessorPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> {
+      updateEduAssistantPanel(eduAssistantPanel);
+    }).start();
+  }
 }
