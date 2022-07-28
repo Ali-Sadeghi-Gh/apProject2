@@ -290,4 +290,11 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendSearchStudentTemporary(String studentId) {
+    Request request = new Request(RequestType.SEARCH_STUDENT_TEMPORARY);
+    request.addData("studentId", studentId);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

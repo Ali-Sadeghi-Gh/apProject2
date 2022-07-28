@@ -6,11 +6,11 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import shared.model.users.Professor;
-import shared.model.users.Student;
+import client.Client;
+import shared.model.PanelName;
 
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /**
  *
@@ -18,14 +18,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class EduSearchStudentPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
-  Student student;
+  Client client;
 
   /**
    * Creates new form EduSearchStudentPanel
    */
-  public EduSearchStudentPanel(MainFrame mainFrame, Professor professor) {
-    this.professor = professor;
+  public EduSearchStudentPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
     setBounds(200, 270, 1100, 700);
     initComponents();
@@ -52,28 +51,24 @@ public class EduSearchStudentPanel extends javax.swing.JPanel {
 
     studentField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    studentLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    studentLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     studentLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     studentLabel.setText("student id:");
 
-    searchButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    searchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     searchButton.setText("search");
-    searchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        searchButtonActionPerformed(evt);
-      }
-    });
+    searchButton.addActionListener(this::searchButtonActionPerformed);
 
-    facultyLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    facultyLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-    gradeLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    gradeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     gradeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-    nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-    idLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    idLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     idLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
     scoreTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -84,6 +79,12 @@ public class EduSearchStudentPanel extends javax.swing.JPanel {
 
             }
     ));
+    scoreTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
     jScrollPane1.setViewportView(scoreTable);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -136,35 +137,33 @@ public class EduSearchStudentPanel extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  private void showData(Student student) {
-    idLabel.setText("id: " + student.getId());
-    nameLabel.setText("name: " + (student.getName()==null ? "-" : student.getName()));
-    gradeLabel.setText("grade: " + (student.getGrade()==null ? "-" : student.getGrade().name()));
-    facultyLabel.setText("faculty: " + (student.getFacultyName()==null ? "-" : student.getFacultyName()));
-
+  private void showData(String[][] data) {
     DefaultTableModel model = (DefaultTableModel) scoreTable.getModel();
     String[] cols = {"id", "name", "professor", "grade", "objection", "answer", "score"};
-//    String[][] data = Controller.getInstance().getCourseTemporaryScoreDataByStudent(student);
-//    model.setDataVector(data, cols);
+    model.setDataVector(data, cols);
   }
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
     try {
       Integer.parseInt(studentField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "student id must be a number");
+      mainFrame.showMessage("student id must be a number");
+      client.changePanel(PanelName.EduSearchStudentPanel, null);
       return;
     }
-//    student = Controller.getInstance().findStudentById(Integer.parseInt(studentField.getText()));
-    studentField.setText("");
 
-    if (student == null) {
-      JOptionPane.showMessageDialog(mainFrame, "student not found");
-    } else {
-      showData(student);
-    }
+    client.searchStudentTemporary(this, String.valueOf(studentField.getText()));
+    studentField.setText("");
   }
 
+  public void update(String id, String name, String grade, String faculty, String[][] data) {
+    idLabel.setText("id: " + id);
+    nameLabel.setText("name: " + name);
+    gradeLabel.setText("grade: " + grade);
+    facultyLabel.setText("faculty: " + faculty);
+
+    showData(data);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JLabel facultyLabel;
