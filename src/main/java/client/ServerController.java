@@ -263,37 +263,44 @@ public class ServerController {
     return scanResponse();
   }
 
-  public Response sendSearchStudentStatusById(String id) {
+  public Response sendSearchStudentStatusByIdRequest(String id) {
     Request request = new Request(RequestType.SEARCH_STUDENT_STATUS_BY_ID);
     request.addData("id", id);
     sendRequest(request);
     return scanResponse();
   }
 
-  public Response sendSearchStudentStatusByName(String name) {
+  public Response sendSearchStudentStatusByNameRequest(String name) {
     Request request = new Request(RequestType.SEARCH_STUDENT_STATUS_BY_NAME);
     request.addData("name", name);
     sendRequest(request);
     return scanResponse();
   }
 
-  public Response sendSearchCourseTemporary(String courseId) {
+  public Response sendSearchCourseTemporaryRequest(String courseId) {
     Request request = new Request(RequestType.SEARCH_COURSE_TEMPORARY);
     request.addData("courseId", courseId);
     sendRequest(request);
     return scanResponse();
   }
 
-  public Response sendSearchProfessorTemporary(String professorId) {
+  public Response sendSearchProfessorTemporaryRequest(String professorId) {
     Request request = new Request(RequestType.SEARCH_PROFESSOR_TEMPORARY);
     request.addData("professorId", professorId);
     sendRequest(request);
     return scanResponse();
   }
 
-  public Response sendSearchStudentTemporary(String studentId) {
+  public Response sendSearchStudentTemporaryRequest(String studentId) {
     Request request = new Request(RequestType.SEARCH_STUDENT_TEMPORARY);
     request.addData("studentId", studentId);
+    sendRequest(request);
+    return scanResponse();
+  }
+
+  public Response sendSearchCourseSummaryRequest(String courseId) {
+    Request request = new Request(RequestType.SEARCH_COURSE_SUMMARY);
+    request.addData("courseId", courseId);
     sendRequest(request);
     return scanResponse();
   }

@@ -201,6 +201,9 @@ public class Client {
       case EduSearchStudentPanel:
         changeToEduSearchStudentPanel();
         break;
+      case CourseSummaryPanel:
+        changeToCourseSummaryPanel();
+        break;
     }
   }
 
@@ -1034,7 +1037,7 @@ public class Client {
   }
 
   public void searchStudentStatusById(EduEducationalPanel eduEducationalPanel, String id) {
-    Response response = serverController.sendSearchStudentStatusById(id);
+    Response response = serverController.sendSearchStudentStatusByIdRequest(id);
 
     if (response.getStatus().equals(ResponseStatus.OK)) {
       StudentEducationalPanel studentEducationalPanel = new StudentEducationalPanel(this);
@@ -1052,7 +1055,7 @@ public class Client {
   }
 
   public void searchStudentStatusByName(EduEducationalPanel eduEducationalPanel, String name) {
-    Response response = serverController.sendSearchStudentStatusByName(name);
+    Response response = serverController.sendSearchStudentStatusByNameRequest(name);
 
     if (response.getStatus().equals(ResponseStatus.OK)) {
       StudentEducationalPanel studentEducationalPanel = new StudentEducationalPanel(this);
@@ -1086,7 +1089,7 @@ public class Client {
   }
 
   public void searchCourseTemporary(EduSearchCoursePanel eduSearchCoursePanel, String courseId) {
-    Response response = serverController.sendSearchCourseTemporary(courseId);
+    Response response = serverController.sendSearchCourseTemporaryRequest(courseId);
     if (response.getStatus().equals(ResponseStatus.OK)) {
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -1112,7 +1115,7 @@ public class Client {
   }
 
   public void searchProfessorTemporary(EduSearchProfessorPanel eduSearchProfessorPanel, String professorId) {
-    Response response = serverController.sendSearchProfessorTemporary(professorId);
+    Response response = serverController.sendSearchProfessorTemporaryRequest(professorId);
     if (response.getStatus().equals(ResponseStatus.OK)) {
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -1137,7 +1140,7 @@ public class Client {
   }
 
   public void searchStudentTemporary(EduSearchStudentPanel eduSearchStudentPanel, String studentId) {
-    Response response = serverController.sendSearchStudentTemporary(studentId);
+    Response response = serverController.sendSearchStudentTemporaryRequest(studentId);
     if (response.getStatus().equals(ResponseStatus.OK)) {
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -1145,11 +1148,33 @@ public class Client {
         strings.add(arrayList1.toArray(new String[0]));
       }
       eduSearchStudentPanel.update((String) response.getData("id"), (String) response.getData("name"),
-              (String) response.getData("faculty"), (String) response.getData("degree"),
+              (String) response.getData("grade"), (String) response.getData("faculty"),
               strings.toArray(new String[0][0]));
     } else {
       mainFrame.showMessage(response.getErrorMessage());
       changePanel(PanelName.EduSearchStudentPanel, null);
+    }
+  }
+
+  private void changeToCourseSummaryPanel() {
+    CourseSummaryPanel courseSummaryPanel = new CourseSummaryPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, courseSummaryPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  public void searchCourseSummary(CourseSummaryPanel courseSummaryPanel, String courseId) {
+    Response response = serverController.sendSearchCourseSummaryRequest(courseId);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      courseSummaryPanel.update((String) response.getData("id"), (String) response.getData("name"),
+              (String) response.getData("professor"), (String) response.getData("faculty"),
+              (String) response.getData("grade"), (String) response.getData("averageScore"),
+              (String) response.getData("studentCount"), (String) response.getData("passedStudentCount"),
+              (String) response.getData("failStudentCount"), (String) response.getData("averageScoreWithoutFail"));
+    } else {
+      mainFrame.showMessage(response.getErrorMessage());
+      changePanel(PanelName.CourseSummaryPanel, null);
     }
   }
 }

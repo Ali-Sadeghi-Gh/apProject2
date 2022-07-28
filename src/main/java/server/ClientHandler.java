@@ -408,6 +408,31 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case SEARCH_COURSE_SUMMARY:
+        course = Controller.getInstance().findCourse(Integer.parseInt(String.valueOf(request.getData("courseId"))));
+        if (course == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("course not found");
+        } else if (Controller.getInstance().findScoreByCourse(course).length == 0) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("scores must finalize");
+        } else {
+          response = new Response(ResponseStatus.OK);
+          response.addData("id", String.valueOf(course.getId()));
+          response.addData("name", course.getName() == null ? "-" : course.getName());
+          response.addData("professor", Controller.getInstance().findProfessorByCourse(course.getId()) == null ? "-"
+            : Controller.getInstance().findProfessorByCourse(course.getId()).getName());
+          response.addData("grade", course.getGrade() == null ? "-" : course.getGrade().name());
+          response.addData("faculty", course.getFacultyName() == null ? "-" : course.getFacultyName());
+
+          response.addData("averageScore", String.valueOf(Controller.getInstance().getAverageScoreByCourse(course)));
+          response.addData("studentCount", String.valueOf(Controller.getInstance().getStudentsCount(course)));
+          response.addData("passedStudentCount", String.valueOf(Controller.getInstance().getPassStudentsCount(course)));
+          response.addData("failStudentCount", String.valueOf(Controller.getInstance().getFailStudentsCount(course)));
+          response.addData("averageScoreWithoutFail", String.valueOf(Controller.getInstance().getPassAverageScoreByCourse(course)));
+        }
+        sendResponse(response);
+        break;
     }
   }
 

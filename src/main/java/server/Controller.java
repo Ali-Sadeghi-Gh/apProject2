@@ -425,7 +425,7 @@ public class Controller {
         }
       }
       int averageScore = 0;
-      if (getPassCredit(student) != 0) {
+      if (getAllCredit(student) != 0) {
         averageScore = (int) ((sumScore / getAllCredit(student)) * 100 + 0.5);
       }
       return (double) averageScore / 100;

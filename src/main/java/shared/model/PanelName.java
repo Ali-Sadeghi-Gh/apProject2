@@ -43,5 +43,6 @@ public enum PanelName {
   EduTemporaryScorePanel,
   EduSearchCoursePanel,
   EduSearchProfessorPanel,
-  EduSearchStudentPanel
+  EduSearchStudentPanel,
+  CourseSummaryPanel
 }

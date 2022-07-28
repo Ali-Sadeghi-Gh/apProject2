@@ -110,8 +110,7 @@ public class EduTemporaryScorePanel extends javax.swing.JPanel {
   }
 
   private void courseSummaryButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new CourseSummaryPanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.CourseSummaryPanel, null);
   }
 
   private void studentSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
