@@ -39,5 +39,6 @@ public enum PanelName {
   AnswerDropoutPanel,
   MinorListPanel,
   AnswerMinorPanel,
-  EduEducationalPanel
+  EduEducationalPanel,
+  EduTemporaryScorePanel
 }

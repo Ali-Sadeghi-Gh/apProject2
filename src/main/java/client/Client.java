@@ -189,6 +189,9 @@ public class Client {
       case EduEducationalPanel:
         changeToEduEducationalPanel();
         break;
+      case EduTemporaryScorePanel:
+        changeToEduTemporaryScorePanel();
+        break;
     }
   }
 
@@ -1055,5 +1058,13 @@ public class Client {
       mainFrame.showMessage(response.getErrorMessage());
       changePanel(PanelName.EduEducationalPanel, null);
     }
+  }
+
+  private void changeToEduTemporaryScorePanel() {
+    EduTemporaryScorePanel eduTemporaryScorePanel = new EduTemporaryScorePanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduTemporaryScorePanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 }

@@ -6,8 +6,9 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import GUI.professors.ProfessorsCourseList;
-import shared.model.users.Professor;
+import client.Client;
+
+import java.awt.*;
 
 /**
  *
@@ -15,14 +16,14 @@ import shared.model.users.Professor;
  */
 public class EduTemporaryScorePanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
 
   /**
    * Creates new form EduTemporaryScorePanel
    */
-  public EduTemporaryScorePanel(MainFrame mainFrame, Professor professor) {
+  public EduTemporaryScorePanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.professor = professor;
     setBounds(100, 270, 1200, 700);
     initComponents();
   }
@@ -42,45 +43,25 @@ public class EduTemporaryScorePanel extends javax.swing.JPanel {
     studentSearchButton = new javax.swing.JButton();
     professorSearchButton = new javax.swing.JButton();
 
-    submitScoreButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    submitScoreButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     submitScoreButton.setText("submit scores");
-    submitScoreButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        submitScoreButtonActionPerformed(evt);
-      }
-    });
+    submitScoreButton.addActionListener(this::submitScoreButtonActionPerformed);
 
-    courseSearchButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    courseSearchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     courseSearchButton.setText("search by course");
-    courseSearchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        courseSearchButtonActionPerformed(evt);
-      }
-    });
+    courseSearchButton.addActionListener(this::courseSearchButtonActionPerformed);
 
-    courseSummaryButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    courseSummaryButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     courseSummaryButton.setText("course summary");
-    courseSummaryButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        courseSummaryButtonActionPerformed(evt);
-      }
-    });
+    courseSummaryButton.addActionListener(this::courseSummaryButtonActionPerformed);
 
-    studentSearchButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    studentSearchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     studentSearchButton.setText("search by student");
-    studentSearchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        studentSearchButtonActionPerformed(evt);
-      }
-    });
+    studentSearchButton.addActionListener(this::studentSearchButtonActionPerformed);
 
-    professorSearchButton.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+    professorSearchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     professorSearchButton.setText("search by professor");
-    professorSearchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        professorSearchButtonActionPerformed(evt);
-      }
-    });
+    professorSearchButton.addActionListener(this::professorSearchButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
