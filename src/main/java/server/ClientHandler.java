@@ -314,6 +314,37 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case SEARCH_STUDENT_STATUS_BY_ID:
+        id = Integer.parseInt(String.valueOf(request.getData("id")));
+        student = Controller.getInstance().findStudentById(id);
+        if (student == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("student not found");
+        } else {
+          response = new Response(ResponseStatus.OK);
+          response.addData("id", String.valueOf(student.getId()));
+          response.addData("name", student.getName());
+          response.addData("credit", String.valueOf(Controller.getInstance().getPassCredit(student)));
+          response.addData("averageScore", String.valueOf(Controller.getInstance().getAverageScoreByStudent(student)));
+          response.addData("data", Controller.getInstance().getScoresData(student));
+        }
+        sendResponse(response);
+        break;
+      case SEARCH_STUDENT_STATUS_BY_NAME:
+        student = Controller.getInstance().findStudentByName(String.valueOf(request.getData("name")));
+        if (student == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("student not found");
+        } else {
+          response = new Response(ResponseStatus.OK);
+          response.addData("id", String.valueOf(student.getId()));
+          response.addData("name", student.getName());
+          response.addData("credit", String.valueOf(Controller.getInstance().getPassCredit(student)));
+          response.addData("averageScore", String.valueOf(Controller.getInstance().getAverageScoreByStudent(student)));
+          response.addData("data", Controller.getInstance().getScoresData(student));
+        }
+        sendResponse(response);
+        break;
     }
   }
 

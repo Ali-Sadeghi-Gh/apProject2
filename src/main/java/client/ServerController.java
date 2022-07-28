@@ -262,4 +262,18 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendSearchStudentStatusById(String id) {
+    Request request = new Request(RequestType.SEARCH_STUDENT_STATUS_BY_ID);
+    request.addData("id", id);
+    sendRequest(request);
+    return scanResponse();
+  }
+
+  public Response sendSearchStudentStatusByName(String name) {
+    Request request = new Request(RequestType.SEARCH_STUDENT_STATUS_BY_NAME);
+    request.addData("name", name);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

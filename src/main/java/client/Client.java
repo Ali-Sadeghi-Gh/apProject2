@@ -186,6 +186,9 @@ public class Client {
       case AnswerMinorPanel:
         changeToAnswerMinorPanel();
         break;
+      case EduEducationalPanel:
+        changeToEduEducationalPanel();
+        break;
     }
   }
 
@@ -391,8 +394,8 @@ public class Client {
       for (ArrayList<String> arrayList1 : arrayList) {
         strings.add(arrayList1.toArray(new String[0]));
       }
-      studentEducationalOuterPanel.update((int) Double.parseDouble(String.valueOf(response.getData("credit"))),
-              Double.parseDouble(String.valueOf(response.getData("averageScore"))),
+      studentEducationalOuterPanel.update((String) response.getData("credit"),
+              (String) response.getData("averageScore"),
               ((strings.toArray(new String[0][0]))));
 
       updateStudentPanel(studentPanel);
@@ -1008,5 +1011,49 @@ public class Client {
     mainFrame.setContentPane(eduAssistantPanel);
 
     new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  private void changeToEduEducationalPanel() {
+    EduEducationalPanel eduEducationalPanel = new EduEducationalPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduEducationalPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  public void searchStudentStatusById(EduEducationalPanel eduEducationalPanel, String id) {
+    Response response = serverController.sendSearchStudentStatusById(id);
+
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      StudentEducationalPanel studentEducationalPanel = new StudentEducationalPanel(this);
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      studentEducationalPanel.update((String) response.getData("credit"), (String) response.getData("averageScore"), strings.toArray(new String[0][0]));
+      eduEducationalPanel.update(studentEducationalPanel, (String) response.getData("id"), (String) response.getData("name"));
+    } else {
+      mainFrame.showMessage(response.getErrorMessage());
+      changePanel(PanelName.EduEducationalPanel, null);
+    }
+  }
+
+  public void searchStudentStatusByName(EduEducationalPanel eduEducationalPanel, String name) {
+    Response response = serverController.sendSearchStudentStatusByName(name);
+
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      StudentEducationalPanel studentEducationalPanel = new StudentEducationalPanel(this);
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      studentEducationalPanel.update((String) response.getData("credit"), (String) response.getData("averageScore"), strings.toArray(new String[0][0]));
+      eduEducationalPanel.update(studentEducationalPanel, (String) response.getData("id"), (String) response.getData("name"));
+    } else {
+      mainFrame.showMessage(response.getErrorMessage());
+      changePanel(PanelName.EduEducationalPanel, null);
+    }
   }
 }

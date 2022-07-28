@@ -6,10 +6,11 @@ package GUI.professors.eduAssistant;
  */
 
 import GUI.MainFrame;
-import shared.model.users.Professor;
-import shared.model.users.Student;
+import client.Client;
+import shared.model.PanelName;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -17,15 +18,15 @@ import javax.swing.*;
  */
 public class EduEducationalPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
-  Professor professor;
+  Client client;
+  JPanel jPanel;
 
   /**
    * Creates new form EduEducationalPanel
    */
-  public EduEducationalPanel(MainFrame mainFrame, Professor professor, JPanel jPanel) {
+  public EduEducationalPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.professor = professor;
-    this.add(jPanel);
     setBounds(100, 270, 1200, 700);
 
     initComponents();
@@ -47,33 +48,25 @@ public class EduEducationalPanel extends javax.swing.JPanel {
     nameSearchButton = new javax.swing.JButton();
     idSearchButton = new javax.swing.JButton();
 
-    idLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    idLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     idLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     idLabel.setText("id:");
 
     idField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    nameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     nameLabel.setText("name:");
 
     nameField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    nameSearchButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    nameSearchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     nameSearchButton.setText("search");
-    nameSearchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        nameSearchButtonActionPerformed(evt);
-      }
-    });
+    nameSearchButton.addActionListener(this::nameSearchButtonActionPerformed);
 
-    idSearchButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    idSearchButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     idSearchButton.setText("search");
-    idSearchButton.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        idSearchButtonActionPerformed(evt);
-      }
-    });
+    idSearchButton.addActionListener(this::idSearchButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -115,28 +108,28 @@ public class EduEducationalPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void nameSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//    Student student = Controller.getInstance().findStudentByName(nameField.getText());
-//    if (student == null) {
-//      JOptionPane.showMessageDialog(mainFrame, "no student found");
-//    } else {
-//  todo    mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduEducationalPanel(mainFrame, professor, new StudentEducationalOutPanel(student))));
-//      mainFrame.repaintFrame();
-//    }
+    client.searchStudentStatusByName(this, nameField.getText());
   }
 
   private void idSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
     try {
-      int id = Integer.parseInt(idField.getText());
-//      Student student = Controller.getInstance().findStudentById(id);
-//      if (student == null) {
-//        JOptionPane.showMessageDialog(mainFrame, "no student found");
-//      } else {
-//   todo     mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduEducationalPanel(mainFrame, professor, new StudentEducationalOutPanel(student))));
-//        mainFrame.repaintFrame();
-//      }
+      Integer.parseInt(idField.getText());
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(mainFrame, "id must be a number");
+      mainFrame.showMessage("id must be a number");
+      client.changePanel(PanelName.EduEducationalPanel, null);
+      return;
     }
+    client.searchStudentStatusById(this, idField.getText());
+  }
+
+  public void update(JPanel jPanel, String id, String name) {
+    if (this.jPanel != null) {
+      this.remove(this.jPanel);
+    }
+    this.jPanel = jPanel;
+    this.add(jPanel);
+    idField.setText(id);
+    nameField.setText(name);
   }
 
 

@@ -9,6 +9,7 @@ package GUI.student;
 import client.Client;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /**
  *
@@ -58,12 +59,12 @@ public class StudentEducationalPanel extends javax.swing.JPanel {
     jScrollPane1.setViewportView(coursesTable);
 
     passCreditLabel.setBackground(new java.awt.Color(200, 200, 200));
-    passCreditLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    passCreditLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     passCreditLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     passCreditLabel.setOpaque(true);
 
     averageScoreLabel.setBackground(new java.awt.Color(200, 200, 200));
-    averageScoreLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    averageScoreLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     averageScoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     averageScoreLabel.setOpaque(true);
 
@@ -101,7 +102,7 @@ public class StudentEducationalPanel extends javax.swing.JPanel {
     model.setDataVector(data, cols);
   }
 
-  public void update(int credit, double averageScore, String[][] data) {
+  public void update(String credit, String averageScore, String[][] data) {
     passCreditLabel.setText("Passed credits: " + credit);
     averageScoreLabel.setText("average score: " + averageScore);
     showData(data);

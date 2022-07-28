@@ -502,7 +502,7 @@ public class Controller {
 
   public Student findStudentByName(String name) {
     for (Student student : University.getInstance().getStudents()) {
-      if (name.equals(student.getName())) {
+      if (student.getName().equals(name)) {
         return student;
       }
     }

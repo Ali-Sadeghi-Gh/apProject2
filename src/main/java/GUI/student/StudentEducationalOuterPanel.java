@@ -13,7 +13,7 @@ public class StudentEducationalOuterPanel extends JPanel {
     add(studentEducationalPanel);
   }
 
-  public void update(int credit, double averageScore, String[][] data) {
+  public void update(String credit, String averageScore, String[][] data) {
     studentEducationalPanel.update(credit, averageScore, data);
   }
 }
