@@ -283,4 +283,11 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendSearchProfessorTemporary(String professorId) {
+    Request request = new Request(RequestType.SEARCH_PROFESSOR_TEMPORARY);
+    request.addData("professorId", professorId);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

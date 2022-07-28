@@ -84,6 +84,12 @@ public class EduSearchCoursePanel extends javax.swing.JPanel {
 
             }
     ));
+    scoreTable.setModel(new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int row, int column) {
+        return false;
+      }
+    });
     jScrollPane1.setViewportView(scoreTable);
 
     professorLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N

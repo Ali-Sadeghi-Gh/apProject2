@@ -195,6 +195,9 @@ public class Client {
       case EduSearchCoursePanel:
         changeToEduSearchCoursePanel();
         break;
+      case EduSearchProfessorPanel:
+        changeToEduSearchProfessorPanel();
+        break;
     }
   }
 
@@ -1094,6 +1097,31 @@ public class Client {
     } else {
       mainFrame.showMessage(response.getErrorMessage());
       changePanel(PanelName.EduSearchCoursePanel, null);
+    }
+  }
+
+  private void changeToEduSearchProfessorPanel() {
+    EduSearchProfessorPanel eduSearchProfessorPanel = new EduSearchProfessorPanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduSearchProfessorPanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  public void searchProfessorTemporary(EduSearchProfessorPanel eduSearchProfessorPanel, String professorId) {
+    Response response = serverController.sendSearchProfessorTemporary(professorId);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      eduSearchProfessorPanel.update((String) response.getData("id"), (String) response.getData("name"),
+              (String) response.getData("faculty"), (String) response.getData("degree"),
+              strings.toArray(new String[0][0]));
+    } else {
+      mainFrame.showMessage(response.getErrorMessage());
+      changePanel(PanelName.EduSearchProfessorPanel, null);
     }
   }
 }

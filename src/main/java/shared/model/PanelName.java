@@ -41,5 +41,6 @@ public enum PanelName {
   AnswerMinorPanel,
   EduEducationalPanel,
   EduTemporaryScorePanel,
-  EduSearchCoursePanel
+  EduSearchCoursePanel,
+  EduSearchProfessorPanel
 }

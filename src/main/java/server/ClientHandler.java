@@ -378,6 +378,21 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case SEARCH_PROFESSOR_TEMPORARY:
+        professor = Controller.getInstance().findProfessorById(Integer.parseInt(String.valueOf(request.getData("professorId"))));
+        if (professor == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("professor not found");
+        } else {
+          response = new Response(ResponseStatus.OK);
+          response.addData("id", String.valueOf(professor.getId()));
+          response.addData("name", professor.getName()==null ? "-" : professor.getName());
+          response.addData("faculty", professor.getFacultyName()==null ? "-" : professor.getFacultyName());
+          response.addData("degree", professor.getDegree()==null ? "-" : professor.getDegree());
+          response.addData("data", Controller.getInstance().getAllScoresDataByProfessor(professor));
+        }
+        sendResponse(response);
+        break;
     }
   }
 
