@@ -7,6 +7,8 @@ package GUI.professors.eduAssistant;
 
 import GUI.MainFrame;
 import client.Client;
+import shared.model.PanelName;
+import shared.model.users.UserRole;
 
 import java.awt.*;
 
@@ -100,13 +102,11 @@ public class EduTemporaryScorePanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void submitScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new ProfessorsCourseList(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.ProfessorsCourseList, UserRole.EduAssistant);
   }
 
   private void courseSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-//  todo  mainFrame.setContentPane(new EduAssistantPanel(mainFrame, professor, new EduSearchCoursePanel(mainFrame, professor)));
-    mainFrame.repaintFrame();
+    client.changePanel(PanelName.EduSearchCoursePanel, null);
   }
 
   private void courseSummaryButtonActionPerformed(java.awt.event.ActionEvent evt) {

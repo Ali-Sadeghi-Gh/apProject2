@@ -192,6 +192,9 @@ public class Client {
       case EduTemporaryScorePanel:
         changeToEduTemporaryScorePanel();
         break;
+      case EduSearchCoursePanel:
+        changeToEduSearchCoursePanel();
+        break;
     }
   }
 
@@ -1066,5 +1069,31 @@ public class Client {
     mainFrame.setContentPane(eduAssistantPanel);
 
     new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  private void changeToEduSearchCoursePanel() {
+    EduSearchCoursePanel eduSearchCoursePanel = new EduSearchCoursePanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduSearchCoursePanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+  }
+
+  public void searchCourseTemporary(EduSearchCoursePanel eduSearchCoursePanel, String courseId) {
+    Response response = serverController.sendSearchCourseTemporary(courseId);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      eduSearchCoursePanel.update((String) response.getData("id"), (String) response.getData("name"),
+              (String) response.getData("grade"), (String) response.getData("professor"),
+              (String) response.getData("faculty"), ((ArrayList<String>) response.getData("cols")).toArray(new String[0]),
+              strings.toArray(new String[0][0]));
+    } else {
+      mainFrame.showMessage(response.getErrorMessage());
+      changePanel(PanelName.EduSearchCoursePanel, null);
+    }
   }
 }

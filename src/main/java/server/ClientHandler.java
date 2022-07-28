@@ -345,6 +345,39 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case SEARCH_COURSE_TEMPORARY:
+        course = Controller.getInstance().findCourse(Integer.parseInt(String.valueOf(request.getData("courseId"))));
+        if (course == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("course not found");
+        } else {
+          response = new Response(ResponseStatus.OK);
+          response.addData("id", String.valueOf(course.getId()));
+          response.addData("name", course.getName()==null ? "-" : course.getName());
+          response.addData("grade", course.getGrade()==null ? "-" : course.getGrade().name());
+          response.addData("professor", Controller.getInstance().findProfessorByCourse(course.getId())==null ? "-"
+            : Controller.getInstance().findProfessorByCourse(course.getId()).getName());
+          response.addData("faculty", course.getFacultyName()==null ? "-" : course.getFacultyName());
+
+          TemporaryScore[] temporaryScores = Controller.getInstance().findTemporaryScoreByCourse(course);
+          Score[] scores = Controller.getInstance().findScoreByCourse(course);
+          String[] cols;
+          String[][] data;
+          if (scores.length == 0 && temporaryScores.length == 0) {
+            cols = new String[]{"id", "name", "faculty", "grade"};
+            data = Controller.getInstance().getStudentsDataByCourse(course);
+          } else if (scores.length == 0) {
+            cols = new String[]{"id", "name", "faculty", "grade", "objection", "answer", "score"};
+            data = Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course);
+          } else {
+            cols = new String[]{"id", "name", "faculty", "grade", "score"};
+            data = Controller.getInstance().getStudentsScoreDataByCourse(course);
+          }
+          response.addData("cols", cols);
+          response.addData("data", data);
+        }
+        sendResponse(response);
+        break;
     }
   }
 

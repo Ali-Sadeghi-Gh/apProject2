@@ -276,4 +276,11 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendSearchCourseTemporary(String courseId) {
+    Request request = new Request(RequestType.SEARCH_COURSE_TEMPORARY);
+    request.addData("courseId", courseId);
+    sendRequest(request);
+    return scanResponse();
+  }
 }
