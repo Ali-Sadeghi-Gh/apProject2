@@ -85,6 +85,14 @@ public class ServerController {
     return scanResponse();
   }
 
+  public Response sendChangePasswordRequest(String currentPassword, String newPassword) {
+    Request request = new Request(RequestType.CHANGE_PASSWORD);
+    request.addData("currentPassword", currentPassword);
+    request.addData("newPassword", newPassword);
+    sendRequest(request);
+    return scanResponse();
+  }
+
   public Response sendChangePhoneNumberRequest(String phoneNumber) {
     Request request = new Request(RequestType.CHANGE_PHONE_NUMBER);
     request.addData("phoneNumber", phoneNumber);

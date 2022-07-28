@@ -1,13 +1,9 @@
 package GUI;
 
-import GUI.professors.ProfessorPanel;
 import client.Client;
-import shared.model.users.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,15 +18,13 @@ import java.awt.event.ActionListener;
 public class ChangePasswordPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
-  User user;
 
   /**
    * Creates new form changePasswordPanel
    */
-  public ChangePasswordPanel(MainFrame mainFrame, User user) {
+  public ChangePasswordPanel(MainFrame mainFrame, Client client) {
+    this.client = client;
     this.mainFrame = mainFrame;
-    this.user = user;
-
     initComponents();
   }
 
@@ -55,60 +49,44 @@ public class ChangePasswordPanel extends javax.swing.JPanel {
     newPassCheck = new JCheckBox();
     verifyPassCheck = new JCheckBox();
 
-    alertLabel.setFont(new Font("Tahoma", 0, 36)); // NOI18N
+    alertLabel.setFont(new Font("Tahoma", Font.PLAIN, 36)); // NOI18N
     alertLabel.setForeground(new Color(255, 0, 0));
     alertLabel.setHorizontalAlignment(SwingConstants.CENTER);
     alertLabel.setText("*You mast change your password");
 
-    currentPassLabel.setFont(new Font("Tahoma", 0, 18)); // NOI18N
+    currentPassLabel.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     currentPassLabel.setHorizontalAlignment(SwingConstants.CENTER);
     currentPassLabel.setText("current password:");
 
-    newPassLabel.setFont(new Font("Tahoma", 0, 18)); // NOI18N
+    newPassLabel.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     newPassLabel.setHorizontalAlignment(SwingConstants.CENTER);
     newPassLabel.setText("new password:");
 
-    verifyPassLabel.setFont(new Font("Tahoma", 0, 18)); // NOI18N
+    verifyPassLabel.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     verifyPassLabel.setHorizontalAlignment(SwingConstants.CENTER);
     verifyPassLabel.setText("verify password:");
 
-    changeButton.setFont(new Font("Tahoma", 0, 18)); // NOI18N
+    changeButton.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     changeButton.setText("change");
-    changeButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        changeButtonActionPerformed(evt);
-      }
-    });
+    changeButton.addActionListener(this::changeButtonActionPerformed);
 
-    currentPassField.setFont(new Font("Tahoma", 0, 18)); // NOI18N
+    currentPassField.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     currentPassField.setHorizontalAlignment(JTextField.CENTER);
     currentPassField.setEchoChar('*');
 
-    newPassField.setFont(new Font("Tahoma", 0, 18)); // NOI18N
+    newPassField.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     newPassField.setHorizontalAlignment(JTextField.CENTER);
     newPassField.setEchoChar('*');
 
-    verifyPassField.setFont(new Font("Tahoma", 0, 18)); // NOI18N
+    verifyPassField.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     verifyPassField.setHorizontalAlignment(JTextField.CENTER);
     verifyPassField.setEchoChar('*');
 
-    currentPassCheck.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        currentPassCheckActionPerformed(evt);
-      }
-    });
+    currentPassCheck.addActionListener(this::currentPassCheckActionPerformed);
 
-    newPassCheck.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        newPassCheckActionPerformed(evt);
-      }
-    });
+    newPassCheck.addActionListener(this::newPassCheckActionPerformed);
 
-    verifyPassCheck.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        verifyPassCheckActionPerformed(evt);
-      }
-    });
+    verifyPassCheck.addActionListener(this::verifyPassCheckActionPerformed);
 
     GroupLayout layout = new GroupLayout(this);
     this.setLayout(layout);
@@ -169,53 +147,25 @@ public class ChangePasswordPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    if (currentPassField.getText().hashCode() != user.getPassword()) {
-      JOptionPane.showMessageDialog(mainFrame, "incorrect password input");
-      mainFrame.setContentPane(new ChangePasswordPanel(mainFrame, user));
-      mainFrame.repaintFrame();
-      return;
-    }
-
     if (newPassField.getText().equals("")) {
-      JOptionPane.showMessageDialog(mainFrame, "new password can't be empty");
-      mainFrame.setContentPane(new ChangePasswordPanel(mainFrame, user));
-      mainFrame.repaintFrame();
+      mainFrame.showMessage("new password can't be empty");
+      client.changePasswordPanelCLI();
       return;
     }
 
     if (!newPassField.getText().equals(verifyPassField.getText())) {
-      JOptionPane.showMessageDialog(mainFrame, "new password doesn't match");
-      mainFrame.setContentPane(new ChangePasswordPanel(mainFrame, user));
-      mainFrame.repaintFrame();
+      mainFrame.showMessage("new password doesn't match");
+      client.changePasswordPanelCLI();
       return;
     }
 
     if (currentPassField.getText().equals(newPassField.getText())) {
-      JOptionPane.showMessageDialog(mainFrame, "new password must differ from old one");
-      mainFrame.setContentPane(new ChangePasswordPanel(mainFrame, user));
-      mainFrame.repaintFrame();
+      mainFrame.showMessage("new password must differ from old one");
+      client.changePasswordPanelCLI();
       return;
     }
 
-
-//    Controller.getInstance().changePassword(newPassField.getText(), user);
-//    Controller.getInstance().setUserLoginTime(user);
-
-    if (user instanceof Student) {
-//todo      mainFrame.setContentPane(new StudentPanel(mainFrame, (Student) user, new StudentMainPanel((Student) user)));
-      mainFrame.repaintFrame();
-      return;
-    }
-
-    Professor professor = (Professor) user;
-    if (professor.getPosition() == Professor.Position.eduAssistant) {
-//   todo   mainFrame.setContentPane(new EduAssistantPanel(mainFrame, (Professor) user, new JPanel()));
-      mainFrame.repaintFrame();
-      return;
-    }
-
-    mainFrame.setContentPane(new ProfessorPanel(mainFrame, new JPanel(), client));
-    mainFrame.repaintFrame();
+    client.changePassword(currentPassField.getText(), newPassField.getText());
   }
 
   private void currentPassCheckActionPerformed(java.awt.event.ActionEvent evt) {

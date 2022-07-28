@@ -66,6 +66,30 @@ public class ClientHandler implements Runnable {
       case LOGIN:
         handleLogin(request);
         break;
+      case CHANGE_PASSWORD:
+        Response response;
+        if (String.valueOf(request.getData("currentPassword")).hashCode() != user.getPassword()) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage("incorrect password input");
+        } else {
+          response = new Response(ResponseStatus.OK);
+          Controller.getInstance().changePassword(String.valueOf(request.getData("newPassword")), user);
+          Controller.getInstance().setUserLoginTime(user);
+          UserRole userRole = null;
+          if (user instanceof Student) {
+            userRole = UserRole.Student;
+          } else if (user instanceof Professor) {
+            Professor professor = (Professor) user;
+            if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
+              userRole = UserRole.EduAssistant;
+            } else {
+              userRole = UserRole.Professor;
+            }
+          }
+          response.addData("userRole", userRole);
+        }
+        sendResponse(response);
+        break;
       case UPDATE:
         handleUpdate(request);
         break;
@@ -94,7 +118,6 @@ public class ClientHandler implements Runnable {
         sendResponse(new Response(ResponseStatus.OK));
         break;
       case ADD_SCORE:
-        Response response;
         Course course = Controller.getInstance().findCourse(Integer.parseInt(String.valueOf(request.getData("courseId"))));
         if (Integer.parseInt(String.valueOf(request.getData("studentsCount"))) == Controller.getInstance().findTemporaryScoreByCourse(course).length) {
           Controller.getInstance().setFinalScores(course);
@@ -673,21 +696,25 @@ public class ClientHandler implements Runnable {
       response.setErrorMessage("wrong id or password input");
     } else {
       this.user = user;
-      Controller.getInstance().setUserLoginTime(user);
-      response = new Response(ResponseStatus.OK);
+      if (Time.needToChangPassword(user)) {
+        response = new Response(ResponseStatus.ERROR);
+      } else {
+        Controller.getInstance().setUserLoginTime(user);
+        response = new Response(ResponseStatus.OK);
 
-      UserRole userRole = null;
-      if (user instanceof Student) {
-        userRole = UserRole.Student;
-      } else if (user instanceof Professor) {
-        Professor professor = (Professor) user;
-        if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
-          userRole = UserRole.EduAssistant;
-        } else {
-          userRole = UserRole.Professor;
+        UserRole userRole = null;
+        if (user instanceof Student) {
+          userRole = UserRole.Student;
+        } else if (user instanceof Professor) {
+          Professor professor = (Professor) user;
+          if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
+            userRole = UserRole.EduAssistant;
+          } else {
+            userRole = UserRole.Professor;
+          }
         }
+        response.addData("userRole", userRole);
       }
-      response.addData("userRole", userRole);
     }
 
     sendResponse(response);

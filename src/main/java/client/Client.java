@@ -46,9 +46,25 @@ public class Client {
 
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainPanelCLI(response);
+    } else if (response.getErrorMessage() == null) {
+      changePasswordPanelCLI();
     } else {
       loginCLI();
       mainFrame.showMessage(response.getErrorMessage());
+    }
+  }
+
+  public void changePasswordPanelCLI() {
+    mainFrame.setContentPane(new ChangePasswordPanel(mainFrame, this));
+  }
+
+  public void changePassword(String currentPassword, String newPassword) {
+    Response response = serverController.sendChangePasswordRequest(currentPassword, newPassword);
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      mainPanelCLI(response);
+    } else {
+      mainFrame.showMessage(response.getErrorMessage());
+      changePasswordPanelCLI();
     }
   }
 

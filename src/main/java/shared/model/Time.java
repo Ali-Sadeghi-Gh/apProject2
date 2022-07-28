@@ -28,12 +28,12 @@ public class Time {
     return sdf.format(new Date());
   }
 
-  public static boolean needToChangPassword(User user) {//todo
+  public static boolean needToChangPassword(User user) {
     if (user.getLastLogIn() == null) {
       return false;
     }
     try {
-      if ((convertStringToDate(getCurrentTime()).getTime() - convertStringToDate(user.getLastLogIn()).getTime())/1000 > 100000000) {
+      if ((convertStringToDate(getCurrentTime()).getTime() - convertStringToDate(user.getLastLogIn()).getTime())/1000 > 259200) {
         return true;
       }
     } catch (ParseException e) {
