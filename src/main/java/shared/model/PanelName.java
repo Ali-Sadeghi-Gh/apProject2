@@ -44,6 +44,5 @@ public enum PanelName {
   EduSearchCoursePanel,
   EduSearchProfessorPanel,
   EduSearchStudentPanel,
-  CourseSummaryPanel,
-  ChangePasswordPanel
+  CourseSummaryPanel
 }

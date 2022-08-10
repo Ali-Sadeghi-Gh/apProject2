@@ -1,5 +1,7 @@
 package shared.model.users;
 
+import shared.model.message.Messenger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public abstract class User {
   protected int password;
   protected String lastLogIn;
   protected List<String> courses = new ArrayList<>();
+  protected Messenger messenger = new Messenger();
 
   public User(String name, String email, String melliCode, String facultyName, String phoneNumber, String password, String lastLogIn) {
     this.name = name;
@@ -92,4 +95,8 @@ public abstract class User {
   }
 
   public abstract int getId();
+
+  public Messenger getMessenger() {
+    return messenger;
+  }
 }
