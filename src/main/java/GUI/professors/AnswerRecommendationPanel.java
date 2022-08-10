@@ -129,7 +129,7 @@ public class AnswerRecommendationPanel extends javax.swing.JPanel {
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.RecommendationListPanel, userRole);
+    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, userRole);
   }
 
 

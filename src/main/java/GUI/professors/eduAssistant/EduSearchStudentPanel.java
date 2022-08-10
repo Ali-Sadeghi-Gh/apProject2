@@ -148,7 +148,7 @@ public class EduSearchStudentPanel extends javax.swing.JPanel {
       Integer.parseInt(studentField.getText());
     } catch (Exception e) {
       mainFrame.showMessage("student id must be a number");
-      client.changePanel(PanelName.EduSearchStudentPanel, null);
+      client.changePanel(PanelName.EDU_SEARCH_STUDENT_PANEL, null);
       return;
     }
 

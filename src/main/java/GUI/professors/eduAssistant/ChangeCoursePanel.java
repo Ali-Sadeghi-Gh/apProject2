@@ -260,7 +260,7 @@ public class ChangeCoursePanel extends javax.swing.JPanel {
       Integer.parseInt(idField.getText());
     } catch (Exception e) {
       mainFrame.showMessage("course id must be a number");
-      client.changePanel(PanelName.ChangeCoursePanel, null);
+      client.changePanel(PanelName.CHANGE_COURSE_PANEL, null);
       return;
     }
 

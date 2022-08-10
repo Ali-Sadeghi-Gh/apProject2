@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Chat {
   private int contactId;
   private String contactName;
-  private String lastMessage = "";
+  private String lastMessage = "chat created";
   private ArrayList<Message> messages;
   private Messenger messenger;
 

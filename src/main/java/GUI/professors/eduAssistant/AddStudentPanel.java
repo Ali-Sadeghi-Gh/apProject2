@@ -278,7 +278,7 @@ public class AddStudentPanel extends javax.swing.JPanel {
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.AddStudentOrProfessorPanel, null);
+    client.changePanel(PanelName.ADD_STUDENT_OR_PROFESSOR_PANEL, null);
   }
 
 

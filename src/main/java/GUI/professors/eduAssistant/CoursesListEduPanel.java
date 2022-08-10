@@ -175,15 +175,15 @@ public class CoursesListEduPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void addCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.AddCoursePanel, null);
+    client.changePanel(PanelName.ADD_COURSE_PANEL, null);
   }
 
   private void changeCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ChangeCoursePanel, null);
+    client.changePanel(PanelName.CHANGE_COURSE_PANEL, null);
   }
 
   private void removeCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.RemoveCoursePanel, null);
+    client.changePanel(PanelName.REMOVE_COURSE_PANEL, null);
   }
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {

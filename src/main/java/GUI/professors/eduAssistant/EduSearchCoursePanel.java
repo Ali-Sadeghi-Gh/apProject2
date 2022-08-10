@@ -174,7 +174,7 @@ public class EduSearchCoursePanel extends javax.swing.JPanel {
       Integer.parseInt(courseField.getText());
     } catch (Exception e) {
       mainFrame.showMessage("course id must be a number");
-      client.changePanel(PanelName.EduSearchCoursePanel, null);
+      client.changePanel(PanelName.EDU_SEARCH_COURSE_PANEL, null);
       return;
     }
 

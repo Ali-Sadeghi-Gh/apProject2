@@ -123,7 +123,7 @@ public class AnswerDropoutPanel extends javax.swing.JPanel {
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.DropoutListPanel, null);
+    client.changePanel(PanelName.DROPOUT_LIST_PANEL, null);
   }
 
 

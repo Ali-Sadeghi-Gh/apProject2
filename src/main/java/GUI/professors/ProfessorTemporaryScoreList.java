@@ -149,7 +149,7 @@ public class ProfessorTemporaryScoreList extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ProfessorsCourseList, userRole);
+    client.changePanel(PanelName.PROFESSORS_COURSE_LIST, userRole);
   }
 
   private void temporaryButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -1,6 +1,7 @@
 package client;
 
 import GUI.*;
+import GUI.messenger.MessengerPanel;
 import GUI.professors.*;
 import GUI.professors.dean.AddProfessorDeanPanel;
 import GUI.professors.dean.ChangeProfessorPanel;
@@ -10,6 +11,7 @@ import GUI.professors.eduAssistant.*;
 import GUI.student.*;
 import shared.model.EducationalRequest;
 import shared.model.PanelName;
+import shared.model.message.Chat;
 import shared.model.users.*;
 import shared.request.*;
 import shared.response.*;
@@ -70,30 +72,30 @@ public class Client {
 
   private void mainPanelCLI(Response response) {
     if (String.valueOf(response.getData("userRole")).equals(UserRole.Student.toString())) {
-      changePanel(PanelName.StudentMainPanel, null);
+      changePanel(PanelName.STUDENT_MAIN_PANEL, null);
     } else if (String.valueOf(response.getData("userRole")).equals(UserRole.EduAssistant.toString())) {
-      changePanel(PanelName.EduAssistantPanel, null);
+      changePanel(PanelName.EDU_ASSISTANT_PANEL, null);
     } else if (String.valueOf(response.getData("userRole")).equals(UserRole.Professor.toString())) {
-      changePanel(PanelName.ProfessorPanel, null);
+      changePanel(PanelName.PROFESSOR_PANEL, null);
     }
   }
 
   private void updateStudentPanel(StudentPanel studentPanel) {
-    Response response = serverController.sendUpdateRequest(PanelName.StudentPanel);
+    Response response = serverController.sendUpdateRequest(PanelName.STUDENT_PANEL);
     studentPanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
   }
 
   private void updateProfessorPanel(ProfessorPanel professorPanel) {
-    Response response = serverController.sendUpdateRequest(PanelName.ProfessorPanel);
+    Response response = serverController.sendUpdateRequest(PanelName.PROFESSOR_PANEL);
     professorPanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
   }
 
   private void updateEduAssistantPanel(EduAssistantPanel eduAssistantPanel) {
-    Response response = serverController.sendUpdateRequest(PanelName.EduAssistantPanel);
+    Response response = serverController.sendUpdateRequest(PanelName.EDU_ASSISTANT_PANEL);
     eduAssistantPanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
@@ -106,119 +108,122 @@ public class Client {
 
   public void changePanel(PanelName panelName, UserRole userRole) {
     switch (panelName) {
-      case StudentMainPanel:
+      case STUDENT_MAIN_PANEL:
         changeToStudentMainPanel();
         break;
-      case ProfessorPanel:
+      case PROFESSOR_PANEL:
         changeToProfessorPanel();
         break;
-      case EduAssistantPanel:
+      case EDU_ASSISTANT_PANEL:
         changeToEduAssistantPanel();
         break;
-      case StudentProfilePanel:
+      case STUDENT_PROFILE_PANEL:
         changeToStudentProfilePanel();
         break;
-      case ProfessorProfilePanel:
+      case PROFESSOR_PROFILE_PANEL:
         changeToProfessorProfilePanel(userRole);
         break;
-      case StudentEducationalOutPanel:
+      case STUDENT_EDUCATIONAL_OUT_PANEL:
         changeToStudentEducationalPanel();
         break;
-      case StudentTemporaryScoreList:
+      case STUDENT_TEMPORARY_SCORE_LIST:
         changeToStudentTemporaryScoreList();
         break;
-      case WeeklySchedulePanel:
+      case WEEKLY_SCHEDULE_PANEL:
         changeToWeeklySchedulePanel(userRole);
         break;
-      case ExamListPanel:
+      case EXAM_LIST_PANEL:
         changeToExamListPanel(userRole);
         break;
-      case RecommendationRequestPanel:
+      case RECOMMENDATION_REQUEST_PANEL:
         changeToRecommendationRequestPanel();
         break;
-      case EnrollmentCertificatePanel:
+      case ENROLLMENT_CERTIFICATE_PANEL:
         changeToEnrollmentCertificatePanel();
         break;
-      case MinorRequestPanel:
+      case MINOR_REQUEST_PANEL:
         changeToMinorRequestPanel();
         break;
-      case DropoutRequestPanel:
+      case DROPOUT_REQUEST_PANEL:
         changeToDropoutRequestPanel();
         break;
-      case DormitoryRequestPanel:
+      case DORMITORY_REQUEST_PANEL:
         changeToDormitoryRequestPanel();
         break;
-      case DefendingRequestPanel:
+      case DEFENDING_REQUEST_PANEL:
         changeToDefendingRequestPanel();
         break;
-      case ProfessorsCourseList:
+      case PROFESSORS_COURSE_LIST:
         changeToProfessorsCourseList(userRole);
         break;
-      case RecommendationListPanel:
+      case RECOMMENDATION_LIST_PANEL:
         changeToRecommendationListPanel(userRole);
         break;
-      case AnswerRecommendationPanel:
+      case ANSWER_RECOMMENDATION_PANEL:
         changeToAnswerRecommendationPanel(userRole);
         break;
-      case RemoveProfessorPanel:
+      case REMOVE_PROFESSOR_PANEL:
         changeToRemoveProfessorPanel();
         break;
-      case AddProfessorDeanPanel:
+      case ADD_PROFESSOR_DEAN_PANEL:
         changeToAddProfessorDeanPanel();
         break;
-      case ChangeProfessorPanel:
+      case CHANGE_PROFESSOR_PANEL:
         changeToChangeProfessorPanel();
         break;
-      case AddCoursePanel:
+      case ADD_COURSE_PANEL:
         changeToAddCoursePanel();
         break;
-      case RemoveCoursePanel:
+      case REMOVE_COURSE_PANEL:
         changeToRemoveCoursePanel();
         break;
-      case ChangeCoursePanel:
+      case CHANGE_COURSE_PANEL:
         changeToChangeCoursePanel();
         break;
-      case AddStudentOrProfessorPanel:
+      case ADD_STUDENT_OR_PROFESSOR_PANEL:
         changeToAddStudentOrProfessorPanel();
         break;
-      case AddProfessorPanel:
+      case ADD_PROFESSOR_PANEL:
         changeToAddProfessorPanel();
         break;
-      case AddStudentPanel:
+      case ADD_STUDENT_PANEL:
         changeToAddStudentPanel();
         break;
-      case EduRequestPanel:
+      case EDU_REQUEST_PANEL:
         changeToEduRequestPanel();
         break;
-      case DropoutListPanel:
+      case DROPOUT_LIST_PANEL:
         changeToDropoutListPanel();
         break;
-      case AnswerDropoutPanel:
+      case ANSWER_DROPOUT_PANEL:
         changeToAnswerDropoutPanel();
         break;
-      case MinorListPanel:
+      case MINOR_LIST_PANEL:
         changeToMinorListPanel();
         break;
-      case AnswerMinorPanel:
+      case ANSWER_MINOR_PANEL:
         changeToAnswerMinorPanel();
         break;
-      case EduEducationalPanel:
+      case EDU_EDUCATIONAL_PANEL:
         changeToEduEducationalPanel();
         break;
-      case EduTemporaryScorePanel:
+      case EDU_TEMPORARY_SCORE_PANEL:
         changeToEduTemporaryScorePanel();
         break;
-      case EduSearchCoursePanel:
+      case EDU_SEARCH_COURSE_PANEL:
         changeToEduSearchCoursePanel();
         break;
-      case EduSearchProfessorPanel:
+      case EDU_SEARCH_PROFESSOR_PANEL:
         changeToEduSearchProfessorPanel();
         break;
-      case EduSearchStudentPanel:
+      case EDU_SEARCH_STUDENT_PANEL:
         changeToEduSearchStudentPanel();
         break;
-      case CourseSummaryPanel:
+      case COURSE_SUMMARY_PANEL:
         changeToCourseSummaryPanel();
+        break;
+      case MESSENGER_PANEL:
+        changeToMessengerPanel(userRole, 0);
         break;
     }
   }
@@ -229,7 +234,7 @@ public class Client {
     mainFrame.setContentPane(studentPanel);
 
     new Loop(1, () -> {
-      Response response1 = serverController.sendUpdateRequest(PanelName.StudentMainPanel);
+      Response response1 = serverController.sendUpdateRequest(PanelName.STUDENT_MAIN_PANEL);
       studentMainPanel.update((String) response1.getData("educationalStatus"),
               (String) response1.getData("supervisor"));
 
@@ -257,7 +262,7 @@ public class Client {
     mainFrame.setContentPane(studentPanel);
 
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.StudentProfilePanel);
+      Response response = serverController.sendUpdateRequest(PanelName.STUDENT_PROFILE_PANEL);
       studentProfilePanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
               (String) response.getData("melliCode"), (String) response.getData("faculty"),
               (String) response.getData("phoneNumber"), (String) response.getData("enteringYear"),
@@ -280,7 +285,7 @@ public class Client {
 
     JPanel finalJPanel = jPanel;
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.ProfessorProfilePanel);
+      Response response = serverController.sendUpdateRequest(PanelName.PROFESSOR_PROFILE_PANEL);
       professorProfilePanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
               (String) response.getData("melliCode"), (String) response.getData("faculty"),
               (String) response.getData("phoneNumber"), (String) response.getData("degree"),
@@ -324,7 +329,7 @@ public class Client {
     request.addData("faculty", faculty);
     request.addData("professor", professor);
     request.addData("grade", grade);
-    Response response = serverController.sendUpdateRequest(PanelName.CoursesListPanel, request);
+    Response response = serverController.sendUpdateRequest(PanelName.COURSES_LIST_PANEL, request);
 
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
@@ -358,7 +363,7 @@ public class Client {
         request.addData("faculty", faculty);
         request.addData("name", name);
         request.addData("grade", grade);
-        Response response1 = serverController.sendUpdateRequest(PanelName.ProfessorsListDeanPanel, request);
+        Response response1 = serverController.sendUpdateRequest(PanelName.PROFESSORS_LIST_DEAN_PANEL, request);
 
         ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response1.getData("data");
         ArrayList<String[]> strings = new ArrayList<>();
@@ -388,7 +393,7 @@ public class Client {
     request.addData("faculty", faculty);
     request.addData("name", name);
     request.addData("grade", grade);
-    Response response = serverController.sendUpdateRequest(PanelName.ProfessorsListPanel, request);
+    Response response = serverController.sendUpdateRequest(PanelName.PROFESSORS_LIST_PANEL, request);
 
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
@@ -419,7 +424,7 @@ public class Client {
     mainFrame.setContentPane(studentPanel);
 
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.StudentEducationalOutPanel);
+      Response response = serverController.sendUpdateRequest(PanelName.STUDENT_EDUCATIONAL_OUT_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -438,7 +443,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, studentTemporaryScoreList, this);
     mainFrame.setContentPane(studentPanel);
 
-    Response response = serverController.sendUpdateRequest(PanelName.StudentTemporaryScoreList);
+    Response response = serverController.sendUpdateRequest(PanelName.STUDENT_TEMPORARY_SCORE_LIST);
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
     for (ArrayList<String> arrayList1 : arrayList) {
@@ -452,7 +457,7 @@ public class Client {
   public void addTemporaryScoreByStudent(String courseId, String objection, String answer, String score) {
     Response response = serverController.sendAddTemporaryScoreByStudentRequest(courseId, objection, answer, score);
     if (response.getStatus().equals(ResponseStatus.OK)) {
-      changePanel(PanelName.StudentTemporaryScoreList, null);
+      changePanel(PanelName.STUDENT_TEMPORARY_SCORE_LIST, null);
     }
   }
 
@@ -467,7 +472,7 @@ public class Client {
     Response response = serverController.sendAddScoreRequest(courseId, studentsCount);
     mainFrame.showMessage(response.getErrorMessage());
     if (response.getStatus().equals(ResponseStatus.OK)) {
-      changePanel(PanelName.ProfessorsCourseList, userRole);
+      changePanel(PanelName.PROFESSORS_COURSE_LIST, userRole);
     } else {
       changeToProfessorTemporaryScoreList(userRole, courseId);
     }
@@ -487,7 +492,7 @@ public class Client {
 
     JPanel finalJPanel = jPanel;
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.WeeklySchedulePanel);
+      Response response = serverController.sendUpdateRequest(PanelName.WEEKLY_SCHEDULE_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -522,7 +527,7 @@ public class Client {
 
     JPanel finalJPanel = jPanel;
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.ExamListPanel);
+      Response response = serverController.sendUpdateRequest(PanelName.EXAM_LIST_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -544,7 +549,7 @@ public class Client {
   }
 
   private void changeToRecommendationRequestPanel() {
-    Response response = serverController.sendUpdateRequest(PanelName.RecommendationRequestPanel);
+    Response response = serverController.sendUpdateRequest(PanelName.RECOMMENDATION_REQUEST_PANEL);
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       return;
@@ -582,7 +587,7 @@ public class Client {
   }
 
   private void changeToMinorRequestPanel() {
-    Response response = serverController.sendUpdateRequest(PanelName.MinorRequestPanel);
+    Response response = serverController.sendUpdateRequest(PanelName.MINOR_REQUEST_PANEL);
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       return;
@@ -612,7 +617,7 @@ public class Client {
     mainFrame.setContentPane(studentPanel);
 
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.DropoutRequestPanel);
+      Response response = serverController.sendUpdateRequest(PanelName.DROPOUT_REQUEST_PANEL);
       dropoutRequestPanel.update((String) response.getData("result"));
 
       updateStudentPanel(studentPanel);
@@ -628,7 +633,7 @@ public class Client {
   }
 
   private void changeToDormitoryRequestPanel() {
-    Response response = serverController.sendUpdateRequest(PanelName.DormitoryRequestPanel);
+    Response response = serverController.sendUpdateRequest(PanelName.DORMITORY_REQUEST_PANEL);
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       return;
@@ -651,7 +656,7 @@ public class Client {
   }
 
   private void changeToDefendingRequestPanel() {
-    Response response = serverController.sendUpdateRequest(PanelName.DefendingRequestPanel);
+    Response response = serverController.sendUpdateRequest(PanelName.DEFENDING_REQUEST_PANEL);
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       return;
@@ -683,7 +688,7 @@ public class Client {
     }
     mainFrame.setContentPane(jPanel);
 
-    Response response = serverController.sendUpdateRequest(PanelName.ProfessorsCourseList);
+    Response response = serverController.sendUpdateRequest(PanelName.PROFESSORS_COURSE_LIST);
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
     for (ArrayList<String> arrayList1 : arrayList) {
@@ -706,7 +711,7 @@ public class Client {
   public void changeToProfessorTemporaryScoreList(UserRole userRole, String courseId) {
     Request request = new Request(RequestType.UPDATE);
     request.addData("courseId", courseId);
-    Response response = serverController.sendUpdateRequest(PanelName.ProfessorTemporaryScoreList, request);
+    Response response = serverController.sendUpdateRequest(PanelName.PROFESSOR_TEMPORARY_SCORE_LIST, request);
 
     ProfessorTemporaryScoreList professorTemporaryScoreList = new ProfessorTemporaryScoreList(mainFrame, this, userRole);
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
@@ -750,7 +755,7 @@ public class Client {
 
     JPanel finalJPanel = jPanel;
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.RecommendationListPanel);
+      Response response = serverController.sendUpdateRequest(PanelName.RECOMMENDATION_LIST_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -813,7 +818,7 @@ public class Client {
     ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, addProfessorDeanPanel, this);
     mainFrame.setContentPane(professorPanel);
 
-    Response response = serverController.sendUpdateRequest(PanelName.AddProfessorDeanPanel);
+    Response response = serverController.sendUpdateRequest(PanelName.ADD_PROFESSOR_DEAN_PANEL);
     addProfessorDeanPanel.update(((ArrayList<String>) response.getData("positions")).toArray(new String[0]));
 
     new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
@@ -825,9 +830,9 @@ public class Client {
             password, roomNumber, degree, position);
     mainFrame.showMessage(response.getErrorMessage());
     if (userRole.equals(UserRole.Dean)) {
-      changePanel(PanelName.AddProfessorDeanPanel, null);
+      changePanel(PanelName.ADD_PROFESSOR_DEAN_PANEL, null);
     } else if (userRole.equals(UserRole.EduAssistant)) {
-      changePanel(PanelName.AddProfessorPanel, null);
+      changePanel(PanelName.ADD_PROFESSOR_PANEL, null);
     }
   }
 
@@ -842,10 +847,10 @@ public class Client {
   public void findProfessorForChange(ChangeProfessorPanel changeProfessorPanel, String professorId) {
     Request request = new Request(RequestType.UPDATE);
     request.addData("professorId", professorId);
-    Response response = serverController.sendUpdateRequest(PanelName.ChangeProfessorPanel, request);
+    Response response = serverController.sendUpdateRequest(PanelName.CHANGE_PROFESSOR_PANEL, request);
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
-      changePanel(PanelName.ChangeProfessorPanel, null);
+      changePanel(PanelName.CHANGE_PROFESSOR_PANEL, null);
       return;
     }
     changeProfessorPanel.update((String) response.getData("id"), (String) response.getData("name"),
@@ -861,7 +866,7 @@ public class Client {
             melliCode, phoneNumber, password, roomNumber, degree, position);
 
     mainFrame.showMessage(response.getErrorMessage());
-    changePanel(PanelName.ChangeProfessorPanel, null);
+    changePanel(PanelName.CHANGE_PROFESSOR_PANEL, null);
   }
 
   public void changeToCoursesListEduPanel(String faculty, String professor, String grade) {
@@ -873,7 +878,7 @@ public class Client {
     request.addData("faculty", faculty);
     request.addData("professor", professor);
     request.addData("grade", grade);
-    Response response = serverController.sendUpdateRequest(PanelName.CoursesListEduPanel, request);
+    Response response = serverController.sendUpdateRequest(PanelName.COURSES_LIST_EDU_PANEL, request);
 
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
@@ -899,7 +904,7 @@ public class Client {
     System.out.println(response);
     mainFrame.showMessage(response.getErrorMessage());
     if (response.getStatus().equals(ResponseStatus.OK)) {
-      changePanel(PanelName.AddCoursePanel, null);
+      changePanel(PanelName.ADD_COURSE_PANEL, null);
     }
   }
 
@@ -927,10 +932,10 @@ public class Client {
   public void findCourseForChange(ChangeCoursePanel changeCoursePanel, String courseId) {
     Request request = new Request(RequestType.UPDATE);
     request.addData("courseId", courseId);
-    Response response = serverController.sendUpdateRequest(PanelName.ChangeCoursePanel, request);
+    Response response = serverController.sendUpdateRequest(PanelName.CHANGE_COURSE_PANEL, request);
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
-      changePanel(PanelName.ChangeCoursePanel, null);
+      changePanel(PanelName.CHANGE_COURSE_PANEL, null);
       return;
     }
     changeCoursePanel.update((String) response.getData("id"), (String) response.getData("name"),
@@ -946,7 +951,7 @@ public class Client {
             credit, classTime, examDate, grade);
 
     mainFrame.showMessage(response.getErrorMessage());
-    changePanel(PanelName.ChangeCoursePanel, null);
+    changePanel(PanelName.CHANGE_COURSE_PANEL, null);
   }
 
   private void changeToAddStudentOrProfessorPanel() {
@@ -980,7 +985,7 @@ public class Client {
 
     mainFrame.showMessage(response.getErrorMessage());
     if (response.getStatus().equals(ResponseStatus.OK)) {
-      changePanel(PanelName.AddStudentPanel, null);
+      changePanel(PanelName.ADD_STUDENT_PANEL, null);
     }
   }
 
@@ -998,7 +1003,7 @@ public class Client {
     mainFrame.setContentPane(eduAssistantPanel);
 
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.DropoutListPanel);
+      Response response = serverController.sendUpdateRequest(PanelName.DROPOUT_LIST_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -1024,7 +1029,7 @@ public class Client {
     mainFrame.setContentPane(eduAssistantPanel);
 
     new Loop(1, () -> {
-      Response response = serverController.sendUpdateRequest(PanelName.MinorListPanel);
+      Response response = serverController.sendUpdateRequest(PanelName.MINOR_LIST_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -1066,7 +1071,7 @@ public class Client {
       eduEducationalPanel.update(studentEducationalPanel, (String) response.getData("id"), (String) response.getData("name"));
     } else {
       mainFrame.showMessage(response.getErrorMessage());
-      changePanel(PanelName.EduEducationalPanel, null);
+      changePanel(PanelName.EDU_EDUCATIONAL_PANEL, null);
     }
   }
 
@@ -1084,7 +1089,7 @@ public class Client {
       eduEducationalPanel.update(studentEducationalPanel, (String) response.getData("id"), (String) response.getData("name"));
     } else {
       mainFrame.showMessage(response.getErrorMessage());
-      changePanel(PanelName.EduEducationalPanel, null);
+      changePanel(PanelName.EDU_EDUCATIONAL_PANEL, null);
     }
   }
 
@@ -1118,7 +1123,7 @@ public class Client {
               strings.toArray(new String[0][0]));
     } else {
       mainFrame.showMessage(response.getErrorMessage());
-      changePanel(PanelName.EduSearchCoursePanel, null);
+      changePanel(PanelName.EDU_SEARCH_COURSE_PANEL, null);
     }
   }
 
@@ -1143,7 +1148,7 @@ public class Client {
               strings.toArray(new String[0][0]));
     } else {
       mainFrame.showMessage(response.getErrorMessage());
-      changePanel(PanelName.EduSearchProfessorPanel, null);
+      changePanel(PanelName.EDU_SEARCH_PROFESSOR_PANEL, null);
     }
   }
 
@@ -1168,7 +1173,7 @@ public class Client {
               strings.toArray(new String[0][0]));
     } else {
       mainFrame.showMessage(response.getErrorMessage());
-      changePanel(PanelName.EduSearchStudentPanel, null);
+      changePanel(PanelName.EDU_SEARCH_STUDENT_PANEL, null);
     }
   }
 
@@ -1190,7 +1195,40 @@ public class Client {
               (String) response.getData("failStudentCount"), (String) response.getData("averageScoreWithoutFail"));
     } else {
       mainFrame.showMessage(response.getErrorMessage());
-      changePanel(PanelName.CourseSummaryPanel, null);
+      changePanel(PanelName.COURSE_SUMMARY_PANEL, null);
     }
+  }
+
+  public void changeToMessengerPanel(UserRole userRole, int contactId) {
+    MessengerPanel messengerPanel = new MessengerPanel(mainFrame, this, userRole);
+    JPanel jPanel = null;
+    if (userRole.equals(UserRole.Student)) {
+      jPanel = new StudentPanel(mainFrame, messengerPanel, this);
+    } else if ((userRole.equals(UserRole.Professor))) {
+      jPanel = new ProfessorPanel(mainFrame, messengerPanel, this);
+    } else if (userRole.equals(UserRole.EduAssistant)) {
+      jPanel = new EduAssistantPanel(mainFrame, messengerPanel, this);
+    }
+    mainFrame.setContentPane(jPanel);
+
+    JPanel finalJPanel = jPanel;
+    new Loop(1, () -> {
+      Request request = new Request(RequestType.UPDATE);
+      request.addData("contactId", contactId);
+      Response response = serverController.sendUpdateRequest(PanelName.MESSENGER_PANEL, request);
+
+      messengerPanel.update((ArrayList<Chat>) response.getData("chats"), (Chat) response.getData("chat"));
+
+      if (userRole.equals(UserRole.Student)) {
+        StudentPanel studentPanel = (StudentPanel) finalJPanel;
+        updateStudentPanel(studentPanel);
+      } else if (userRole.equals(UserRole.Professor)) {
+        ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
+        updateProfessorPanel(professorPanel);
+      } else if (userRole.equals(UserRole.EduAssistant)) {
+        EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
+        updateEduAssistantPanel(eduAssistantPanel);
+      }
+    }).start();
   }
 }

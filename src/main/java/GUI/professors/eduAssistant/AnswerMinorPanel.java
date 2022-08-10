@@ -123,7 +123,7 @@ public class AnswerMinorPanel extends javax.swing.JPanel {
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.MinorListPanel, null);
+    client.changePanel(PanelName.MINOR_LIST_PANEL, null);
   }
 
 

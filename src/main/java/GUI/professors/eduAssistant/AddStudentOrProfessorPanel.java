@@ -71,11 +71,11 @@ public class AddStudentOrProfessorPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void addStudentButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.AddStudentPanel, null);
+    client.changePanel(PanelName.ADD_STUDENT_PANEL, null);
   }
 
   private void addProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.AddProfessorPanel, null);
+    client.changePanel(PanelName.ADD_PROFESSOR_PANEL, null);
   }
 
 

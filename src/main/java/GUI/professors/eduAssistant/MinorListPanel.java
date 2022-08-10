@@ -107,11 +107,11 @@ public class MinorListPanel extends javax.swing.JPanel {
   }
 
   private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.AnswerMinorPanel, null);
+    client.changePanel(PanelName.ANSWER_MINOR_PANEL, null);
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduRequestPanel, null);
+    client.changePanel(PanelName.EDU_REQUEST_PANEL, null);
   }
 
   public void update(String[][] data) {

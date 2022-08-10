@@ -106,11 +106,11 @@ public class RecommendationListPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void answerButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.AnswerRecommendationPanel, userRole);
+    client.changePanel(PanelName.ANSWER_RECOMMENDATION_PANEL, userRole);
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduRequestPanel, null);
+    client.changePanel(PanelName.EDU_REQUEST_PANEL, null);
   }
 
   private void showData(String[][] data) {

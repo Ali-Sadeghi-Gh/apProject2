@@ -81,15 +81,15 @@ public class EduRequestPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void recommendationButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.RecommendationListPanel, UserRole.EduAssistant);
+    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, UserRole.EduAssistant);
   }
 
   private void dropoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.DropoutListPanel, null);
+    client.changePanel(PanelName.DROPOUT_LIST_PANEL, null);
   }
 
   private void minorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.MinorListPanel, null);
+    client.changePanel(PanelName.MINOR_LIST_PANEL, null);
   }
 
 

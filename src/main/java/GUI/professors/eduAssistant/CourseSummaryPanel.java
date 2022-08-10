@@ -197,7 +197,7 @@ public class CourseSummaryPanel extends javax.swing.JPanel {
       Integer.parseInt(courseField.getText());
     } catch (Exception e) {
       mainFrame.showMessage("course id must be a number");
-      client.changePanel(PanelName.CourseSummaryPanel, null);
+      client.changePanel(PanelName.COURSE_SUMMARY_PANEL, null);
       return;
     }
 

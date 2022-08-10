@@ -178,15 +178,15 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
   }
 
   private void removeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.RemoveProfessorPanel, null);
+    client.changePanel(PanelName.REMOVE_PROFESSOR_PANEL, null);
   }
 
   private void addProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.AddProfessorDeanPanel, null);
+    client.changePanel(PanelName.ADD_PROFESSOR_DEAN_PANEL, null);
   }
 
   private void changeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ChangeProfessorPanel, null);
+    client.changePanel(PanelName.CHANGE_PROFESSOR_PANEL, null);
   }
 
   public void showData(String[][] data) {

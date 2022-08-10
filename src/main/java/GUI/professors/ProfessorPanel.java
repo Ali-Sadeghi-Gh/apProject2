@@ -270,7 +270,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ProfessorPanel, null);
+    client.changePanel(PanelName.PROFESSOR_PANEL, null);
   }
 
   private void registrationMattersButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -292,7 +292,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ProfessorProfilePanel, UserRole.Professor);
+    client.changePanel(PanelName.PROFESSOR_PROFILE_PANEL, UserRole.Professor);
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -304,19 +304,19 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.WeeklySchedulePanel, UserRole.Professor);
+    client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.Professor);
   }
 
   private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ExamListPanel, UserRole.Professor);
+    client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.Professor);
   }
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.RecommendationListPanel, UserRole.Professor);
+    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, UserRole.Professor);
   }
 
   private void temporaryScoreActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ProfessorsCourseList, UserRole.Professor);
+    client.changePanel(PanelName.PROFESSORS_COURSE_LIST, UserRole.Professor);
   }
 
   public void update(int id, String lastLogin, String email, String name, String currentTime) {

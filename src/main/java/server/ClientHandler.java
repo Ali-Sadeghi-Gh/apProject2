@@ -464,21 +464,21 @@ public class ClientHandler implements Runnable {
 
     Response response = new Response(ResponseStatus.OK);
     switch (panelName) {
-      case StudentPanel:
-      case EduAssistantPanel:
-      case ProfessorPanel:
+      case STUDENT_PANEL:
+      case EDU_ASSISTANT_PANEL:
+      case PROFESSOR_PANEL:
         response.addData("id", user.getId());
         response.addData("lastLogin", user.getLastLogIn());
         response.addData("email", user.getEmail());
         response.addData("name", user.getName());
         response.addData("currentTime", Time.getCurrentTime());
         break;
-      case StudentMainPanel:
+      case STUDENT_MAIN_PANEL:
         Student student = (Student) user;
         response.addData("educationalStatus", student.getStatus());
         response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
         break;
-      case StudentProfilePanel:
+      case STUDENT_PROFILE_PANEL:
         student = (Student) user;
         response.addData("id", student.getId());
         response.addData("melliCode", student.getMelliCode());
@@ -490,7 +490,7 @@ public class ClientHandler implements Runnable {
         response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
         response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent(student));
         break;
-      case ProfessorProfilePanel:
+      case PROFESSOR_PROFILE_PANEL:
         Professor professor = (Professor) user;
         response.addData("id", professor.getId());
         response.addData("melliCode", professor.getMelliCode());
@@ -499,40 +499,40 @@ public class ClientHandler implements Runnable {
         response.addData("degree", professor.getDegree());
         response.addData("roomNumber", professor.getRoomNumber());
         break;
-      case CoursesListPanel:
-      case CoursesListEduPanel:
+      case COURSES_LIST_PANEL:
+      case COURSES_LIST_EDU_PANEL:
         response.addData("faculties", Controller.getInstance().getFacultiesName());
         response.addData("data", Controller.getInstance().getCoursesData((String) request.getData("faculty"),
                 (String) request.getData("professor"), (String) request.getData("grade")));
         break;
-      case ProfessorsListPanel:
-      case ProfessorsListDeanPanel:
+      case PROFESSORS_LIST_PANEL:
+      case PROFESSORS_LIST_DEAN_PANEL:
         response.addData("faculties", Controller.getInstance().getFacultiesName());
         response.addData("data", Controller.getInstance().getProfessorsData((String) request.getData("faculty"),
                 (String) request.getData("name"), (String) request.getData("grade")));
         break;
-      case StudentEducationalOutPanel:
+      case STUDENT_EDUCATIONAL_OUT_PANEL:
         response.addData("credit", Controller.getInstance().getPassCredit((Student) user));
         response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent((Student) user));
         response.addData("data", Controller.getInstance().getScoresData((Student) user));
         break;
-      case StudentTemporaryScoreList:
+      case STUDENT_TEMPORARY_SCORE_LIST:
         response.addData("data", Controller.getInstance().getCourseTemporaryScoreDataByStudent((Student) user));
         break;
-      case WeeklySchedulePanel:
+      case WEEKLY_SCHEDULE_PANEL:
         response.addData("data", Controller.getInstance().getScheduleData(user));
         break;
-      case ExamListPanel:
+      case EXAM_LIST_PANEL:
         response.addData("data", Controller.getInstance().getExamListData(user));
         break;
-      case RecommendationRequestPanel:
+      case RECOMMENDATION_REQUEST_PANEL:
         student = (Student) user;
         if (student.getGrade() == null || (!student.getGrade().equals(Student.Grade.masters) && !student.getGrade().equals(Student.Grade.underGraduate))) {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage("this section is only for undergraduate and masters students");
         }
         break;
-      case MinorRequestPanel:
+      case MINOR_REQUEST_PANEL:
         student = (Student) user;
         if (student.getGrade() != null && student.getGrade().equals(Student.Grade.underGraduate)) {
           EducationalRequest educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.minor);
@@ -550,7 +550,7 @@ public class ClientHandler implements Runnable {
           response.setErrorMessage("this section is only for undergraduate students");
         }
         break;
-      case DropoutRequestPanel:
+      case DROPOUT_REQUEST_PANEL:
         student = (Student) user;
         EducationalRequest educationalRequest = Controller.getInstance().findRequestByFaculty(student, student.getFacultyName(), EducationalRequest.Type.dropout);
         if (educationalRequest != null) {
@@ -559,7 +559,7 @@ public class ClientHandler implements Runnable {
           response.addData("result", "");
         }
         break;
-      case DormitoryRequestPanel:
+      case DORMITORY_REQUEST_PANEL:
         student = (Student) user;
         if (student.getGrade() != null && student.getGrade().equals(Student.Grade.masters)) {
           response.addData("result", student.getDormitoryRequest()==null ? "" : student.getDormitoryRequest());
@@ -568,7 +568,7 @@ public class ClientHandler implements Runnable {
           response.setErrorMessage("this section is only for masters students");
         }
         break;
-      case DefendingRequestPanel:
+      case DEFENDING_REQUEST_PANEL:
         student = (Student) user;
         if (student.getGrade() != null && student.getGrade().equals(Student.Grade.phd)) {
           response.addData("result", student.getDefendingTurn()==null ? "" : student.getDefendingTurn());
@@ -577,11 +577,11 @@ public class ClientHandler implements Runnable {
           response.setErrorMessage("this section is only for phd students");
         }
         break;
-      case ProfessorsCourseList:
+      case PROFESSORS_COURSE_LIST:
         professor = (Professor) user;
         response.addData("data", Controller.getInstance().getCoursesDataByProfessor(professor));
         break;
-      case ProfessorTemporaryScoreList:
+      case PROFESSOR_TEMPORARY_SCORE_LIST:
         Course course = Controller.getInstance().findCourse(Integer.parseInt((String) request.getData("courseId")));
         response.addData("data", Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course));
         response.addData("courseName", course.getName()==null ? "-" : course.getName());
@@ -590,10 +590,10 @@ public class ClientHandler implements Runnable {
         response.addData("credit", String.valueOf(course.getCredit()));
         response.addData("grade", course.getGrade()==null ? "-" : course.getGrade().name());
         break;
-      case RecommendationListPanel:
+      case RECOMMENDATION_LIST_PANEL:
         response.addData("data", Controller.getInstance().getRecommendationData((Professor) user, EducationalRequest.Type.recommendation));
         break;
-      case AddProfessorDeanPanel:
+      case ADD_PROFESSOR_DEAN_PANEL:
         String[] positions;
         if (Controller.getInstance().findEduAssistantByFaculty(user.getFacultyName()) == null) {
           positions = new String[]{Professor.Position.professor.name(), Professor.Position.eduAssistant.name()};
@@ -602,7 +602,7 @@ public class ClientHandler implements Runnable {
         }
         response.addData("positions", positions);
         break;
-      case ChangeProfessorPanel:
+      case CHANGE_PROFESSOR_PANEL:
         Professor changingProfessor = Controller.getInstance().findProfessorById(Integer.parseInt(String.valueOf(request.getData("professorId"))));
         if (changingProfessor == null || !changingProfessor.getFacultyName().equals(user.getFacultyName())) {
           response = new Response(ResponseStatus.ERROR);
@@ -637,7 +637,7 @@ public class ClientHandler implements Runnable {
           response.addData("positions", positions);
         }
         break;
-      case ChangeCoursePanel:
+      case CHANGE_COURSE_PANEL:
         Course changingCourse = Controller.getInstance().findCourse(Integer.parseInt(String.valueOf(request.getData("courseId"))));
         if (changingCourse == null || !changingCourse.getFacultyName().equals(user.getFacultyName())) {
           response = new Response(ResponseStatus.ERROR);
@@ -676,11 +676,18 @@ public class ClientHandler implements Runnable {
           response.addData("grades", grades);
         }
         break;
-      case DropoutListPanel:
+      case DROPOUT_LIST_PANEL:
         response.addData("data", Controller.getInstance().getDropoutData(user.getFacultyName(), EducationalRequest.Type.dropout));
         break;
-      case MinorListPanel:
+      case MINOR_LIST_PANEL:
         response.addData("data", Controller.getInstance().getMinorData(user.getFacultyName(), EducationalRequest.Type.minor));
+        break;
+      case MESSENGER_PANEL:
+        response.addData("chats", user.getMessenger().getChats());
+        int contactId = (Integer) request.getData("contactId");
+        if (contactId != 0) {
+          response.addData("chat", user.getMessenger().getChat(contactId));
+        }
         break;
     }
     sendResponse(response);

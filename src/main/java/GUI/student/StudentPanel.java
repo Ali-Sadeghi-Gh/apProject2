@@ -320,7 +320,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.StudentMainPanel, null);
+        client.changePanel(PanelName.STUDENT_MAIN_PANEL, null);
     }
 
     private void registrationMattersButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -343,7 +343,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.StudentProfilePanel, null);
+        client.changePanel(PanelName.STUDENT_PROFILE_PANEL, null);
     }
 
     private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -355,43 +355,44 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void educationalStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.StudentEducationalOutPanel, null);
+        client.changePanel(PanelName.STUDENT_EDUCATIONAL_OUT_PANEL, null);
     }
 
     private void temporaryScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.StudentTemporaryScoreList, null);
+        client.changePanel(PanelName.STUDENT_TEMPORARY_SCORE_LIST, null);
     }
 
     private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.WeeklySchedulePanel, UserRole.Student);
+        client.changePanel(PanelName.MESSENGER_PANEL, UserRole.Student);
+//        client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.Student);
     }
 
     private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.ExamListPanel, UserRole.Student);
+        client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.Student);
     }
 
     private void enrollmentCertificateButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.EnrollmentCertificatePanel, null);
+        client.changePanel(PanelName.ENROLLMENT_CERTIFICATE_PANEL, null);
     }
 
     private void defendingButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.DefendingRequestPanel, null);
+        client.changePanel(PanelName.DEFENDING_REQUEST_PANEL, null);
     }
 
     private void dormitoryButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.DormitoryRequestPanel, null);
+        client.changePanel(PanelName.DORMITORY_REQUEST_PANEL, null);
     }
 
     private void recommendationButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.RecommendationRequestPanel, null);
+        client.changePanel(PanelName.RECOMMENDATION_REQUEST_PANEL, null);
     }
 
     private void dropoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.DropoutRequestPanel, null);
+        client.changePanel(PanelName.DROPOUT_REQUEST_PANEL, null);
     }
 
     private void minorButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.MinorRequestPanel, null);
+        client.changePanel(PanelName.MINOR_REQUEST_PANEL, null);
     }
 
     public void update(int id, String lastLogin, String email, String name, String currentTime) {

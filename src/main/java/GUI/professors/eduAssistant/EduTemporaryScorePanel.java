@@ -102,23 +102,23 @@ public class EduTemporaryScorePanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void submitScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ProfessorsCourseList, UserRole.EduAssistant);
+    client.changePanel(PanelName.PROFESSORS_COURSE_LIST, UserRole.EduAssistant);
   }
 
   private void courseSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduSearchCoursePanel, null);
+    client.changePanel(PanelName.EDU_SEARCH_COURSE_PANEL, null);
   }
 
   private void courseSummaryButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.CourseSummaryPanel, null);
+    client.changePanel(PanelName.COURSE_SUMMARY_PANEL, null);
   }
 
   private void studentSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduSearchStudentPanel, null);
+    client.changePanel(PanelName.EDU_SEARCH_STUDENT_PANEL, null);
   }
 
   private void professorSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduSearchProfessorPanel, null);
+    client.changePanel(PanelName.EDU_SEARCH_PROFESSOR_PANEL, null);
   }
 
 

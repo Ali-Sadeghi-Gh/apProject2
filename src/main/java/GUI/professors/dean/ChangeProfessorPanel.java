@@ -243,7 +243,7 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
       Integer.parseInt(idField.getText());
     } catch (Exception e) {
       mainFrame.showMessage("professor id must be a number");
-      client.changePanel(PanelName.ChangeProfessorPanel, null);
+      client.changePanel(PanelName.CHANGE_PROFESSOR_PANEL, null);
       return;
     }
 

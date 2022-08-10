@@ -164,7 +164,7 @@ public class EduSearchProfessorPanel extends javax.swing.JPanel {
       Integer.parseInt(professorField.getText());
     } catch (Exception e) {
       mainFrame.showMessage("professor id must be a number");
-      client.changePanel(PanelName.EduSearchProfessorPanel, null);
+      client.changePanel(PanelName.EDU_SEARCH_PROFESSOR_PANEL, null);
       return;
     }
 

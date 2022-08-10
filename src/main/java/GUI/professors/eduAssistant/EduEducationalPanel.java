@@ -116,7 +116,7 @@ public class EduEducationalPanel extends javax.swing.JPanel {
       Integer.parseInt(idField.getText());
     } catch (Exception e) {
       mainFrame.showMessage("id must be a number");
-      client.changePanel(PanelName.EduEducationalPanel, null);
+      client.changePanel(PanelName.EDU_EDUCATIONAL_PANEL, null);
       return;
     }
     client.searchStudentStatusById(this, idField.getText());

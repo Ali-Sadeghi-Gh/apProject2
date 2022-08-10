@@ -283,7 +283,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void mainPageButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduAssistantPanel, null);
+    client.changePanel(PanelName.EDU_ASSISTANT_PANEL, null);
   }
 
   private void registrationMattersButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,7 +305,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ProfessorProfilePanel, UserRole.EduAssistant);
+    client.changePanel(PanelName.PROFESSOR_PROFILE_PANEL, UserRole.EduAssistant);
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -317,27 +317,27 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void educationalStatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduEducationalPanel, null);
+    client.changePanel(PanelName.EDU_EDUCATIONAL_PANEL, null);
   }
 
   public void temporaryScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduTemporaryScorePanel, null);
+    client.changePanel(PanelName.EDU_TEMPORARY_SCORE_PANEL, null);
   }
 
   private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.AddStudentOrProfessorPanel, null);
+    client.changePanel(PanelName.ADD_STUDENT_OR_PROFESSOR_PANEL, null);
   }
 
   private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.WeeklySchedulePanel, UserRole.EduAssistant);
+    client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.EduAssistant);
   }
 
   private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.ExamListPanel, UserRole.EduAssistant);
+    client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.EduAssistant);
   }
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EduRequestPanel, null);
+    client.changePanel(PanelName.EDU_REQUEST_PANEL, null);
   }
 
   public void update(int id, String lastLogin, String email, String name, String currentTime) {

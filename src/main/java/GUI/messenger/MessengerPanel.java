@@ -9,9 +9,10 @@ package GUI.messenger;
 import GUI.MainFrame;
 import client.Client;
 import shared.model.message.Chat;
-import shared.model.message.Messenger;
+import shared.model.users.UserRole;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,13 +21,15 @@ import java.awt.*;
 public class MessengerPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
+  UserRole userRole;
 
   /**
    * Creates new form MessengerPanel
    */
-  public MessengerPanel(MainFrame mainFrame, Client client) {
+  public MessengerPanel(MainFrame mainFrame, Client client, UserRole userRole) {
     this.client = client;
     this.mainFrame = mainFrame;
+    this.userRole = userRole;
     setBounds(200, 270, 1100, 700);
     initComponents();
   }
@@ -48,6 +51,8 @@ public class MessengerPanel extends javax.swing.JPanel {
     sendTextButton = new javax.swing.JButton();
     sendFileButton = new javax.swing.JButton();
 
+    textField.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+
     createChatButton.setText("create a chat");
     createChatButton.addActionListener(this::createChatButtonActionPerformed);
 
@@ -55,8 +60,11 @@ public class MessengerPanel extends javax.swing.JPanel {
 
     sendTextButton.setText("send text");
     sendTextButton.addActionListener(this::sendTextButtonActionPerformed);
+    sendTextButton.setVisible(false);
 
     sendFileButton.setText("send file");
+    sendTextButton.addActionListener(this::sendFileButtonActionPerformed);
+    sendFileButton.setVisible(false);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -112,8 +120,12 @@ public class MessengerPanel extends javax.swing.JPanel {
     // TODO add your handling code here:
   }
 
-  public void update(Messenger messenger, Chat chat) {
+  private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    // TODO add your handling code here:
+  }
 
+  public void update(ArrayList<Chat> chats, Chat chat) {
+    chatsPane.setViewportView(new ChatsPanel(chats, client, userRole));
   }
 
 
