@@ -312,4 +312,19 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public void sendMessengerSendTextRequest(String message, String contactId) {
+    Request request = new Request(RequestType.MESSENGER_SEND_TEXT);
+    request.addData("message", message);
+    request.addData("contactId", contactId);
+    sendRequest(request);
+  }
+
+  public void sendMessengerSendFileRequest(String[] strings,String fileName, String contactId) {
+    Request request = new Request(RequestType.MESSENGER_SEND_FILE);
+    request.addData("strings", strings);
+    request.addData("fileName", fileName);
+    request.addData("contactId", contactId);
+    sendRequest(request);
+  }
 }

@@ -518,6 +518,16 @@ public class Controller {
     return null;
   }
 
+  public User findUserById(int id) {
+    if (findStudentById(id) != null) {
+      return findStudentById(id);
+    } else if (findProfessorById(id) != null) {
+      return findProfessorById(id);
+    }
+
+    return null;
+  }
+
   public EducationalRequest findRequestByProfessor(Student student, Professor professor, EducationalRequest.Type type) {
     for (EducationalRequest request : University.getInstance().getRequests()) {
       if (request.getStudentId().equals(String.valueOf(student.getId())) && String.valueOf(professor.getId()).equals(request.getProfessorId())

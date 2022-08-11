@@ -9,6 +9,7 @@ import java.util.Collections;
 
 public class ChatsPanel extends JPanel {
   MessengerPanel messengerPanel;
+
   public ChatsPanel(ArrayList<Chat> chats, MessengerPanel messengerPanel) {
     this.messengerPanel = messengerPanel;
     setPreferredSize(new Dimension(440, chats.size() * 75 + 5));
@@ -19,7 +20,7 @@ public class ChatsPanel extends JPanel {
     }
   }
 
-  public void updateMessenger(int contactId) {
+  public void updateMessenger(String contactId) {
     messengerPanel.updateMessenger(contactId);
   }
 }

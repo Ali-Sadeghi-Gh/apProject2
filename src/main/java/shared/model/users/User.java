@@ -13,8 +13,8 @@ public abstract class User {
   protected String phoneNumber;
   protected int password;
   protected String lastLogIn;
-  protected List<String> courses = new ArrayList<>();
-  protected Messenger messenger = new Messenger();
+  protected List<String> courses;
+  protected Messenger messenger;
 
   public User(String name, String email, String melliCode, String facultyName, String phoneNumber, String password, String lastLogIn) {
     this.name = name;
@@ -87,6 +87,9 @@ public abstract class User {
   }
 
   public void addCourse(String courseId) {
+    if (courses == null) {
+      courses = new ArrayList<>();
+    }
     courses.add(courseId);
   }
 
@@ -95,6 +98,10 @@ public abstract class User {
   }
 
   public abstract int getId();
+
+  public void setMessenger(Messenger messenger) {
+    this.messenger = messenger;
+  }
 
   public Messenger getMessenger() {
     return messenger;

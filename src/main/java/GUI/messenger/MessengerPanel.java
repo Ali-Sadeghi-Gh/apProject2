@@ -11,7 +11,9 @@ import client.Client;
 import shared.model.message.Chat;
 import shared.model.users.UserRole;
 
+import javax.swing.*;
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +24,7 @@ public class MessengerPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
   UserRole userRole;
+  String contactId;
 
   /**
    * Creates new form MessengerPanel
@@ -50,6 +53,7 @@ public class MessengerPanel extends javax.swing.JPanel {
     contactNameLabel = new javax.swing.JLabel();
     sendTextButton = new javax.swing.JButton();
     sendFileButton = new javax.swing.JButton();
+    imgLabel = new javax.swing.JLabel();
 
     textField.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
 
@@ -57,13 +61,14 @@ public class MessengerPanel extends javax.swing.JPanel {
     createChatButton.addActionListener(this::createChatButtonActionPerformed);
 
     contactNameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+    contactNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
     sendTextButton.setText("send text");
     sendTextButton.addActionListener(this::sendTextButtonActionPerformed);
     sendTextButton.setVisible(false);
 
     sendFileButton.setText("send file");
-    sendTextButton.addActionListener(this::sendFileButtonActionPerformed);
+    sendFileButton.addActionListener(this::sendFileButtonActionPerformed);
     sendFileButton.setVisible(false);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -73,14 +78,17 @@ public class MessengerPanel extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addContainerGap(78, Short.MAX_VALUE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(messagesPane)
                                     .addGroup(layout.createSequentialGroup()
                                             .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addComponent(sendFileButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(sendTextButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                    .addComponent(contactNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(messagesPane)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(contactNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(imgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGap(27, 27, 27)
                             .addComponent(chatsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(32, 32, 32))
@@ -94,11 +102,13 @@ public class MessengerPanel extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(createChatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                            .addComponent(contactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(1, 1, 1)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(contactNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(messagesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,32 +127,63 @@ public class MessengerPanel extends javax.swing.JPanel {
   }
 
   private void sendTextButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
+    if (!textField.getText().equals("")) {
+      client.messengerSendText(textField.getText(), String.valueOf(contactId));
+      textField.setText("");
+    }
   }
 
   private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
+    JFileChooser fileChooser = new JFileChooser("C:\\Users\\HP\\Desktop");
+    int response = fileChooser.showOpenDialog(null);
+    if (response == JFileChooser.APPROVE_OPTION) {
+      File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+      String fileName = file.getName();
+      FileInputStream fileInputStream = null;
+      try {
+        fileInputStream = new FileInputStream(file);
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+      byte[] bytes = new byte[(int) file.length()];
+      try {
+        assert fileInputStream != null;
+        fileInputStream.read(bytes);
+        fileInputStream.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      client.messengerSendFile(bytes, fileName, contactId);
+    }
   }
 
   public int getChatsScrollValue() {
     return chatsPane.getVerticalScrollBar().getValue();
   }
 
-  public void update(ArrayList<Chat> chats, Chat chat , int chatsScrollValue) {
+  public int getMessagesScrollValue() {
+    return messagesPane.getVerticalScrollBar().getValue();
+  }
+
+  public void update(ArrayList<Chat> chats, Chat chat , int chatsScrollValue, int messagesScrollValue) {
     if (chats != null) {
       chatsPane.setViewportView(new ChatsPanel(chats, this));
       chatsPane.getVerticalScrollBar().setValue(chatsScrollValue);
     }
 
     if (chat != null) {
+      contactId = chat.getContactId();
       sendTextButton.setVisible(true);
       sendFileButton.setVisible(true);
       contactNameLabel.setText(chat.getContactName());
-      //todo
+      if (chat.getMessages() != null) {
+        messagesPane.setViewportView(new MessagesPanel(chat.getMessages()));
+        messagesPane.getVerticalScrollBar().setValue(messagesScrollValue);
+      }
     }
   }
 
-  public void updateMessenger(int contactId) {
+  public void updateMessenger(String contactId) {
     client.changeToMessengerPanel(userRole, contactId);
   }
 
@@ -154,5 +195,6 @@ public class MessengerPanel extends javax.swing.JPanel {
   private javax.swing.JButton sendFileButton;
   private javax.swing.JButton sendTextButton;
   private javax.swing.JTextField textField;
+  private javax.swing.JLabel imgLabel;
   // End of variables declaration
 }

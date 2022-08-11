@@ -3,26 +3,26 @@ package shared.model.message;
 import java.util.ArrayList;
 
 public class Chat {
-  private int contactId;
+  private String contactId;
   private String contactName;
   private String lastMessage = "chat created";
   private ArrayList<Message> messages;
-  private Messenger messenger;
 
-  public Chat(Messenger messenger, int contactId, String contactName) {
+  public Chat(String contactId, String contactName) {
     this.contactId = contactId;
     this.contactName = contactName;
-    this.messenger = messenger;
   }
 
   public void addMessage(Message message) {
+    if (messages == null) {
+      messages = new ArrayList<>();
+    }
     messages.add(message);
     if (message.isFile()) {
       lastMessage = "File";
     } else {
       lastMessage = message.getMessage();
     }
-    messenger.takeChatUp(this);
   }
 
   public ArrayList<Message> getMessages() {
@@ -33,7 +33,7 @@ public class Chat {
     this.messages = messages;
   }
 
-  public int getContactId() {
+  public String getContactId() {
     return contactId;
   }
 
@@ -43,5 +43,9 @@ public class Chat {
 
   public String getLastMessage() {
     return lastMessage;
+  }
+
+  public void setLastMessage(String lastMessage) {
+    this.lastMessage = lastMessage;
   }
 }

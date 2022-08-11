@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import shared.model.*;
+import shared.model.message.Message;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 import shared.model.users.User;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
@@ -456,6 +458,25 @@ public class ClientHandler implements Runnable {
         }
         sendResponse(response);
         break;
+      case MESSENGER_SEND_TEXT:
+        String contactId = (String) request.getData("contactId");
+        Message message = new Message((String) request.getData("message"));
+        message.setAuthor(user.getName());
+        user.getMessenger().getChat(contactId).addMessage(message);
+        Controller.getInstance().findUserById(Integer.parseInt(contactId)).getMessenger().getChat(String.valueOf(user.getId())).addMessage(message);
+        break;
+      case MESSENGER_SEND_FILE:
+        contactId = (String) request.getData("contactId");
+        ArrayList<String> strings = (ArrayList<String>) request.getData("strings");
+        byte[] bytes = new byte[strings.size()];
+        for (int i = 0; i < strings.size(); i++) {
+          bytes[i] = Byte.parseByte((strings.get(i)));
+        }
+        message = new Message(bytes, (String) request.getData("fileName"));
+        message.setAuthor(user.getName());
+        user.getMessenger().getChat(contactId).addMessage(message);
+        Controller.getInstance().findUserById(Integer.parseInt(contactId)).getMessenger().getChat(String.valueOf(user.getId())).addMessage(message);
+        break;
     }
   }
 
@@ -684,8 +705,8 @@ public class ClientHandler implements Runnable {
         break;
       case MESSENGER_PANEL:
         response.addData("chats", user.getMessenger().getChats());
-        int contactId = (Integer) request.getData("contactId");
-        if (contactId != 0) {
+        String contactId = (String) request.getData("contactId");
+        if (!contactId.equals("0")) {
           response.addData("chat", user.getMessenger().getChat(contactId));
         }
         break;

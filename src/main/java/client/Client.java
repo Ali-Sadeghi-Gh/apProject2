@@ -9,15 +9,22 @@ import GUI.professors.dean.ProfessorsListDeanPanel;
 import GUI.professors.dean.RemoveProfessorPanel;
 import GUI.professors.eduAssistant.*;
 import GUI.student.*;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 import shared.model.EducationalRequest;
 import shared.model.PanelName;
 import shared.model.message.Chat;
+import shared.model.message.Message;
 import shared.model.users.*;
 import shared.request.*;
 import shared.response.*;
 
+import javax.sound.midi.Soundbank;
 import javax.swing.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Client {
   private final MainFrame mainFrame;
@@ -223,7 +230,7 @@ public class Client {
         changeToCourseSummaryPanel();
         break;
       case MESSENGER_PANEL:
-        changeToMessengerPanel(userRole, 0);
+        changeToMessengerPanel(userRole, "0");
         break;
     }
   }
@@ -1199,7 +1206,7 @@ public class Client {
     }
   }
 
-  public void changeToMessengerPanel(UserRole userRole, int contactId) {
+  public void changeToMessengerPanel(UserRole userRole, String contactId) {
     MessengerPanel messengerPanel = new MessengerPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
     if (userRole.equals(UserRole.Student)) {
@@ -1216,7 +1223,11 @@ public class Client {
       Request request = new Request(RequestType.UPDATE);
       request.addData("contactId", contactId);
       Response response = serverController.sendUpdateRequest(PanelName.MESSENGER_PANEL, request);
-      messengerPanel.update((ArrayList<Chat>) response.getData("chats"), (Chat) response.getData("chat"), messengerPanel.getChatsScrollValue());
+
+      ArrayList<Chat> chats = new Gson().fromJson(new Gson().toJson(response.getData("chats")), TypeToken.getParameterized(ArrayList.class, Chat.class).getType());
+      Chat chat = new Gson().fromJson(new Gson().toJson(response.getData("chat")), Chat.class);
+      messengerPanel.update(chats, chat, messengerPanel.getChatsScrollValue(),
+              messengerPanel.getMessagesScrollValue());
 
       if (userRole.equals(UserRole.Student)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
@@ -1229,5 +1240,17 @@ public class Client {
         updateEduAssistantPanel(eduAssistantPanel);
       }
     }).start();
+  }
+
+  public void messengerSendText(String message, String contactId) {
+    serverController.sendMessengerSendTextRequest(message, contactId);
+  }
+
+  public void messengerSendFile(byte[] bytes, String fileName, String contactId) {
+    String[] strings = new String[bytes.length];
+    for (int i = 0; i < bytes.length; i++) {
+      strings[i] = String.valueOf(bytes[i]);
+    }
+    serverController.sendMessengerSendFileRequest(strings, fileName, contactId);
   }
 }

@@ -28,7 +28,7 @@ public class ChatLabel extends JLabel {
 
       @Override
       public void mouseReleased(MouseEvent e) {
-
+        chatsPanel.updateMessenger(chat.getContactId());
       }
 
       @Override
