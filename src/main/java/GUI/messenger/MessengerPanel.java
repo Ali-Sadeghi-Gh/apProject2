@@ -124,10 +124,27 @@ public class MessengerPanel extends javax.swing.JPanel {
     // TODO add your handling code here:
   }
 
-  public void update(ArrayList<Chat> chats, Chat chat) {
-    chatsPane.setViewportView(new ChatsPanel(chats, client, userRole));
+  public int getChatsScrollValue() {
+    return chatsPane.getVerticalScrollBar().getValue();
   }
 
+  public void update(ArrayList<Chat> chats, Chat chat , int chatsScrollValue) {
+    if (chats != null) {
+      chatsPane.setViewportView(new ChatsPanel(chats, this));
+      chatsPane.getVerticalScrollBar().setValue(chatsScrollValue);
+    }
+
+    if (chat != null) {
+      sendTextButton.setVisible(true);
+      sendFileButton.setVisible(true);
+      contactNameLabel.setText(chat.getContactName());
+      //todo
+    }
+  }
+
+  public void updateMessenger(int contactId) {
+    client.changeToMessengerPanel(userRole, contactId);
+  }
 
   // Variables declaration - do not modify
   private javax.swing.JScrollPane chatsPane;

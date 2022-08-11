@@ -1216,8 +1216,7 @@ public class Client {
       Request request = new Request(RequestType.UPDATE);
       request.addData("contactId", contactId);
       Response response = serverController.sendUpdateRequest(PanelName.MESSENGER_PANEL, request);
-
-      messengerPanel.update((ArrayList<Chat>) response.getData("chats"), (Chat) response.getData("chat"));
+      messengerPanel.update((ArrayList<Chat>) response.getData("chats"), (Chat) response.getData("chat"), messengerPanel.getChatsScrollValue());
 
       if (userRole.equals(UserRole.Student)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
