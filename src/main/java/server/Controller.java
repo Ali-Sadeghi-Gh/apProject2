@@ -3,7 +3,13 @@ package server;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import shared.model.*;
-import shared.model.users.*;
+import shared.model.users.Professor;
+import shared.model.users.Student;
+import shared.model.users.User;
+import shared.util.Config;
+import shared.util.Data;
+import shared.util.LogIn;
+import shared.util.Time;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +37,17 @@ public class Controller {
 
   public void changePhoneNumber(String phoneNumber, User user) {
     user.setPhoneNumber(phoneNumber);
-    logger.info("user " + user.getId() + " changed phone number to " + phoneNumber);
+    logger.info(String.format(getConfig().getProperty(String.class, "changePhoneNumberLog"), user.getId(), phoneNumber));
   }
 
   public void changeEmail(String email, User user) {
     user.setEmail(email);
-    logger.info("user " + user.getId() + " changed email to " + email);
+    logger.info(String.format(getConfig().getProperty(String.class, "changeEmailLog"), user.getId(), email));
   }
 
   public void changePassword(String password, User user) {
     user.setPassword(password);
-    logger.info("user " + user.getId() + " changed password to " + password.hashCode());
+    logger.info(String.format(getConfig().getProperty(String.class, "changePasswordLog"), user.getId(), password.hashCode()));
   }
 
   /////////////////////////////////////getTableData///////////////////////////////////////
@@ -83,9 +89,11 @@ public class Controller {
     List<String[]> data = new ArrayList<>();
     for (int i = 0; i < courses.size(); i++) {
       Course course = courses.get(i);
-      if ((faculty.equals("all") || faculty.equals(course.getFacultyName())) && (professor.equals("") ||
+      if ((faculty.equals(getConfig().getProperty(String.class, "comboBoxDefault")) ||
+              faculty.equals(course.getFacultyName())) && (professor.equals("") ||
               (findProfessorByCourse(course.getId())!=null && professor.equals(findProfessorByCourse(course.getId()).getName())))
-              && (grade.equals("all") || (course.getGrade() != null && grade.equals(course.getGrade().name())))) {
+              && (grade.equals(getConfig().getProperty(String.class, "comboBoxDefault"))) ||
+              (course.getGrade() != null && grade.equals(course.getGrade().name()))) {
         data.add(new String[]{String.valueOf(course.getId()), course.getName(), String.valueOf(course.getCredit()),
                 findProfessorByCourse(course.getId()) == null ? "" : findProfessorByCourse(course.getId()).getName(),
                 course.getFacultyName(), (course.getGrade() == null) ? "" : course.getGrade().name(), course.getClassTime()});
@@ -121,10 +129,12 @@ public class Controller {
     List<String[]> data = new ArrayList<>();
     for (int i = 0; i < professors.size(); i++) {
       Professor professor = professors.get(i);
-      if ((faculty.equals("all") || faculty.equals(professor.getFacultyName())) && (name.equals("") || name.equals(professor.getName()))
-              && (degree.equals("all") || (professor.getDegree() != null && degree.equals(professor.getDegree().name())))) {
-        data.add(new String[]{String.valueOf(professor.getId()), professor.getName(), professor.getFacultyName(), professor.getEmail(),
-                professor.getDegree() == null ? "" : professor.getDegree().name()});
+      if ((faculty.equals(getConfig().getProperty(String.class, "comboBoxDefault")) ||
+              faculty.equals(professor.getFacultyName())) && (name.equals("") || name.equals(professor.getName()))
+              && (degree.equals(getConfig().getProperty(String.class, "comboBoxDefault")) ||
+              (professor.getDegree() != null && degree.equals(professor.getDegree().name())))) {
+        data.add(new String[]{String.valueOf(professor.getId()), professor.getName(), professor.getFacultyName(),
+                professor.getEmail(), professor.getDegree() == null ? "" : professor.getDegree().name()});
       }
     }
     String[][] dataArray = new String[data.size()][];
@@ -163,14 +173,15 @@ public class Controller {
   public String[] addCourseDataToScoreData(int courseId) {
     Course course = findCourse(courseId);
     if (course != null) {
-      return new String[]{String.valueOf(course.getId()), course.getName(), String.valueOf(course.getCredit()), "N/A"};
+      return new String[]{String.valueOf(course.getId()), course.getName(), String.valueOf(course.getCredit()),
+              getConfig().getProperty(String.class, "indeterminateScore")};
     }
     return null;
   }
 
   public String[] getFacultiesName() {
     String[] names = new String[University.getInstance().getFaculties().size()+1];
-    names[0] = "all";
+    names[0] = getConfig().getProperty(String.class, "comboBoxDefault");
     for (int i = 0; i < University.getInstance().getFaculties().size(); i++) {
       names[i+1] = University.getInstance().getFaculties().get(i).getName();
     }
@@ -373,7 +384,7 @@ public class Controller {
     double sumScore = 0;
     if (findScoreByCourse(course).length != 0) {
       for (Score score : findScoreByCourse(course)) {
-        if (score.getScore() >= 10) {
+        if (score.getScore() >= getConfig().getProperty(Integer.class, "minPassScore")) {
           sumScore += score.getScore();
         }
       }
@@ -399,7 +410,7 @@ public class Controller {
   public int getPassStudentsCount(Course course) {
     int counter = 0;
     for (Score score : University.getInstance().getScores()) {
-      if (score.getCourseId() == course.getId() && score.getScore() >= 10) {
+      if (score.getCourseId() == course.getId() && score.getScore() >= getConfig().getProperty(Integer.class, "minPassScore")) {
         counter++;
       }
     }
@@ -409,7 +420,7 @@ public class Controller {
   public int getFailStudentsCount(Course course) {
     int counter = 0;
     for (Score score : University.getInstance().getScores()) {
-      if (score.getCourseId() == course.getId() && score.getScore() < 10) {
+      if (score.getCourseId() == course.getId() && score.getScore() < getConfig().getProperty(Integer.class, "minPassScore")) {
         counter++;
       }
     }
@@ -444,7 +455,7 @@ public class Controller {
   public int getPassCredit(Student student) {
     int passCredit = 0;
     for (Score score : findScoreByStudent(student)) {
-      if (convertScoreToData(score) != null && score.getScore() >= 10) {
+      if (convertScoreToData(score) != null && score.getScore() >= getConfig().getProperty(Integer.class, "minPassScore")) {
         passCredit += Integer.parseInt(convertScoreToData(score)[2]);
       }
     }
@@ -459,7 +470,7 @@ public class Controller {
       University.getInstance().removeTemporaryScore(temporaryScore);
     }
     course.setFinalSubmit(true);
-    logger.info("scores of course with id " + course.getId() + " finalize");
+    logger.info(String.format(getConfig().getProperty(String.class, "finalizeScoreLogFirstStr"), course.getId()));
   }
 
   /////////////////////////////////////find sth///////////////////////////////////////
@@ -622,7 +633,7 @@ public class Controller {
             null, supervisorId, enteringYear, Student.EducationalStatus.valueOf(status), Student.Grade.valueOf(grade));
     University.getInstance().addStudent(student);
 
-    logger.info("student with id " + student.getId() + " added");
+    logger.info(String.format(getConfig().getProperty(String.class, "addStudentLog"), student.getId()));
     return student.getId();
   }
 
@@ -631,7 +642,7 @@ public class Controller {
     University.getInstance().addCourse(course);
     findProfessorById(Integer.parseInt(professorId)).addCourse(String.valueOf(course.getId()));
 
-    logger.info("course with id " + course.getId() + " added");
+    logger.info(String.format(getConfig().getProperty(String.class, "addCourseLog"), course.getId()));
     return course.getId();
   }
 
@@ -645,7 +656,7 @@ public class Controller {
       findProfessorByCourse(course.getId()).removeCourse(String.valueOf(course.getId()));
     }
     findProfessorById(Integer.parseInt(professorId)).addCourse(String.valueOf(course.getId()));
-    logger.info("course with id " + course.getId() + " changed");
+    logger.info(String.format(getConfig().getProperty(String.class, "changeCourseLog"), course.getId()));
   }
 
   public boolean removeCourse(int id, String facultyName) {
@@ -658,7 +669,7 @@ public class Controller {
       for (Student student : University.getInstance().getStudents()) {
         student.removeCourse(String.valueOf(course.getId()));
       }
-      logger.info("course with id " + course.getId() + " removed");
+      logger.info(String.format(getConfig().getProperty(String.class, "removeCourseLog"), course.getId()));
       return true;
     }
     return false;
@@ -670,7 +681,7 @@ public class Controller {
             null, roomNumber, Professor.Degree.valueOf(degree), Professor.Position.valueOf(position));
     University.getInstance().addProfessor(professor);
 
-    logger.info("professor with id " + professor.getId() + " added");
+    logger.info(String.format(getConfig().getProperty(String.class, "addProfessorLog"), professor.getId()));
     return professor.getId();
   }
 
@@ -686,7 +697,7 @@ public class Controller {
     professor.setRoomNumber(roomNumber);
     professor.setDegree(Professor.Degree.valueOf(degree));
     professor.setPosition(Professor.Position.valueOf(position));
-    logger.info("professor with id " + professor.getId() + " changed");
+    logger.info(String.format(getConfig().getProperty(String.class, "changeProfessorLog"), professor.getId()));
   }
 
   public boolean removeProfessor(int id, String facultyName) {
@@ -698,7 +709,7 @@ public class Controller {
           student.setSupervisorId(null);
         }
       }
-      logger.info("professor with id " + professor.getId() + " removed");
+      logger.info(String.format(getConfig().getProperty(String.class, "removeProfessorLog"), professor.getId()));
       return true;
     }
     return false;
@@ -707,8 +718,8 @@ public class Controller {
   public EducationalRequest addRequest(String studentId, String professorId, String faculty1, String faculty2, EducationalRequest.Type type) {
     EducationalRequest request = new EducationalRequest(studentId, professorId, faculty1, faculty2, type);
     University.getInstance().addRequest(request);
-    request.setResult("submitted");
-    logger.info(type + " request with id " + request.getId() + " added");
+    request.setResult(getConfig().getProperty(String.class, "requestSubmitted"));
+    logger.info(String.format(getConfig().getProperty(String.class, "addRequestLog"), type.toString(), request.getId()));
     return request;
   }
 
@@ -735,17 +746,17 @@ public class Controller {
   /////////////////////////////////////requests/////////////////////////////////////
 
   public String getEnrollmentString(Student student) {
-    File file = new File("./src/main/resources/enrollmentCertificate.txt");
+    File file = new File(getConfig().getProperty(String.class, "enrollmentFilePath"));
     try {
       Scanner scanner = new Scanner(file);
       String str = "";
       while (scanner.hasNext()) {
         str += scanner.nextLine();
       }
-      logger.info("student whit id " + student.getId() + " request enrollment certificate");
+      logger.info(String.format(getConfig().getProperty(String.class, "enrollmentLog"), student.getId()));
       return String.format(str, student.getName(), student.getId(), student.getFacultyName(), Time.getExpiration());
     } catch (FileNotFoundException e) {
-      logger.error("enrollmentCertificate file not found");
+      logger.error(getConfig().getProperty(String.class, "enrollmentLogError"));
       return "";
     }
   }
@@ -754,24 +765,24 @@ public class Controller {
     try {
       long time = Time.convertStringToDateExam(University.getInstance().getDefendingTurn()).getTime();
       do {
-        time += 1000L * 3600 * 24 * 7;
+        time += getConfig().getProperty(Long.class, "defendingTimeDifference");
       } while (time < new Date().getTime());
 
       University.getInstance().setDefendingTurn(Time.convertDateToStringExam(new Date(time)));
-      logger.info("student with id " + student.getId() + " request defending turn");
+      logger.info(String.format(getConfig().getProperty(String.class, "defendingLog"), student.getId()));
     } catch (Exception e) {
-      logger.error("parse error in getDefendingTurn");
+      logger.error(getConfig().getProperty(String.class, "defendingError"));
     }
     return University.getInstance().getDefendingTurn();
   }
 
   public String getDormitoryRequest(Student student) {
-    logger.info("student with id " + student.getId() + " request dormitory");
+    logger.info(String.format(getConfig().getProperty(String.class, "dormitoryLog"), student.getId()));
     String result;
     if (new Random().nextInt(2) == 0) {
-      result = "rejected";
+      result = getConfig().getProperty(String.class, "resultRejected");
     } else {
-      result = "accepted";
+      result = getConfig().getProperty(String.class, "resultAccepted");
     }
     student.setDormitoryRequest(result);
     return result;
@@ -784,7 +795,7 @@ public class Controller {
       String courses = "";
       String scores = "";
       for (Score score : findScoreByStudent(student)) {
-        if (score.getScore()>=10) {
+        if (score.getScore() >= getConfig().getProperty(Integer.class, "minPassScore")) {
           courses = courses + ", " + findCourse(score.getCourseId()).getName();
           scores = scores + ", " + score.getScore();
         }
@@ -796,7 +807,7 @@ public class Controller {
         scores = scores.substring(2);
       }
 
-      File file = new File("./src/main/resources/recommendation.txt");
+      File file = new File(getConfig().getProperty(String.class, "recommendationFilePath"));
       try {
         Scanner scanner = new Scanner(file);
         String str = "";
@@ -805,13 +816,13 @@ public class Controller {
         }
         request.setResult(String.format(str, professor.getName(), student.getName(), student.getId(), getPassCredit(student), courses,
                 getAverageScoreByStudent(student), scores));
-        logger.info("professor whit id " + professor.getId() + " accept " + request.getType().name() + " request with id " + request.getId());
+        logger.info(String.format(getConfig().getProperty(String.class, "answerRequestAcceptLog"), professor.getId(), request.getType().toString(), request.getId()));
       } catch (FileNotFoundException e) {
-        logger.error("recommendation file not found");
+        logger.error(getConfig().getProperty(String.class, "recommendationLogError"));
       }
     } else {
-      request.setResult("rejected");
-      logger.info("professor whit id " + professor.getId() + " reject " + request.getType().name() + " request with id " + request.getId());
+      request.setResult(getConfig().getProperty(String.class, "resultRejected"));
+      logger.info(String.format(getConfig().getProperty(String.class, "answerRequestRejectLog"), professor.getId(), request.getType().toString(), request.getId()));
     }
     request.setFinished(true);
   }
@@ -821,12 +832,12 @@ public class Controller {
     if (accepted) {
       Student student = findStudentById(Integer.parseInt(request.getStudentId()));
       student.setStatus(Student.EducationalStatus.dropout);
-      logger.info("professor whit id " + professor.getId() + " accept " + request.getType().name() + " request with id " + request.getId());
-      request.setResult("accepted");
+      logger.info(String.format(getConfig().getProperty(String.class, "answerRequestAcceptLog"), professor.getId(), request.getType().toString(), request.getId()));
+      request.setResult(getConfig().getProperty(String.class, "resultAccepted"));
     } else {
-      logger.info("professor whit id " + professor.getId() + " reject " + request.getType().name() + " request with id " + request.getId());
+      logger.info(String.format(getConfig().getProperty(String.class, "answerRequestRejectLog"), professor.getId(), request.getType().toString(), request.getId()));
 
-      request.setResult("rejected");
+      request.setResult(getConfig().getProperty(String.class, "resultRejected"));
     }
     request.setFinished(true);
   }
@@ -835,33 +846,33 @@ public class Controller {
     Professor professor = findEduAssistantByFaculty(faculty);
     if (accepted) {
       if (faculty.equals(request.getFaculty())) {
-        request.setFacultyResult("accepted");
+        request.setFacultyResult(getConfig().getProperty(String.class, "resultAccepted"));
       } else {
-        request.setTargetFacultyResult("accepted");
+        request.setTargetFacultyResult(getConfig().getProperty(String.class, "resultAccepted"));
       }
-      logger.info("professor whit id " + professor.getId() + " accept " + request.getType().name() + " request with id " + request.getId());
+      logger.info(String.format(getConfig().getProperty(String.class, "answerRequestAcceptLog"), professor.getId(), request.getType().toString(), request.getId()));
     } else {
       if (faculty.equals(request.getFaculty())) {
-        request.setFacultyResult("rejected");
+        request.setFacultyResult(getConfig().getProperty(String.class, "resultRejected"));
       } else {
-        request.setTargetFacultyResult("rejected");
+        request.setTargetFacultyResult(getConfig().getProperty(String.class, "resultRejected"));
       }
 
-      logger.info("professor whit id " + professor.getId() + " reject " + request.getType().name() + " request with id " + request.getId());
+      logger.info(String.format(getConfig().getProperty(String.class, "answerRequestRejectLog"), professor.getId(), request.getType().toString(), request.getId()));
     }
 
     Student student = findStudentById(Integer.parseInt(request.getStudentId()));
-    if ((request.getFacultyResult()!=null && request.getFacultyResult().equals("rejected")) ||
-            (request.getTargetFacultyResult()!=null && request.getTargetFacultyResult().equals("rejected"))) {
-      request.setResult("rejected");
-      student.setMinor(request.getTargetFaculty() + " reject");
+    if ((request.getFacultyResult()!=null && request.getFacultyResult().equals(getConfig().getProperty(String.class, "resultRejected"))) ||
+            (request.getTargetFacultyResult()!=null && request.getTargetFacultyResult().equals(getConfig().getProperty(String.class, "resultRejected")))) {
+      request.setResult(getConfig().getProperty(String.class, "resultRejected"));
+      student.setMinor(String.format(getConfig().getProperty(String.class, "minorRejectAnswer"), request.getTargetFaculty()));
       request.setFinished(true);
-      logger.info(request.getType().name() + " request with id " + request.getId() + " of student whit id " + student.getId() + " is rejected");
-    } else if ((request.getFacultyResult()!=null && request.getFacultyResult().equals("accepted")) &&
-            (request.getTargetFacultyResult()!=null && request.getTargetFacultyResult().equals("accepted"))) {
+      logger.info(String.format(getConfig().getProperty(String.class, "minorAnswerRejectLog"), request.getType().toString(), request.getId(), student.getId()));
+    } else if ((request.getFacultyResult()!=null && request.getFacultyResult().equals(getConfig().getProperty(String.class, "resultAccepted"))) &&
+            (request.getTargetFacultyResult()!=null && request.getTargetFacultyResult().equals(getConfig().getProperty(String.class, "resultAccepted")))) {
       request.setResult("your minor request for " + request.getTargetFaculty() + " is accepted");
-      student.setMinor(request.getTargetFaculty() + " accept");
-      logger.info(request.getType().name() + " request with id " + request.getId() + " of student whit id " + student.getId() + " is accepted");
+      student.setMinor(String.format(getConfig().getProperty(String.class, "minorAcceptAnswer"), request.getTargetFaculty()));
+      logger.info(String.format(getConfig().getProperty(String.class, "minorAnswerAcceptLog"), request.getType().toString(), request.getId(), student.getId()));
       request.setFinished(true);
     }
   }
@@ -869,11 +880,11 @@ public class Controller {
   ///////////////////////////////////////program/////////////////////////////////////////////
 
   public void startProgram() {
-    logger.info("Application started");
+    logger.info(getConfig().getProperty(String.class, "startAppLog"));
     try {
       data.loadData();
     } catch (Exception e) {
-      logger.error("can't load data");
+      logger.error(getConfig().getProperty(String.class, "loadDataLogError"));
     }
   }
 
@@ -881,8 +892,12 @@ public class Controller {
     try {
       data.saveData(University.getInstance());
     } catch (Exception e) {
-      logger.error("can't save data");
+      logger.error(getConfig().getProperty(String.class, "saveDataLogError"));
     }
-    logger.info("a client closed window");
+    logger.info(getConfig().getProperty(String.class, "saveDataLog"));
+  }
+
+  private Config getConfig() {
+    return Config.getConfig(Config.getMainConfig().getProperty(String.class, "controllerConfig"));
   }
 }

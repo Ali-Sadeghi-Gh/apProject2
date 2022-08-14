@@ -2,7 +2,9 @@ package shared.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import shared.model.users.*;
+
+import shared.model.users.Professor;
+import shared.model.users.Student;
 
 public class University {
   private static University instance;

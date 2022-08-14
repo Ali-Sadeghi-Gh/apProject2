@@ -1,11 +1,13 @@
 package shared.model.message;
 
+import shared.util.Config;
+
 import java.util.ArrayList;
 
 public class Chat {
-  private String contactId;
-  private String contactName;
-  private String lastMessage = "chat created";
+  private final String contactId;
+  private final String contactName;
+  private String lastMessage = getConfig().getProperty(String.class, "lastMessageDefault");
   private ArrayList<Message> messages;
 
   public Chat(String contactId, String contactName) {
@@ -19,7 +21,7 @@ public class Chat {
     }
     messages.add(message);
     if (message.isFile()) {
-      lastMessage = "File";
+      lastMessage = getConfig().getProperty(String.class, "fileName");
     } else {
       lastMessage = message.getMessage();
     }
@@ -27,10 +29,6 @@ public class Chat {
 
   public ArrayList<Message> getMessages() {
     return messages;
-  }
-
-  public void setMessages(ArrayList<Message> messages) {
-    this.messages = messages;
   }
 
   public String getContactId() {
@@ -47,5 +45,9 @@ public class Chat {
 
   public void setLastMessage(String lastMessage) {
     this.lastMessage = lastMessage;
+  }
+
+  private Config getConfig() {
+    return Config.getConfig(Config.getMainConfig().getProperty(String.class, "sharedConfig"));
   }
 }

@@ -1,37 +1,33 @@
 package client;
 
-import GUI.*;
-import GUI.messenger.MessengerPanel;
-import GUI.professors.*;
-import GUI.professors.dean.AddProfessorDeanPanel;
-import GUI.professors.dean.ChangeProfessorPanel;
-import GUI.professors.dean.ProfessorsListDeanPanel;
-import GUI.professors.dean.RemoveProfessorPanel;
-import GUI.professors.eduAssistant.*;
-import GUI.student.*;
+import client.GUI.*;
+import client.GUI.messenger.MessengerPanel;
+import client.GUI.professors.*;
+import client.GUI.professors.dean.*;
+import client.GUI.professors.eduAssistant.*;
+import client.GUI.student.*;
 import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import shared.model.EducationalRequest;
 import shared.model.PanelName;
 import shared.model.message.Chat;
-import shared.model.message.Message;
-import shared.model.users.*;
+import shared.model.users.UserRole;
+import shared.util.Config;
+import shared.util.Loop;
 import shared.request.*;
 import shared.response.*;
 
-import javax.sound.midi.Soundbank;
 import javax.swing.*;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Client {
   private final MainFrame mainFrame;
   private ServerController serverController;
   private final int port;
+  private final String address;
 
-  public Client(int port) {
+  public Client(String address, int port) {
+    this.address = address;
     this.port = port;
     mainFrame = new MainFrame(this);
   }
@@ -41,9 +37,13 @@ public class Client {
   }
 
   public void start() {
-    serverController = new ServerController(port);
+    serverController = new ServerController(address, port);
     serverController.connectToServer();
     loginCLI();
+  }
+
+  private Config getConfig() {
+    return Config.getConfig(Config.getMainConfig().getProperty(String.class, "clientConfig"));
   }
 
   private void loginCLI() {
@@ -89,21 +89,21 @@ public class Client {
 
   private void updateStudentPanel(StudentPanel studentPanel) {
     Response response = serverController.sendUpdateRequest(PanelName.STUDENT_PANEL);
-    studentPanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
+    studentPanel.update(String.valueOf(response.getData("id")),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
   }
 
   private void updateProfessorPanel(ProfessorPanel professorPanel) {
     Response response = serverController.sendUpdateRequest(PanelName.PROFESSOR_PANEL);
-    professorPanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
+    professorPanel.update(String.valueOf(response.getData("id")),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
   }
 
   private void updateEduAssistantPanel(EduAssistantPanel eduAssistantPanel) {
     Response response = serverController.sendUpdateRequest(PanelName.EDU_ASSISTANT_PANEL);
-    eduAssistantPanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
+    eduAssistantPanel.update(String.valueOf(response.getData("id")),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
   }
@@ -240,7 +240,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, studentMainPanel, this);
     mainFrame.setContentPane(studentPanel);
 
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response1 = serverController.sendUpdateRequest(PanelName.STUDENT_MAIN_PANEL);
       studentMainPanel.update((String) response1.getData("educationalStatus"),
               (String) response1.getData("supervisor"));
@@ -253,14 +253,14 @@ public class Client {
     ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, new JPanel(), this);
     mainFrame.setContentPane(professorPanel);
 
-    new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateProfessorPanel(professorPanel)).start();
   }
 
   private void changeToEduAssistantPanel() {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, new JPanel(), this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToStudentProfilePanel() {
@@ -268,7 +268,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, studentProfilePanel, this);
     mainFrame.setContentPane(studentPanel);
 
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.STUDENT_PROFILE_PANEL);
       studentProfilePanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
               (String) response.getData("melliCode"), (String) response.getData("faculty"),
@@ -291,9 +291,9 @@ public class Client {
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.PROFESSOR_PROFILE_PANEL);
-      professorProfilePanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
+      professorProfilePanel.update(String.valueOf(response.getData("id")),
               (String) response.getData("melliCode"), (String) response.getData("faculty"),
               (String) response.getData("phoneNumber"), (String) response.getData("degree"),
               (String) response.getData("roomNumber"));
@@ -311,14 +311,14 @@ public class Client {
   public void changePhoneNumber(String phoneNumber) {
     Response response = serverController.sendChangePhoneNumberRequest(phoneNumber);
     if (response.getStatus().equals(ResponseStatus.OK)) {
-      mainFrame.showMessage("successfully changed");
+      mainFrame.showMessage(getConfig().getProperty(String.class, "changeSuccessfulMessage"));
     }
   }
 
   public void changeEmail(String email) {
     Response response = serverController.sendChangeEmailRequest(email);
     if (response.getStatus().equals(ResponseStatus.OK)) {
-      mainFrame.showMessage("successfully changed");
+      mainFrame.showMessage(getConfig().getProperty(String.class, "changeSuccessfulMessage"));
     }
   }
 
@@ -347,7 +347,7 @@ public class Client {
             ((strings.toArray(new String[0][0]))));
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       if (userRole.equals(UserRole.Student)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
         updateStudentPanel(studentPanel);
@@ -380,7 +380,7 @@ public class Client {
         professorsListDeanPanel.update((((ArrayList<String>) response1.getData("faculties")).toArray(new String[0])),
                 ((strings.toArray(new String[0][0]))));
 
-        new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
+        new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateProfessorPanel(professorPanel)).start();
         return;
       }
     }
@@ -411,7 +411,7 @@ public class Client {
             ((strings.toArray(new String[0][0]))));
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       if (userRole.equals(UserRole.Student)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
         updateStudentPanel(studentPanel);
@@ -430,7 +430,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, studentEducationalOuterPanel, this);
     mainFrame.setContentPane(studentPanel);
 
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.STUDENT_EDUCATIONAL_OUT_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -458,7 +458,7 @@ public class Client {
     }
     studentTemporaryScoreList.update(strings.toArray(new String[0][0]));
 
-    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void addTemporaryScoreByStudent(String courseId, String objection, String answer, String score) {
@@ -498,7 +498,7 @@ public class Client {
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.WEEKLY_SCHEDULE_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -533,7 +533,7 @@ public class Client {
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.EXAM_LIST_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -565,7 +565,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, recommendationRequestPanel, this);
     mainFrame.setContentPane(studentPanel);
 
-    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void getRecommendationResult(RecommendationRequestPanel recommendationRequestPanel, String professorId) {
@@ -583,7 +583,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, enrollmentCertificatePanel, this);
     mainFrame.setContentPane(studentPanel);
 
-    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void enrollmentCertificate(EnrollmentCertificatePanel enrollmentCertificatePanel) {
@@ -606,7 +606,7 @@ public class Client {
     minorRequestPanel.update((String) response.getData("result"), (String) response.getData("targetFaculty"),
             ((ArrayList<String>) response.getData("faculties")).toArray(new String[0]));
 
-    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void requestMinor(MinorRequestPanel minorRequestPanel, String faculty) {
@@ -623,7 +623,7 @@ public class Client {
     StudentPanel studentPanel = new StudentPanel(mainFrame, dropoutRequestPanel, this);
     mainFrame.setContentPane(studentPanel);
 
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.DROPOUT_REQUEST_PANEL);
       dropoutRequestPanel.update((String) response.getData("result"));
 
@@ -651,7 +651,7 @@ public class Client {
 
     dormitoryRequestPanel.update((String) response.getData("result"));
 
-    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void dormitoryRequest(DormitoryRequestPanel dormitoryRequestPanel) {
@@ -674,7 +674,7 @@ public class Client {
 
     defendingRequestPanel.update((String) response.getData("result"));
 
-    new Loop(1, () -> updateStudentPanel(studentPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateStudentPanel(studentPanel)).start();
   }
 
   public void defendingRequest(DefendingRequestPanel defendingRequestPanel) {
@@ -704,7 +704,7 @@ public class Client {
     professorsCourseList.update(strings.toArray(new String[0][0]));
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       if (userRole.equals(UserRole.Professor)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
@@ -739,7 +739,7 @@ public class Client {
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       if (userRole.equals(UserRole.Professor)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
@@ -761,7 +761,7 @@ public class Client {
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.RECOMMENDATION_LIST_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -791,7 +791,7 @@ public class Client {
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       if (userRole.equals(UserRole.Professor)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
@@ -812,7 +812,7 @@ public class Client {
     ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, removeProfessorPanel, this);
     mainFrame.setContentPane(professorPanel);
 
-    new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateProfessorPanel(professorPanel)).start();
   }
 
   public void removeProfessor(String professorId) {
@@ -828,7 +828,7 @@ public class Client {
     Response response = serverController.sendUpdateRequest(PanelName.ADD_PROFESSOR_DEAN_PANEL);
     addProfessorDeanPanel.update(((ArrayList<String>) response.getData("positions")).toArray(new String[0]));
 
-    new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateProfessorPanel(professorPanel)).start();
   }
 
   public void addProfessor(UserRole userRole, String name, String email, String melliCode, String phoneNumber, String password,
@@ -848,7 +848,7 @@ public class Client {
     ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, changeProfessorPanel, this);
     mainFrame.setContentPane(professorPanel);
 
-    new Loop(1, () -> updateProfessorPanel(professorPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateProfessorPanel(professorPanel)).start();
   }
 
   public void findProfessorForChange(ChangeProfessorPanel changeProfessorPanel, String professorId) {
@@ -895,7 +895,7 @@ public class Client {
     coursesListEduPanel.update((((ArrayList<String>) response.getData("faculties")).toArray(new String[0])),
             ((strings.toArray(new String[0][0]))));
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToAddCoursePanel() {
@@ -903,7 +903,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addCoursePanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void addCourse(String name, String grade, String credit, String examTime, String classTime, String professorId) {
@@ -920,7 +920,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, removeCoursePanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void removeCourse(String courseId) {
@@ -933,7 +933,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, changeCoursePanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void findCourseForChange(ChangeCoursePanel changeCoursePanel, String courseId) {
@@ -966,7 +966,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addStudentOrProfessorPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToAddProfessorPanel() {
@@ -974,7 +974,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addProfessorPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToAddStudentPanel() {
@@ -982,7 +982,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, addStudentPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void addStudent(String name, String email, String melliCode, String supervisorId, String phoneNumber,
@@ -1001,7 +1001,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduRequestPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToDropoutListPanel() {
@@ -1009,7 +1009,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, dropoutListPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.DROPOUT_LIST_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -1027,7 +1027,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, answerDropoutPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToMinorListPanel() {
@@ -1035,7 +1035,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, minorListPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.MINOR_LIST_PANEL);
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -1053,7 +1053,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, answerMinorPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToEduEducationalPanel() {
@@ -1061,7 +1061,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduEducationalPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void searchStudentStatusById(EduEducationalPanel eduEducationalPanel, String id) {
@@ -1105,7 +1105,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduTemporaryScorePanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   private void changeToEduSearchCoursePanel() {
@@ -1113,7 +1113,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduSearchCoursePanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void searchCourseTemporary(EduSearchCoursePanel eduSearchCoursePanel, String courseId) {
@@ -1139,7 +1139,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduSearchProfessorPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void searchProfessorTemporary(EduSearchProfessorPanel eduSearchProfessorPanel, String professorId) {
@@ -1164,7 +1164,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, eduSearchStudentPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void searchStudentTemporary(EduSearchStudentPanel eduSearchStudentPanel, String studentId) {
@@ -1189,7 +1189,7 @@ public class Client {
     EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, courseSummaryPanel, this);
     mainFrame.setContentPane(eduAssistantPanel);
 
-    new Loop(1, () -> updateEduAssistantPanel(eduAssistantPanel)).start();
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
   public void searchCourseSummary(CourseSummaryPanel courseSummaryPanel, String courseId) {
@@ -1219,7 +1219,7 @@ public class Client {
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
-    new Loop(1, () -> {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Request request = new Request(RequestType.UPDATE);
       request.addData("contactId", contactId);
       Response response = serverController.sendUpdateRequest(PanelName.MESSENGER_PANEL, request);

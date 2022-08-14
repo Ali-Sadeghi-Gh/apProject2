@@ -4,12 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import shared.model.EducationalRequest;
 import shared.model.PanelName;
+import shared.util.Config;
+import shared.util.Loop;
 import shared.request.*;
 import shared.response.Response;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -21,15 +22,17 @@ public class ServerController {
   private final GsonBuilder gsonBuilder = new GsonBuilder();
   private final Gson gson;
   private final int port;
+  private final String address;
 
-  public ServerController(int port) {
+  public ServerController(String address, int port) {
+    this.address = address;
     this.port = port;
     gson = gsonBuilder.create();
   }
 
   public void connectToServer() {
     try {
-      socket = new Socket(InetAddress.getLocalHost(), port);
+      socket = new Socket(address, port);
       printStream = new PrintStream(socket.getOutputStream());
       scanner = new Scanner(socket.getInputStream());
       authToken = scanner.nextLine();
@@ -59,7 +62,7 @@ public class ServerController {
       response = gson.fromJson(scanner.nextLine(), Response.class);
     } catch (Exception e) {
       Loop.stopCurrent();
-      System.out.println("scanning error");
+      System.out.println(Config.getConfig(Config.getMainConfig().getProperty(String.class, "clientConfig")).getProperty(String.class, "scanError"));
     }
     return response;
   }
