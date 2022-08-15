@@ -1,5 +1,6 @@
 package shared.model.users;
 
+import server.Controller;
 import shared.model.message.Messenger;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public abstract class User {
   protected String lastLogIn;
   protected List<String> courses;
   protected Messenger messenger;
+  protected ArrayList<String> contacts;
 
   public User(String name, String email, String melliCode, String facultyName, String phoneNumber, String password, String lastLogIn) {
     this.name = name;
@@ -108,5 +110,16 @@ public abstract class User {
       messenger = new Messenger();
     }
     return messenger;
+  }
+
+  public ArrayList<String> getContacts() {
+    if (contacts == null) {
+      contacts = Controller.getInstance().getContacts(this);
+    }
+    return contacts;
+  }
+
+  public void addContact(String contact) {
+    getContacts().add(contact);
   }
 }

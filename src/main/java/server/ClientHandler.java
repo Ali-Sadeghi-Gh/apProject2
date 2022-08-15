@@ -14,6 +14,7 @@ import shared.request.Request;
 import shared.response.Response;
 import shared.response.ResponseStatus;
 
+import javax.jws.Oneway;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -717,6 +718,9 @@ public class ClientHandler implements Runnable {
         if (!contactId.equals("0")) {
           response.addData("chat", user.getMessenger().getChat(contactId));
         }
+        break;
+      case CREATE_CHAT_PANEL:
+        response.addData("data", Controller.getInstance().getContactData(user));
         break;
     }
     sendResponse(response);

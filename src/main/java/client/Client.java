@@ -1,6 +1,7 @@
 package client;
 
 import client.GUI.*;
+import client.GUI.messenger.CreateChatPanel;
 import client.GUI.messenger.MessengerPanel;
 import client.GUI.professors.*;
 import client.GUI.professors.dean.*;
@@ -283,6 +284,9 @@ public class Client {
         break;
       case MESSENGER_PANEL:
         changeToMessengerPanel(userRole, "0");
+        break;
+      case CREATE_CHAT_PANEL:
+        changeToCreateChatPanel(userRole);
         break;
     }
   }
@@ -1472,5 +1476,48 @@ public class Client {
       strings[i] = String.valueOf(bytes[i]);
     }
     serverController.sendMessengerSendFileRequest(strings, fileName, contactId);
+  }
+
+  public void changeToCreateChatPanel(UserRole userRole) {
+    CreateChatPanel createChatPanel = new CreateChatPanel(mainFrame, this, userRole);
+    JPanel jPanel = null;
+    if (userRole.equals(UserRole.Student)) {
+      jPanel = new StudentPanel(mainFrame, createChatPanel, this);
+    } else if ((userRole.equals(UserRole.Professor))) {
+      jPanel = new ProfessorPanel(mainFrame, createChatPanel, this);
+    } else if (userRole.equals(UserRole.EduAssistant)) {
+      jPanel = new EduAssistantPanel(mainFrame, createChatPanel, this);
+    }
+    mainFrame.setContentPane(jPanel);
+
+    JPanel finalJPanel = jPanel;
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.CREATE_CHAT_PANEL);
+      if (!isConnected) {
+        return;
+      }
+
+      ArrayList<ArrayList<Object>> arrayList = (ArrayList<ArrayList<Object>>) response.getData("data");
+      ArrayList<Object[]> objects = new ArrayList<>();
+      for (ArrayList<Object> arrayList1 : arrayList) {
+        objects.add(arrayList1.toArray());
+      }
+      Boolean[] booleans = createChatPanel.getSendMessageBooleans();
+      for (int i = 0; i< booleans.length; i++) {
+        objects.get(i)[3] = booleans[i];
+      }
+      createChatPanel.update(objects.toArray(new Object[0][0]));
+
+      if (userRole.equals(UserRole.Student)) {
+        StudentPanel studentPanel = (StudentPanel) finalJPanel;
+        updateStudentPanel(studentPanel);
+      } else if (userRole.equals(UserRole.Professor)) {
+        ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
+        updateProfessorPanel(professorPanel);
+      } else if (userRole.equals(UserRole.EduAssistant)) {
+        EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
+        updateEduAssistantPanel(eduAssistantPanel);
+      }
+    }).start();
   }
 }

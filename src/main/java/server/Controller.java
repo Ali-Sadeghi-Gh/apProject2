@@ -52,6 +52,17 @@ public class Controller {
 
   /////////////////////////////////////getTableData///////////////////////////////////////
 
+  public Object[][] getContactData(User user) {
+    Object[][] objects = new Object[user.getContacts().size()][4];
+    for (int i = 0; i < user.getContacts().size(); i++) {
+      User u = findUserById(Integer.parseInt(user.getContacts().get(i)));
+      objects[i][0] = String.valueOf(u.getId());
+      objects[i][1] = u.getName();
+      objects[i][2] = u.getFacultyName();
+    }
+    return objects;
+  }
+
   public String[][] getExamListData(User user) {
     List<String[]> data = new ArrayList<>();
     for (String string : user.getCourses()) {
@@ -623,6 +634,34 @@ public class Controller {
       scoreArray[i] = scores.get(i);
     }
     return scoreArray;
+  }
+
+  public ArrayList<String> getContacts(User user) {
+    ArrayList<String> contacts = new ArrayList<>();
+    if (user instanceof Student) {
+      Student student = (Student) user;
+      contacts.add(student.getSupervisorId());
+      for (Student s : University.getInstance().getStudents()) {
+        if (student.getFacultyName().equals(s.getFacultyName()) && student.getEnteringYear().equals(s.getEnteringYear()) && !student.equals(s)) {
+          contacts.add(String.valueOf(s.getId()));
+        }
+      }
+    } else if (user instanceof Professor) {
+      Professor professor = (Professor) user;
+      if (professor.getPosition().equals(Professor.Position.eduAssistant) || professor.getPosition().equals(Professor.Position.dean)) {
+        for (Student s : University.getInstance().getStudents()) {
+          if (professor.getFacultyName().equals(s.getFacultyName())) {
+            contacts.add(String.valueOf(s.getId()));
+          }
+        }
+      }
+      for (Student s : University.getInstance().getStudents()) {
+        if (s.getSupervisorId().equals(String.valueOf(professor.getId()))) {
+          contacts.add(String.valueOf(s.getId()));
+        }
+      }
+    }
+    return contacts;
   }
 
   ///////////////////////////////////add change remove//////////////////////////////
