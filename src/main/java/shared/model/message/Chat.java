@@ -15,7 +15,7 @@ public class Chat {
     this.contactName = contactName;
   }
 
-  public void addMessage(Message message) {
+  public void addMessage(Messenger messenger, Message message) {
     if (messages == null) {
       messages = new ArrayList<>();
     }
@@ -25,6 +25,7 @@ public class Chat {
     } else {
       lastMessage = message.getMessage();
     }
+    messenger.takeChatUp(this);
   }
 
   public ArrayList<Message> getMessages() {

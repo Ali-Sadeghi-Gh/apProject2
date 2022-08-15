@@ -1,0 +1,813 @@
+{
+  "faculties": [
+    {
+      "name": "mathematics"
+    },
+    {
+      "name": "physics"
+    },
+    {
+      "name": "chemistry"
+    },
+    {
+      "name": "computer"
+    },
+    {
+      "name": "electrical"
+    }
+  ],
+  "students": [
+    {
+      "supervisorId": "1001",
+      "enteringYear": "1400",
+      "status": "studying",
+      "id": 2001,
+      "grade": "underGraduate",
+      "name": "ali sadeghi",
+      "email": "",
+      "melliCode": "441055524",
+      "facultyName": "mathematics",
+      "phoneNumber": "1",
+      "password": 50,
+      "lastLogIn": "22/08/15 08:08:16 PM",
+      "courses": [
+        "3001",
+        "3002"
+      ],
+      "messenger": {
+        "chats": [
+          {
+            "contactId": "2002",
+            "contactName": "mohammad mousavi",
+            "lastMessage": "jalebe",
+            "messages": [
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "Agha ali"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "fha"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "lshlskdf"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "jyhvmn"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "داداش چه خبرا؟"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "قربانت"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "شسسسسسسسسسسسسسساللللللللللللللللللللللل???????????????"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "hhhhhhhhhhhhhhhhhhhhvvvvvvvvvvvvvvvvvvvvvaaaaaaaaaaaadssssssssssflkjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "fa"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "dada khobi?",
+                "time": "22/08/12 03:37:09 AM"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "ghorbanat",
+                "time": "22/08/12 03:38:52 AM"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "va",
+                "time": "22/08/12 03:39:18 AM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "ino",
+                "time": "22/08/12 03:39:59 AM"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "jalebe",
+                "time": "22/08/12 03:40:37 AM"
+              }
+            ]
+          },
+          {
+            "contactId": "1001",
+            "contactName": "mirsadeghi",
+            "lastMessage": "a",
+            "messages": [
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam",
+                "time": "22/08/15 08:06:53 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "sal",
+                "time": "22/08/15 08:08:37 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "a",
+                "time": "22/08/15 08:08:59 PM"
+              }
+            ]
+          },
+          {
+            "contactId": "1002",
+            "contactName": "ahmadi",
+            "lastMessage": "a",
+            "messages": [
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam",
+                "time": "22/08/15 08:06:53 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "sal",
+                "time": "22/08/15 08:08:37 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "a",
+                "time": "22/08/15 08:08:59 PM"
+              }
+            ]
+          },
+          {
+            "contactId": "1003",
+            "contactName": "rezai",
+            "lastMessage": "a",
+            "messages": [
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam",
+                "time": "22/08/15 08:06:53 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "sal",
+                "time": "22/08/15 08:08:37 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "a",
+                "time": "22/08/15 08:08:59 PM"
+              }
+            ]
+          }
+        ]
+      },
+      "contacts": [
+        "1001",
+        "1002",
+        "1003"
+      ]
+    },
+    {
+      "supervisorId": "1012",
+      "enteringYear": "1399",
+      "status": "studying",
+      "id": 2002,
+      "grade": "underGraduate",
+      "name": "mohammad mousavi",
+      "email": "",
+      "melliCode": "5594834",
+      "facultyName": "physics",
+      "phoneNumber": "",
+      "password": 50,
+      "lastLogIn": "22/08/12 03:38:26 AM",
+      "courses": [
+        "3001",
+        "3003"
+      ],
+      "messenger": {
+        "chats": [
+          {
+            "contactId": "2001",
+            "contactName": "ali sadeghi",
+            "lastMessage": "jalebe",
+            "messages": [
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "Agha ali"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "fha"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "lshlskdf"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "jyhvmn"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "داداش چه خبرا؟"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "قربانت"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "شسسسسسسسسسسسسسساللللللللللللللللللللللل???????????????"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "hhhhhhhhhhhhhhhhhhhhvvvvvvvvvvvvvvvvvvvvvaaaaaaaaaaaadssssssssssflkjjjjjjjjjjjjjjjjjjjjjjjjjjjj"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "fa"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "dada khobi?",
+                "time": "22/08/12 03:37:09 AM"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "ghorbanat",
+                "time": "22/08/12 03:38:52 AM"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "va",
+                "time": "22/08/12 03:39:18 AM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "ino",
+                "time": "22/08/12 03:39:59 AM"
+              },
+              {
+                "author": "mohammad mousavi",
+                "isFile": false,
+                "message": "jalebe",
+                "time": "22/08/12 03:40:37 AM"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "supervisorId": "1011",
+      "enteringYear": "1397",
+      "status": "studying",
+      "id": 2003,
+      "grade": "masters",
+      "name": "abolfaszl hajizade",
+      "email": "",
+      "melliCode": "63928475",
+      "facultyName": "mathematics",
+      "phoneNumber": "",
+      "password": 50,
+      "courses": [
+        "3001",
+        "3007",
+        "3010"
+      ]
+    },
+    {
+      "supervisorId": "1003",
+      "enteringYear": "1395",
+      "status": "studying",
+      "id": 2004,
+      "grade": "masters",
+      "name": "ahmad seyyedi",
+      "email": "",
+      "melliCode": "6372834",
+      "facultyName": "chemistry",
+      "phoneNumber": "",
+      "password": 50,
+      "courses": [
+        "3002",
+        "3004"
+      ]
+    },
+    {
+      "supervisorId": "1009",
+      "enteringYear": "1393",
+      "status": "studying",
+      "id": 2005,
+      "grade": "phd",
+      "name": "raha nejati",
+      "email": "",
+      "melliCode": "873894234",
+      "facultyName": "computer",
+      "phoneNumber": "",
+      "password": 50,
+      "lastLogIn": "22/04/29 07:08:18 AM",
+      "courses": []
+    },
+    {
+      "supervisorId": "1005",
+      "enteringYear": "1394",
+      "status": "studying",
+      "id": 2006,
+      "grade": "phd",
+      "name": "zahra mehraban",
+      "email": "",
+      "melliCode": "345546",
+      "facultyName": "computer",
+      "phoneNumber": "",
+      "password": 51,
+      "courses": [
+        "3004",
+        "3005",
+        "3006",
+        "3009",
+        "3010"
+      ]
+    }
+  ],
+  "professors": [
+    {
+      "degree": "full",
+      "roomNumber": "212",
+      "position": "dean",
+      "id": 1001,
+      "name": "mirsadeghi",
+      "email": "mirsad@yahoo.com",
+      "melliCode": "395410",
+      "facultyName": "mathematics",
+      "phoneNumber": "09123456789",
+      "password": 50,
+      "lastLogIn": "22/08/15 05:11:11 AM",
+      "courses": [
+        "3001"
+      ],
+      "messenger": {
+        "chats": [
+          {
+            "contactId": "2001",
+            "contactName": "ali sadeghi",
+            "lastMessage": "a",
+            "messages": [
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam",
+                "time": "22/08/15 08:06:53 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "sal",
+                "time": "22/08/15 08:08:37 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "a",
+                "time": "22/08/15 08:08:59 PM"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "degree": "full",
+      "roomNumber": "103",
+      "position": "dean",
+      "id": 1002,
+      "name": "ahmadi",
+      "email": "ahmadi@gmail.com",
+      "melliCode": "74913",
+      "facultyName": "physics",
+      "phoneNumber": "09193459128",
+      "password": 49,
+      "lastLogIn": "22/04/29 06:54:19 AM",
+      "courses": [
+        "3003"
+      ],
+      "messenger": {
+        "chats": [
+          {
+            "contactId": "2001",
+            "contactName": "ali sadeghi",
+            "lastMessage": "a",
+            "messages": [
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam",
+                "time": "22/08/15 08:06:53 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "sal",
+                "time": "22/08/15 08:08:37 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "a",
+                "time": "22/08/15 08:08:59 PM"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "degree": "full",
+      "roomNumber": "543",
+      "position": "dean",
+      "id": 1003,
+      "name": "rezai",
+      "email": "mohrez@yahoo.com",
+      "melliCode": "16834",
+      "facultyName": "chemistry",
+      "phoneNumber": "09019095223",
+      "password": 49,
+      "lastLogIn": "22/04/29 06:40:44 AM",
+      "courses": [
+        "3004"
+      ],
+      "messenger": {
+        "chats": [
+          {
+            "contactId": "2001",
+            "contactName": "ali sadeghi",
+            "lastMessage": "a",
+            "messages": [
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "salam",
+                "time": "22/08/15 08:06:53 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "sal",
+                "time": "22/08/15 08:08:37 PM"
+              },
+              {
+                "author": "ali sadeghi",
+                "isFile": false,
+                "message": "a",
+                "time": "22/08/15 08:08:59 PM"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "degree": "full",
+      "roomNumber": "313",
+      "position": "dean",
+      "id": 1004,
+      "name": "mohseni",
+      "email": "moh1345@yahoo.com",
+      "melliCode": "72392",
+      "facultyName": "computer",
+      "phoneNumber": "09121237272",
+      "password": 49,
+      "lastLogIn": "22/04/29 06:49:35 AM",
+      "courses": [
+        "3005"
+      ]
+    },
+    {
+      "degree": "full",
+      "roomNumber": "113",
+      "position": "dean",
+      "id": 1005,
+      "name": "akbari",
+      "email": "aliakbari@gmail.com",
+      "melliCode": "55342",
+      "facultyName": "electrical",
+      "phoneNumber": "09352475453",
+      "password": 49,
+      "lastLogIn": "22/04/29 06:50:31 AM",
+      "courses": [
+        "3006"
+      ]
+    },
+    {
+      "degree": "associate",
+      "roomNumber": "310",
+      "position": "eduAssistant",
+      "id": 1006,
+      "name": "alishahi",
+      "email": "",
+      "melliCode": "87354",
+      "facultyName": "mathematics",
+      "phoneNumber": "",
+      "password": 50,
+      "lastLogIn": "22/08/03 07:07:17 PM",
+      "courses": [
+        "3002"
+      ]
+    },
+    {
+      "degree": "full",
+      "roomNumber": "208",
+      "position": "eduAssistant",
+      "id": 1007,
+      "name": "mohammadi",
+      "email": "",
+      "melliCode": "83741",
+      "facultyName": "physics",
+      "phoneNumber": "",
+      "password": 50,
+      "lastLogIn": "22/07/27 08:59:36 PM",
+      "courses": [
+        "3007"
+      ]
+    },
+    {
+      "degree": "associate",
+      "roomNumber": "783",
+      "position": "eduAssistant",
+      "id": 1008,
+      "name": "khazaei",
+      "email": "",
+      "melliCode": "23822",
+      "facultyName": "chemistry",
+      "phoneNumber": "",
+      "password": 50,
+      "lastLogIn": "22/04/29 07:33:26 AM",
+      "courses": [
+        "3008"
+      ]
+    },
+    {
+      "degree": "associate",
+      "roomNumber": "902",
+      "position": "eduAssistant",
+      "id": 1009,
+      "name": "ahmadi",
+      "email": "",
+      "melliCode": "14538",
+      "facultyName": "computer",
+      "phoneNumber": "",
+      "password": 50,
+      "lastLogIn": "22/04/29 07:39:56 AM",
+      "courses": [
+        "3009"
+      ]
+    },
+    {
+      "degree": "assistant",
+      "roomNumber": "245",
+      "position": "eduAssistant",
+      "id": 1010,
+      "name": "salehi",
+      "email": "",
+      "melliCode": "15649",
+      "facultyName": "electrical",
+      "phoneNumber": "",
+      "password": 50,
+      "lastLogIn": "22/04/29 07:42:37 AM",
+      "courses": [
+        "3010"
+      ]
+    },
+    {
+      "degree": "full",
+      "roomNumber": "456",
+      "position": "professor",
+      "id": 1011,
+      "name": "safdari",
+      "email": "",
+      "melliCode": "73919",
+      "facultyName": "mathematics",
+      "phoneNumber": "",
+      "password": 51,
+      "courses": []
+    },
+    {
+      "degree": "associate",
+      "roomNumber": "154",
+      "position": "professor",
+      "id": 1012,
+      "name": "jafari",
+      "email": "",
+      "melliCode": "83945",
+      "facultyName": "physics",
+      "phoneNumber": "",
+      "password": 51,
+      "courses": []
+    }
+  ],
+  "courses": [
+    {
+      "name": "calculus1",
+      "id": 3001,
+      "facultyName": "mathematics",
+      "grade": "underGraduate",
+      "credit": 4,
+      "examTime": "2022/03/12 13:00",
+      "classTime": "sat and mon 9:00 to 11:00",
+      "finalSubmit": false
+    },
+    {
+      "name": "game theory",
+      "id": 3002,
+      "facultyName": "mathematics",
+      "grade": "underGraduate",
+      "credit": 3,
+      "examTime": "2022/05/21 08:30",
+      "classTime": "sun 10:30 to 12:30",
+      "finalSubmit": false
+    },
+    {
+      "name": "phisyc1",
+      "id": 3003,
+      "facultyName": "physics",
+      "grade": "underGraduate",
+      "credit": 3,
+      "examTime": "2022/04/29 10:00",
+      "classTime": "wed 15:00 to 17:00",
+      "finalSubmit": false
+    },
+    {
+      "name": "chemistry1",
+      "id": 3004,
+      "facultyName": "chemistry",
+      "grade": "underGraduate",
+      "credit": 3,
+      "examTime": "2022/04/20 08:00",
+      "classTime": "sat 8:15 to 9:45",
+      "finalSubmit": false
+    },
+    {
+      "name": "AP",
+      "id": 3005,
+      "facultyName": "computer",
+      "grade": "masters",
+      "credit": 4,
+      "examTime": "2022/03/22 15:00",
+      "classTime": "sun 17:00 to 19:00",
+      "finalSubmit": false
+    },
+    {
+      "name": "cercuit1",
+      "id": 3006,
+      "facultyName": "electrical",
+      "grade": "masters",
+      "credit": 3,
+      "examTime": "2022/03/20 13:00",
+      "classTime": "tue 13:00 to 14:30",
+      "finalSubmit": false
+    },
+    {
+      "name": "pysic lab1",
+      "id": 3007,
+      "facultyName": "physics",
+      "grade": "masters",
+      "credit": 1,
+      "examTime": "2022/04/15 10:00",
+      "classTime": "tue 8:15 to 9:45",
+      "finalSubmit": false
+    },
+    {
+      "name": "chemistry lab1",
+      "id": 3008,
+      "facultyName": "chemistry",
+      "grade": "phd",
+      "credit": 2,
+      "examTime": "2022/06/12 09:00",
+      "classTime": "wed 7:00 to 8:30",
+      "finalSubmit": false
+    },
+    {
+      "name": "OS2",
+      "id": 3009,
+      "facultyName": "computer",
+      "grade": "phd",
+      "credit": 3,
+      "examTime": "2022/03/13 10:00",
+      "classTime": "mon 17:00 t0 18:30",
+      "finalSubmit": false
+    },
+    {
+      "name": "cercuit2",
+      "id": 3010,
+      "facultyName": "electrical",
+      "grade": "phd",
+      "credit": 2,
+      "examTime": "2022/07/01 10:00",
+      "classTime": "sat 9:00 to 11:00",
+      "finalSubmit": false
+    }
+  ],
+  "educationalRequests": [
+    {
+      "studentId": "2001",
+      "faculty": "mathematics",
+      "targetFaculty": "physics",
+      "finished": false,
+      "result": "submitted",
+      "type": "minor",
+      "id": 4001
+    }
+  ],
+  "scores": [],
+  "temporaryScores": [
+    {
+      "studentId": 2001,
+      "courseId": 3001,
+      "score": 19.0,
+      "answer": ""
+    },
+    {
+      "studentId": 2002,
+      "courseId": 3001,
+      "score": 19.0,
+      "answer": ""
+    },
+    {
+      "studentId": 2003,
+      "courseId": 3001,
+      "score": 18.0,
+      "answer": ""
+    }
+  ],
+  "studentId": 2006,
+  "professorId": 1012,
+  "courseId": 3010,
+  "requestId": 4001,
+  "defendingTurn": "2022/05/02 09:00"
+}

@@ -345,4 +345,11 @@ public class ServerController {
     request.addData("id", id);
     sendRequest(request);
   }
+
+  public Response sendAddContactRequest(String contactId) {
+    Request request = new Request(RequestType.ADD_CONTACT);
+    request.addData("contactId", contactId);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

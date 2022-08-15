@@ -7,10 +7,18 @@ package client.GUI.messenger;
 
 import client.Client;
 import client.GUI.MainFrame;
+import shared.model.PanelName;
 import shared.model.users.UserRole;
+import shared.util.Config;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -70,30 +78,35 @@ public class CreateChatPanel extends javax.swing.JPanel {
     });
     jScrollPane1.setViewportView(contactsTable);
 
-    chatsButton.setText("chats");
+    textField.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+
+    chatsButton.setText(getConfig().getProperty(String.class, "chatsButtonText"));
+    chatsButton.addActionListener(this::chatsButtonActionPerformed);
 
     addContactLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 22)); // NOI18N
     addContactLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    addContactLabel.setText("add contact");
+    addContactLabel.setText(getConfig().getProperty(String.class, "addContactLabelText"));
 
     contactsLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 22)); // NOI18N
     contactsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    contactsLabel.setText("contacts");
+    contactsLabel.setText(getConfig().getProperty(String.class, "contactsLabelText"));
 
     contactIdLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    contactIdLabel.setText("contact id:");
+    contactIdLabel.setText(getConfig().getProperty(String.class, "contactIdLabelText"));
 
     contactIdField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-    addContactButton.setText("add contact");
+    addContactButton.setText(getConfig().getProperty(String.class, "addContactButtonText"));
+    addContactButton.addActionListener(this::addContactButtonActionPerformed);
 
     sendToAllBox.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
-    sendToAllBox.setText("send to all contacts");
+    sendToAllBox.setText(getConfig().getProperty(String.class, "sendToAllBoxText"));
 
-    sendTextButton.setText("send text");
+    sendTextButton.setText(getConfig().getProperty(String.class, "sendTextButtonText"));
     sendTextButton.addActionListener(this::sendTextButtonActionPerformed);
 
-    sendFileButton.setText("send file");
+    sendFileButton.setText(getConfig().getProperty(String.class, "sendFileButtonText"));
+    sendFileButton.addActionListener(this::sendFileButtonActionPerformed);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -170,7 +183,77 @@ public class CreateChatPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void sendTextButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
+    if (textField.getText().equals("")) {
+      return;
+    }
+    ArrayList<String> contacts = new ArrayList<>();
+    if (sendToAllBox.isSelected()) {
+      for (int i = 0; i < contactsTable.getRowCount(); i++) {
+        contacts.add((String) contactsTable.getValueAt(i, 0));
+      }
+    } else {
+      for (int i = 0; i < contactsTable.getRowCount(); i++) {
+        if (contactsTable.getValueAt(i, 3) != null && (Boolean) contactsTable.getValueAt(i, 3)) {
+          contacts.add((String) contactsTable.getValueAt(i, 0));
+        }
+      }
+    }
+    client.messengerSendText(textField.getText(), contacts);
+    textField.setText("");
+  }
+
+  private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    JFileChooser fileChooser = new JFileChooser(getConfig().getProperty(String.class, "fileChooserOpenDefaultDir"));
+    int response = fileChooser.showOpenDialog(null);
+    if (response == JFileChooser.APPROVE_OPTION) {
+      File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+      String fileName = file.getName();
+      FileInputStream fileInputStream = null;
+      try {
+        fileInputStream = new FileInputStream(file);
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+      byte[] bytes = new byte[(int) file.length()];
+      try {
+        int result;
+        do {
+          assert fileInputStream != null;
+          result = fileInputStream.read(bytes);
+        } while (result != -1);
+        fileInputStream.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      ArrayList<String> contacts = new ArrayList<>();
+      if (sendToAllBox.isSelected()) {
+        for (int i = 0; i < contactsTable.getRowCount(); i++) {
+          contacts.add((String) contactsTable.getValueAt(i, 0));
+        }
+      } else {
+        for (int i = 0; i < contactsTable.getRowCount(); i++) {
+          if (contactsTable.getValueAt(i, 3) != null && (Boolean) contactsTable.getValueAt(i, 3)) {
+            contacts.add((String) contactsTable.getValueAt(i, 0));
+          }
+        }
+      }
+      client.messengerSendFile(bytes, fileName, contacts);
+    }
+  }
+
+  private void chatsButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    client.changePanel(PanelName.MESSENGER_PANEL, userRole);
+  }
+
+  private void addContactButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    try {
+      Integer.parseInt(contactIdField.getText());
+    } catch (Exception e) {
+      mainFrame.showMessage(getConfig().getProperty(String.class, "contactIdNumErrorMessage"));
+      contactIdField.setText("");
+      return;
+    }
+    client.addContact(contactIdField.getText());
   }
 
   public void showData(Object[][] data) {
@@ -197,6 +280,10 @@ public class CreateChatPanel extends javax.swing.JPanel {
 
   public void update(Object[][] data) {
     showData(data);
+  }
+
+  private Config getConfig() {
+    return Config.getConfig(Config.getMainConfig().getProperty(String.class, "messengerConfig"));
   }
 
   // Variables declaration - do not modify

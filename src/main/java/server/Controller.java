@@ -3,6 +3,8 @@ package server;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import shared.model.*;
+import shared.model.message.Chat;
+import shared.model.message.Message;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 import shared.model.users.User;
@@ -914,6 +916,40 @@ public class Controller {
       logger.info(String.format(getConfig().getProperty(String.class, "minorAnswerAcceptLog"), request.getType().toString(), request.getId(), student.getId()));
       request.setFinished(true);
     }
+  }
+
+  public void sendTextMessage(User user, String contactId, String messageStr) {
+    Message message = new Message(messageStr);
+    message.setAuthor(user.getName());
+
+    User contact = Controller.getInstance().findUserById(Integer.parseInt(contactId));
+    if (user.getMessenger().getChat(String.valueOf(contact.getId())) == null) {
+      user.getMessenger().addChat(new Chat(String.valueOf(contact.getId()), contact.getName()));
+    }
+    if (contact.getMessenger().getChat(String.valueOf(user.getId())) == null) {
+      contact.getMessenger().addChat(new Chat(String.valueOf(user.getId()), user.getName()));
+    }
+    user.getMessenger().getChat(contactId).addMessage(user.getMessenger(), message);
+    contact.getMessenger().getChat(String.valueOf(user.getId())).addMessage(contact.getMessenger(), message);
+  }
+
+  public void sendFileMessage(User user, String contactId, ArrayList<String> strings, String fileName) {
+    byte[] bytes = new byte[strings.size()];
+    for (int i = 0; i < strings.size(); i++) {
+      bytes[i] = Byte.parseByte((strings.get(i)));
+    }
+    Message message = new Message(bytes, fileName);
+    message.setAuthor(user.getName());
+
+    User contact = Controller.getInstance().findUserById(Integer.parseInt(contactId));
+    if (user.getMessenger().getChat(String.valueOf(contact.getId())) == null) {
+      user.getMessenger().addChat(new Chat(String.valueOf(contact.getId()), contact.getName()));
+    }
+    if (contact.getMessenger().getChat(String.valueOf(user.getId())) == null) {
+      contact.getMessenger().addChat(new Chat(String.valueOf(user.getId()), user.getName()));
+    }
+    user.getMessenger().getChat(contactId).addMessage(user.getMessenger(), message);
+    contact.getMessenger().getChat(String.valueOf(user.getId())).addMessage(contact.getMessenger(), message);
   }
 
   ///////////////////////////////////////program/////////////////////////////////////////////

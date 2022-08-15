@@ -67,6 +67,7 @@ public class Client {
   }
 
   public void startOfflineLoop() {
+    Offline.getInstance().update(serverController.sendOfflineInformRequest());
     new Loop(getConfig().getProperty(Double.class, "offlineLoopTime"), () -> {
       Offline.getInstance().update(serverController.sendOfflineInformRequest());
     }).offlineStart();
@@ -1519,5 +1520,32 @@ public class Client {
         updateEduAssistantPanel(eduAssistantPanel);
       }
     }).start();
+  }
+
+  public void addContact(String contactId) {
+    Response response = serverController.sendAddContactRequest(contactId);
+    if (!isConnected) {
+      return;
+    }
+
+    if (response.getStatus().equals(ResponseStatus.ERROR)) {
+      mainFrame.showMessage(response.getErrorMessage());
+    }
+  }
+
+  public void messengerSendText(String message, ArrayList<String> contacts) {
+    for (String id : contacts) {
+      serverController.sendMessengerSendTextRequest(message, id);
+    }
+  }
+
+  public void messengerSendFile(byte[] bytes, String fileName, ArrayList<String> contacts) {
+    String[] strings = new String[bytes.length];
+    for (int i = 0; i < bytes.length; i++) {
+      strings[i] = String.valueOf(bytes[i]);
+    }
+    for (String id : contacts) {
+      serverController.sendMessengerSendFileRequest(strings, fileName, id);
+    }
   }
 }

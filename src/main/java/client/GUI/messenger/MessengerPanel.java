@@ -8,6 +8,7 @@ package client.GUI.messenger;
 
 import client.GUI.MainFrame;
 import client.Client;
+import shared.model.PanelName;
 import shared.model.message.Chat;
 import shared.model.users.UserRole;
 import shared.util.Config;
@@ -125,7 +126,7 @@ public class MessengerPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void createChatButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
+    client.changePanel(PanelName.CREATE_CHAT_PANEL, userRole);
   }
 
   private void sendTextButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -469,22 +469,28 @@ public class ClientHandler implements Runnable {
         break;
       case MESSENGER_SEND_TEXT:
         String contactId = (String) request.getData("contactId");
-        Message message = new Message((String) request.getData("message"));
-        message.setAuthor(user.getName());
-        user.getMessenger().getChat(contactId).addMessage(message);
-        Controller.getInstance().findUserById(Integer.parseInt(contactId)).getMessenger().getChat(String.valueOf(user.getId())).addMessage(message);
+        Controller.getInstance().sendTextMessage(user, contactId, (String) request.getData("message"));
         break;
       case MESSENGER_SEND_FILE:
         contactId = (String) request.getData("contactId");
-        ArrayList<String> strings = (ArrayList<String>) request.getData("strings");
-        byte[] bytes = new byte[strings.size()];
-        for (int i = 0; i < strings.size(); i++) {
-          bytes[i] = Byte.parseByte((strings.get(i)));
+        Controller.getInstance().sendFileMessage(user, contactId, (ArrayList<String>) request.getData("strings"), (String) request.getData("fileName"));
+        break;
+      case ADD_CONTACT:
+        //todo
+        User u = Controller.getInstance().findUserById(Integer.parseInt(String.valueOf(request.getData("contactId"))));
+        if (u == null) {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage(getConfig().getProperty(String.class, "contactNotFoundErrorMessage"));
+        } else {
+          if (user.getContacts().contains(String.valueOf(u.getId()))) {
+            response = new Response(ResponseStatus.ERROR);
+            response.setErrorMessage(getConfig().getProperty(String.class, "existContactErrorMessage"));
+          } else {
+            response = new Response(ResponseStatus.OK);
+            user.addContact(String.valueOf(u.getId()));
+          }
         }
-        message = new Message(bytes, (String) request.getData("fileName"));
-        message.setAuthor(user.getName());
-        user.getMessenger().getChat(contactId).addMessage(message);
-        Controller.getInstance().findUserById(Integer.parseInt(contactId)).getMessenger().getChat(String.valueOf(user.getId())).addMessage(message);
+        sendResponse(response);
         break;
     }
   }

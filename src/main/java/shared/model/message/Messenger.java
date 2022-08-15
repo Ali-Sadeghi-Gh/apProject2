@@ -25,9 +25,11 @@ public class Messenger {
   }
 
   public Chat getChat(String contactId) {
+    if (chats == null) {
+      chats = new ArrayList<>();
+    }
     for (Chat chat : chats) {
       if (contactId.equals(chat.getContactId())) {
-        takeChatUp(chat);
         return chat;
       }
     }
