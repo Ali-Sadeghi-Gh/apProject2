@@ -21,6 +21,7 @@ LogInPanel extends JPanel {
   JLabel captchaLabel;
   JLabel captchaImg;
   JButton changeCaptcha;
+  JButton refreshButton;
   Random random = new Random();
   int rand;
   int[] captchaArray = {1569985, 1596889, 1746776, 1629661, 1568002, 1724641};
@@ -51,6 +52,7 @@ LogInPanel extends JPanel {
     captchaField = new JTextField();
     captchaLabel = new JLabel(getConfig().getProperty(String.class, "captchaLabelText"));
     changeCaptcha = new JButton(new ImageIcon(getConfig().getProperty(String.class, "changeCaptchaPath")));
+    refreshButton = new JButton(getConfig().getProperty(String.class, "refreshButtonText"));
   }
 
   private void alignComp() {
@@ -89,6 +91,14 @@ LogInPanel extends JPanel {
     captchaImg = new JLabel(new ImageIcon(String.format(getConfig().getProperty(String.class, "captchaImgPath"), rand)));
     captchaImg.setBounds(mainFrame.FRAME_WIDTH / 2 - 100, mainFrame.FRAME_HEIGHT / 2, 200, 50);
     this.add(captchaImg);
+
+    refreshButton.setBounds(mainFrame.FRAME_WIDTH / 2 - 100, mainFrame.FRAME_HEIGHT / 2 + 100, 100, 25);
+    refreshButton.setVisible(false);
+    this.add(refreshButton);
+
+    if (!client.isConnected()) {
+      refreshButton.setVisible(true);
+    }
   }
 
   private void setCaptcha() {
@@ -100,6 +110,10 @@ LogInPanel extends JPanel {
   }
 
   private void setListener() {
+    refreshButton.addActionListener(e -> {
+      client.refresh();
+    });
+
     changeCaptcha.addActionListener(e -> {
       setCaptcha();
       mainFrame.repaintFrame();
@@ -114,6 +128,11 @@ LogInPanel extends JPanel {
     });
 
     logInButton.addActionListener(e -> {
+      if (!client.isConnected()) {
+        refreshButton.setVisible(true);
+        return;
+      }
+
       int id;
       try {
         id = Integer.parseInt(idField.getText());
@@ -130,7 +149,7 @@ LogInPanel extends JPanel {
       }
 
       String password = passwordField.getText();
-      client.login(id, password);
+      client.login(String.valueOf(id), password);
     });
   }
 

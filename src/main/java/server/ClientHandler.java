@@ -67,6 +67,12 @@ public class ClientHandler implements Runnable {
 
   private void handleRequest(Request request) {
     switch (request.getRequestType()) {
+      case OFFLINE_INFORM:
+        handleOfflineInform();
+        break;
+      case SET_USER:
+        user = Controller.getInstance().findUserById(Integer.parseInt(String.valueOf(request.getData("id"))));
+        break;
       case LOGIN:
         handleLogin(request);
         break;
@@ -515,7 +521,7 @@ public class ClientHandler implements Runnable {
         break;
       case PROFESSOR_PROFILE_PANEL:
         Professor professor = (Professor) user;
-        response.addData("id", professor.getId());
+        response.addData("id", String.valueOf(professor.getId()));
         response.addData("melliCode", professor.getMelliCode());
         response.addData("faculty", professor.getFacultyName());
         response.addData("phoneNumber", professor.getPhoneNumber());
@@ -535,8 +541,8 @@ public class ClientHandler implements Runnable {
                 (String) request.getData("name"), (String) request.getData("grade")));
         break;
       case STUDENT_EDUCATIONAL_OUT_PANEL:
-        response.addData("credit", Controller.getInstance().getPassCredit((Student) user));
-        response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent((Student) user));
+        response.addData("credit", String.valueOf(Controller.getInstance().getPassCredit((Student) user)));
+        response.addData("averageScore", String.valueOf(Controller.getInstance().getAverageScoreByStudent((Student) user)));
         response.addData("data", Controller.getInstance().getScoresData((Student) user));
         break;
       case STUDENT_TEMPORARY_SCORE_LIST:
@@ -717,7 +723,7 @@ public class ClientHandler implements Runnable {
   }
 
   private void handleLogin(Request request) {
-    User user = Controller.getInstance().logIn((int) Double.parseDouble(String.valueOf(request.getData("id"))), (String) request.getData("password"));
+    User user = Controller.getInstance().logIn(Integer.parseInt(String.valueOf(request.getData("id"))), (String) request.getData("password"));
 
     Response response;
 
@@ -746,6 +752,52 @@ public class ClientHandler implements Runnable {
         response.addData("userRole", userRole);
       }
     }
+
+    sendResponse(response);
+  }
+
+  private void handleOfflineInform() {
+    Response response = new Response(ResponseStatus.OK);
+
+    response.addData("id", String.valueOf(user.getId()));
+    response.addData("lastLogin", user.getLastLogIn());
+    response.addData("email", user.getEmail());
+    response.addData("name", user.getName());
+
+    response.addData("melliCode", user.getMelliCode());
+    response.addData("faculty", user.getFacultyName());
+    response.addData("phoneNumber", user.getPhoneNumber());
+    UserRole userRole = null;
+    if (user instanceof Student) {
+      Student student = (Student) user;
+      userRole = UserRole.Student;
+      response.addData("educationalStatus", student.getStatus());
+      response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
+      response.addData("enteringYear", student.getEnteringYear());
+      response.addData("grade", student.getGrade());
+      response.addData("status", student.getStatus());
+      response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
+      response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent(student));
+
+      response.addData("credit", String.valueOf(Controller.getInstance().getPassCredit(student)));
+      response.addData("averageScore", String.valueOf(Controller.getInstance().getAverageScoreByStudent(student)));
+      response.addData("educationalData", Controller.getInstance().getScoresData(student));
+    } else if (user instanceof Professor) {
+      Professor professor = (Professor) user;
+      response.addData("degree", professor.getDegree());
+      response.addData("roomNumber", professor.getRoomNumber());
+      if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
+        userRole = UserRole.EduAssistant;
+      } else {
+        userRole = UserRole.Professor;
+      }
+    }
+    response.addData("userRole", userRole);
+
+    response.addData("weeklyScheduleData", Controller.getInstance().getScheduleData(user));
+    response.addData("examListData", Controller.getInstance().getExamListData(user));
+
+    response.addData("chats", user.getMessenger().getChats());
 
     sendResponse(response);
   }

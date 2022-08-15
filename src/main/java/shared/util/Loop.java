@@ -4,6 +4,7 @@ public class Loop {
   private final double fps;
   protected Thread thread;
   private static Loop currentLoop;
+  private static Loop offlineLoop;
   private final Runnable updatable;
   private volatile boolean running;
 
@@ -29,9 +30,14 @@ public class Loop {
     thread.start();
   }
 
-  public void restart() {
-    thread = new Thread(this::run);
+  public void offlineStart() {
+    offlineLoop = this;
     running = true;
+    try {
+      update();
+    } catch (Throwable throwable) {
+      throwable.printStackTrace();
+    }
     thread.start();
   }
 
@@ -50,6 +56,12 @@ public class Loop {
   public static void stopCurrent() {
     if (currentLoop != null) {
       currentLoop.stop();
+    }
+  }
+
+  public static void stopOffline() {
+    if (offlineLoop != null) {
+      offlineLoop.stop();
     }
   }
 
@@ -82,8 +94,8 @@ public class Loop {
   }
 
   public void sleep(long time) {
-    int milliseconds = (int) (time) / 1000000;
-    int nanoseconds = (int) (time) % 1000000;
+    int milliseconds = (int) ((time) / 1000000);
+    int nanoseconds = (int) ((time) % 1000000);
     try {
       Thread.sleep(milliseconds, nanoseconds);
     } catch (InterruptedException e) {

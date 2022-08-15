@@ -201,7 +201,7 @@ public class StudentProfilePanel extends javax.swing.JPanel {
     emailChangeField.setText("");
   }
 
-  public void update(int id, String melliCode, String faculty, String phoneNumber, String enteringYear, String grade, String status, String supervisor, double averageScore) {
+  public void update(String id, String melliCode, String faculty, String phoneNumber, String enteringYear, String grade, String status, String supervisor, double averageScore) {
     idLabel.setText(String.format(getConfig().getProperty(String.class, "idLabelText"), id));
     melliCodeLabel.setText(String.format(getConfig().getProperty(String.class, "melliCodeLabelText"), (melliCode == null || melliCode.equals("")) ? "-" : melliCode));
     facultyLabel.setText(String.format(getConfig().getProperty(String.class, "facultyLabelText"), (faculty == null || faculty.equals("")) ? "-" : faculty));

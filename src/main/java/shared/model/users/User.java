@@ -104,6 +104,9 @@ public abstract class User {
   }
 
   public Messenger getMessenger() {
+    if (messenger == null) {
+      messenger = new Messenger();
+    }
     return messenger;
   }
 }

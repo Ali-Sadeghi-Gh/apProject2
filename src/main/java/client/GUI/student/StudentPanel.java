@@ -363,7 +363,7 @@ public class StudentPanel extends javax.swing.JPanel {
 
     private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
         client.changePanel(PanelName.MESSENGER_PANEL, UserRole.Student);
-//        client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.Student);
+//     todo   client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.Student);
     }
 
     private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {

@@ -21,15 +21,14 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class Client {
+  private boolean isConnected;
   private final MainFrame mainFrame;
   private ServerController serverController;
-  private final int port;
-  private final String address;
 
-  public Client(String address, int port) {
-    this.address = address;
-    this.port = port;
+  public Client() {
     mainFrame = new MainFrame(this);
+    Offline.getInstance().setClient(this);
+    Offline.getInstance().setMainFrame(mainFrame);
   }
 
   public void kill() {
@@ -37,24 +36,57 @@ public class Client {
   }
 
   public void start() {
-    serverController = new ServerController(address, port);
-    serverController.connectToServer();
+    serverController = new ServerController();
+    isConnected = serverController.connectToServer();
     loginCLI();
+  }
+
+  public void refresh() {
+    if (!isConnected) {
+      isConnected = serverController.connectToServer();
+    }
+
+    if (isConnected) {
+      Offline.getInstance().finish();
+    } else {
+      Offline.getInstance().start();
+    }
   }
 
   private Config getConfig() {
     return Config.getConfig(Config.getMainConfig().getProperty(String.class, "clientConfig"));
   }
 
-  private void loginCLI() {
+  public boolean isConnected() {
+    return isConnected;
+  }
+
+  public void setConnected(boolean connected) {
+    isConnected = connected;
+  }
+
+  public void startOfflineLoop() {
+    new Loop(getConfig().getProperty(Double.class, "offlineLoopTime"), () -> {
+      Offline.getInstance().update(serverController.sendOfflineInformRequest());
+    }).offlineStart();
+  }
+
+  public void setUser(String id) {
+    serverController.sendSetUserRequest(id);
+  }
+
+  public void loginCLI() {
     mainFrame.setContentPane(new LogInPanel(mainFrame, this));
   }
 
-  public void login(int id, String password) {
+  public void login(String id, String password) {
     Response response = serverController.sendLoginRequest(id, password);
-
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
-      mainPanelCLI(response);
+      mainPanelCLI(String.valueOf(response.getData("userRole")));
+      startOfflineLoop();
     } else if (response.getErrorMessage() == null) {
       changePasswordPanelCLI();
     } else {
@@ -69,26 +101,33 @@ public class Client {
 
   public void changePassword(String currentPassword, String newPassword) {
     Response response = serverController.sendChangePasswordRequest(currentPassword, newPassword);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
-      mainPanelCLI(response);
+      mainPanelCLI(String.valueOf(response.getData("userRole")));
+      startOfflineLoop();
     } else {
       mainFrame.showMessage(response.getErrorMessage());
       changePasswordPanelCLI();
     }
   }
 
-  private void mainPanelCLI(Response response) {
-    if (String.valueOf(response.getData("userRole")).equals(UserRole.Student.toString())) {
+  public void mainPanelCLI(String userRole) {
+    if (userRole.equals(UserRole.Student.toString())) {
       changePanel(PanelName.STUDENT_MAIN_PANEL, null);
-    } else if (String.valueOf(response.getData("userRole")).equals(UserRole.EduAssistant.toString())) {
+    } else if (userRole.equals(UserRole.EduAssistant.toString())) {
       changePanel(PanelName.EDU_ASSISTANT_PANEL, null);
-    } else if (String.valueOf(response.getData("userRole")).equals(UserRole.Professor.toString())) {
+    } else if (userRole.equals(UserRole.Professor.toString())) {
       changePanel(PanelName.PROFESSOR_PANEL, null);
     }
   }
 
   private void updateStudentPanel(StudentPanel studentPanel) {
     Response response = serverController.sendUpdateRequest(PanelName.STUDENT_PANEL);
+    if (!isConnected) {
+      return;
+    }
     studentPanel.update(String.valueOf(response.getData("id")),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
@@ -96,6 +135,9 @@ public class Client {
 
   private void updateProfessorPanel(ProfessorPanel professorPanel) {
     Response response = serverController.sendUpdateRequest(PanelName.PROFESSOR_PANEL);
+    if (!isConnected) {
+      return;
+    }
     professorPanel.update(String.valueOf(response.getData("id")),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
@@ -103,17 +145,27 @@ public class Client {
 
   private void updateEduAssistantPanel(EduAssistantPanel eduAssistantPanel) {
     Response response = serverController.sendUpdateRequest(PanelName.EDU_ASSISTANT_PANEL);
+    if (!isConnected) {
+      return;
+    }
     eduAssistantPanel.update(String.valueOf(response.getData("id")),
             (String) response.getData("lastLogin"), (String) response.getData("email"),
             (String) response.getData("name"), (String) response.getData("currentTime"));
   }
 
   public void logout() {
-    Loop.stopCurrent();
     loginCLI();
+    Loop.stopCurrent();
+    Loop.stopOffline();
+    Offline.getInstance().update(null);
   }
 
   public void changePanel(PanelName panelName, UserRole userRole) {
+    if (!isConnected) {
+      Offline.getInstance().changePanel(panelName, userRole);
+      return;
+    }
+
     switch (panelName) {
       case STUDENT_MAIN_PANEL:
         changeToStudentMainPanel();
@@ -242,6 +294,9 @@ public class Client {
 
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response1 = serverController.sendUpdateRequest(PanelName.STUDENT_MAIN_PANEL);
+      if (!isConnected) {
+        return;
+      }
       studentMainPanel.update((String) response1.getData("educationalStatus"),
               (String) response1.getData("supervisor"));
 
@@ -270,7 +325,10 @@ public class Client {
 
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.STUDENT_PROFILE_PANEL);
-      studentProfilePanel.update((int) Double.parseDouble(String.valueOf(response.getData("id"))),
+      if (!isConnected) {
+        return;
+      }
+      studentProfilePanel.update(String.valueOf(response.getData("id")),
               (String) response.getData("melliCode"), (String) response.getData("faculty"),
               (String) response.getData("phoneNumber"), (String) response.getData("enteringYear"),
               (String) response.getData("grade"), (String) response.getData("status"),
@@ -293,6 +351,9 @@ public class Client {
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.PROFESSOR_PROFILE_PANEL);
+      if (!isConnected) {
+        return;
+      }
       professorProfilePanel.update(String.valueOf(response.getData("id")),
               (String) response.getData("melliCode"), (String) response.getData("faculty"),
               (String) response.getData("phoneNumber"), (String) response.getData("degree"),
@@ -309,20 +370,38 @@ public class Client {
   }
 
   public void changePhoneNumber(String phoneNumber) {
+    if (!isConnected) {
+      mainFrame.showMessage(getConfig().getProperty(String.class, "offlineAccessErrorMessage"));
+      return;
+    }
     Response response = serverController.sendChangePhoneNumberRequest(phoneNumber);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(getConfig().getProperty(String.class, "changeSuccessfulMessage"));
     }
   }
 
   public void changeEmail(String email) {
+    if (!isConnected) {
+      mainFrame.showMessage(getConfig().getProperty(String.class, "offlineAccessErrorMessage"));
+      return;
+    }
     Response response = serverController.sendChangeEmailRequest(email);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(getConfig().getProperty(String.class, "changeSuccessfulMessage"));
     }
   }
 
   public void changeToCoursesListPanel(UserRole userRole, String faculty, String professor, String grade) {
+    if (!isConnected) {
+      mainFrame.showMessage(getConfig().getProperty(String.class, "offlineAccessErrorMessage"));
+      return;
+    }
     CoursesListPanel coursesListPanel = new CoursesListPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
     if (userRole.equals(UserRole.Student)) {
@@ -337,6 +416,9 @@ public class Client {
     request.addData("professor", professor);
     request.addData("grade", grade);
     Response response = serverController.sendUpdateRequest(PanelName.COURSES_LIST_PANEL, request);
+    if (!isConnected) {
+      return;
+    }
 
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
@@ -359,8 +441,15 @@ public class Client {
   }
 
   public void changeToProfessorsListPanel(UserRole userRole, String faculty, String name, String grade) {
+    if (!isConnected) {
+      mainFrame.showMessage(getConfig().getProperty(String.class, "offlineAccessErrorMessage"));
+      return;
+    }
     if (userRole.equals(UserRole.Professor)) {
       Response response = serverController.sendIsDeanRequest();
+      if (!isConnected) {
+        return;
+      }
       if (response.getStatus().equals(ResponseStatus.OK)) {
         ProfessorsListDeanPanel professorsListDeanPanel = new ProfessorsListDeanPanel(mainFrame, this);
         ProfessorPanel professorPanel = new ProfessorPanel(mainFrame, professorsListDeanPanel, this);
@@ -371,6 +460,9 @@ public class Client {
         request.addData("name", name);
         request.addData("grade", grade);
         Response response1 = serverController.sendUpdateRequest(PanelName.PROFESSORS_LIST_DEAN_PANEL, request);
+        if (!isConnected) {
+          return;
+        }
 
         ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response1.getData("data");
         ArrayList<String[]> strings = new ArrayList<>();
@@ -401,6 +493,9 @@ public class Client {
     request.addData("name", name);
     request.addData("grade", grade);
     Response response = serverController.sendUpdateRequest(PanelName.PROFESSORS_LIST_PANEL, request);
+    if (!isConnected) {
+      return;
+    }
 
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
@@ -432,13 +527,16 @@ public class Client {
 
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.STUDENT_EDUCATIONAL_OUT_PANEL);
+      if (!isConnected) {
+        return;
+      }
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
         strings.add(arrayList1.toArray(new String[0]));
       }
-      studentEducationalOuterPanel.update((String) response.getData("credit"),
-              (String) response.getData("averageScore"),
+      studentEducationalOuterPanel.update(String.valueOf(response.getData("credit")),
+              String.valueOf(response.getData("averageScore")),
               ((strings.toArray(new String[0][0]))));
 
       updateStudentPanel(studentPanel);
@@ -451,6 +549,9 @@ public class Client {
     mainFrame.setContentPane(studentPanel);
 
     Response response = serverController.sendUpdateRequest(PanelName.STUDENT_TEMPORARY_SCORE_LIST);
+    if (!isConnected) {
+      return;
+    }
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
     for (ArrayList<String> arrayList1 : arrayList) {
@@ -463,6 +564,9 @@ public class Client {
 
   public void addTemporaryScoreByStudent(String courseId, String objection, String answer, String score) {
     Response response = serverController.sendAddTemporaryScoreByStudentRequest(courseId, objection, answer, score);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       changePanel(PanelName.STUDENT_TEMPORARY_SCORE_LIST, null);
     }
@@ -470,6 +574,9 @@ public class Client {
 
   public void addTemporaryScoreByProfessor(UserRole userRole, String studentId, String courseId, String objection, String answer, String score) {
     Response response = serverController.sendAddTemporaryScoreByProfessorRequest(studentId, courseId, objection, answer, score);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       changeToProfessorTemporaryScoreList(userRole, courseId);
     }
@@ -477,6 +584,9 @@ public class Client {
 
   public void addScore(UserRole userRole, String courseId, int studentsCount) {
     Response response = serverController.sendAddScoreRequest(courseId, studentsCount);
+    if (!isConnected) {
+      return;
+    }
     mainFrame.showMessage(response.getErrorMessage());
     if (response.getStatus().equals(ResponseStatus.OK)) {
       changePanel(PanelName.PROFESSORS_COURSE_LIST, userRole);
@@ -500,6 +610,9 @@ public class Client {
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.WEEKLY_SCHEDULE_PANEL);
+      if (!isConnected) {
+        return;
+      }
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -535,6 +648,9 @@ public class Client {
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.EXAM_LIST_PANEL);
+      if (!isConnected) {
+        return;
+      }
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -557,6 +673,9 @@ public class Client {
 
   private void changeToRecommendationRequestPanel() {
     Response response = serverController.sendUpdateRequest(PanelName.RECOMMENDATION_REQUEST_PANEL);
+    if (!isConnected) {
+      return;
+    }
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       return;
@@ -570,6 +689,9 @@ public class Client {
 
   public void getRecommendationResult(RecommendationRequestPanel recommendationRequestPanel, String professorId) {
     Response response = serverController.sendGetRecommendationResultRequest(professorId);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       recommendationRequestPanel.update((String) response.getData("result"));
@@ -588,6 +710,9 @@ public class Client {
 
   public void enrollmentCertificate(EnrollmentCertificatePanel enrollmentCertificatePanel) {
     Response response = serverController.sendEnrollmentCertificationRequest();
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       enrollmentCertificatePanel.update((String) response.getData("certification"));
     }
@@ -595,6 +720,9 @@ public class Client {
 
   private void changeToMinorRequestPanel() {
     Response response = serverController.sendUpdateRequest(PanelName.MINOR_REQUEST_PANEL);
+    if (!isConnected) {
+      return;
+    }
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       return;
@@ -611,6 +739,9 @@ public class Client {
 
   public void requestMinor(MinorRequestPanel minorRequestPanel, String faculty) {
     Response response = serverController.sendMinorRequest(faculty);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       minorRequestPanel.update((String) response.getData("result"), (String) response.getData("targetFaculty"),
               ((ArrayList<String>) response.getData("faculties")).toArray(new String[0]));
@@ -625,6 +756,9 @@ public class Client {
 
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.DROPOUT_REQUEST_PANEL);
+      if (!isConnected) {
+        return;
+      }
       dropoutRequestPanel.update((String) response.getData("result"));
 
       updateStudentPanel(studentPanel);
@@ -633,6 +767,9 @@ public class Client {
 
   public void dropoutRequest(DropoutRequestPanel dropoutRequestPanel) {
     Response response = serverController.sendDropoutRequest();
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       dropoutRequestPanel.update((String) response.getData("result"));
@@ -641,6 +778,9 @@ public class Client {
 
   private void changeToDormitoryRequestPanel() {
     Response response = serverController.sendUpdateRequest(PanelName.DORMITORY_REQUEST_PANEL);
+    if (!isConnected) {
+      return;
+    }
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       return;
@@ -656,6 +796,9 @@ public class Client {
 
   public void dormitoryRequest(DormitoryRequestPanel dormitoryRequestPanel) {
     Response response = serverController.sendDormitoryRequest();
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       dormitoryRequestPanel.update((String) response.getData("result"));
@@ -664,6 +807,9 @@ public class Client {
 
   private void changeToDefendingRequestPanel() {
     Response response = serverController.sendUpdateRequest(PanelName.DEFENDING_REQUEST_PANEL);
+    if (!isConnected) {
+      return;
+    }
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       return;
@@ -679,6 +825,9 @@ public class Client {
 
   public void defendingRequest(DefendingRequestPanel defendingRequestPanel) {
     Response response = serverController.sendDefendingRequest();
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       defendingRequestPanel.update((String) response.getData("result"));
@@ -696,6 +845,9 @@ public class Client {
     mainFrame.setContentPane(jPanel);
 
     Response response = serverController.sendUpdateRequest(PanelName.PROFESSORS_COURSE_LIST);
+    if (!isConnected) {
+      return;
+    }
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
     for (ArrayList<String> arrayList1 : arrayList) {
@@ -719,6 +871,9 @@ public class Client {
     Request request = new Request(RequestType.UPDATE);
     request.addData("courseId", courseId);
     Response response = serverController.sendUpdateRequest(PanelName.PROFESSOR_TEMPORARY_SCORE_LIST, request);
+    if (!isConnected) {
+      return;
+    }
 
     ProfessorTemporaryScoreList professorTemporaryScoreList = new ProfessorTemporaryScoreList(mainFrame, this, userRole);
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
@@ -763,6 +918,9 @@ public class Client {
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.RECOMMENDATION_LIST_PANEL);
+      if (!isConnected) {
+        return;
+      }
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -804,6 +962,9 @@ public class Client {
 
   public void answerEducationalRequest(EducationalRequest.Type type, String requestId, boolean accepted) {
     Response response = serverController.sendAnswerEducationalRequestRequest(type, requestId, accepted);
+    if (!isConnected) {
+      return;
+    }
     mainFrame.showMessage(response.getErrorMessage());
   }
 
@@ -817,6 +978,9 @@ public class Client {
 
   public void removeProfessor(String professorId) {
     Response response = serverController.sendRemoveProfessorRequest(professorId);
+    if (!isConnected) {
+      return;
+    }
     mainFrame.showMessage(response.getErrorMessage());
   }
 
@@ -826,6 +990,9 @@ public class Client {
     mainFrame.setContentPane(professorPanel);
 
     Response response = serverController.sendUpdateRequest(PanelName.ADD_PROFESSOR_DEAN_PANEL);
+    if (!isConnected) {
+      return;
+    }
     addProfessorDeanPanel.update(((ArrayList<String>) response.getData("positions")).toArray(new String[0]));
 
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateProfessorPanel(professorPanel)).start();
@@ -835,6 +1002,9 @@ public class Client {
                            String roomNumber, String degree, String position) {
     Response response = serverController.sendAddProfessorRequest(name, email, melliCode, phoneNumber,
             password, roomNumber, degree, position);
+    if (!isConnected) {
+      return;
+    }
     mainFrame.showMessage(response.getErrorMessage());
     if (userRole.equals(UserRole.Dean)) {
       changePanel(PanelName.ADD_PROFESSOR_DEAN_PANEL, null);
@@ -855,6 +1025,9 @@ public class Client {
     Request request = new Request(RequestType.UPDATE);
     request.addData("professorId", professorId);
     Response response = serverController.sendUpdateRequest(PanelName.CHANGE_PROFESSOR_PANEL, request);
+    if (!isConnected) {
+      return;
+    }
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       changePanel(PanelName.CHANGE_PROFESSOR_PANEL, null);
@@ -871,6 +1044,9 @@ public class Client {
                               String password, String roomNumber, String degree, String position) {
     Response response = serverController.sendChangeProfessorRequest(professorId, name, email,
             melliCode, phoneNumber, password, roomNumber, degree, position);
+    if (!isConnected) {
+      return;
+    }
 
     mainFrame.showMessage(response.getErrorMessage());
     changePanel(PanelName.CHANGE_PROFESSOR_PANEL, null);
@@ -886,6 +1062,9 @@ public class Client {
     request.addData("professor", professor);
     request.addData("grade", grade);
     Response response = serverController.sendUpdateRequest(PanelName.COURSES_LIST_EDU_PANEL, request);
+    if (!isConnected) {
+      return;
+    }
 
     ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
     ArrayList<String[]> strings = new ArrayList<>();
@@ -908,7 +1087,9 @@ public class Client {
 
   public void addCourse(String name, String grade, String credit, String examTime, String classTime, String professorId) {
     Response response = serverController.sendAddCourseRequest(name, grade, credit, examTime, classTime, professorId);
-    System.out.println(response);
+    if (!isConnected) {
+      return;
+    }
     mainFrame.showMessage(response.getErrorMessage());
     if (response.getStatus().equals(ResponseStatus.OK)) {
       changePanel(PanelName.ADD_COURSE_PANEL, null);
@@ -925,6 +1106,9 @@ public class Client {
 
   public void removeCourse(String courseId) {
     Response response = serverController.sendRemoveCourseRequest(courseId);
+    if (!isConnected) {
+      return;
+    }
     mainFrame.showMessage(response.getErrorMessage());
   }
 
@@ -940,6 +1124,9 @@ public class Client {
     Request request = new Request(RequestType.UPDATE);
     request.addData("courseId", courseId);
     Response response = serverController.sendUpdateRequest(PanelName.CHANGE_COURSE_PANEL, request);
+    if (!isConnected) {
+      return;
+    }
     if (!response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
       changePanel(PanelName.CHANGE_COURSE_PANEL, null);
@@ -956,6 +1143,9 @@ public class Client {
   public void changeCourse(String courseId, String name, String professorId, String credit, String classTime, String examDate, String grade) {
     Response response = serverController.sendChangeCourseRequest(courseId, name, professorId,
             credit, classTime, examDate, grade);
+    if (!isConnected) {
+      return;
+    }
 
     mainFrame.showMessage(response.getErrorMessage());
     changePanel(PanelName.CHANGE_COURSE_PANEL, null);
@@ -989,6 +1179,9 @@ public class Client {
                          String password, String enteringYear, String status, String grade) {
     Response response = serverController.sendAddStudentRequest(name, email, melliCode, supervisorId, phoneNumber,
             password, enteringYear, status, grade);
+    if (!isConnected) {
+      return;
+    }
 
     mainFrame.showMessage(response.getErrorMessage());
     if (response.getStatus().equals(ResponseStatus.OK)) {
@@ -1011,6 +1204,9 @@ public class Client {
 
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.DROPOUT_LIST_PANEL);
+      if (!isConnected) {
+        return;
+      }
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -1037,6 +1233,9 @@ public class Client {
 
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
       Response response = serverController.sendUpdateRequest(PanelName.MINOR_LIST_PANEL);
+      if (!isConnected) {
+        return;
+      }
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
       for (ArrayList<String> arrayList1 : arrayList) {
@@ -1066,6 +1265,9 @@ public class Client {
 
   public void searchStudentStatusById(EduEducationalPanel eduEducationalPanel, String id) {
     Response response = serverController.sendSearchStudentStatusByIdRequest(id);
+    if (!isConnected) {
+      return;
+    }
 
     if (response.getStatus().equals(ResponseStatus.OK)) {
       StudentEducationalPanel studentEducationalPanel = new StudentEducationalPanel(this);
@@ -1084,6 +1286,9 @@ public class Client {
 
   public void searchStudentStatusByName(EduEducationalPanel eduEducationalPanel, String name) {
     Response response = serverController.sendSearchStudentStatusByNameRequest(name);
+    if (!isConnected) {
+      return;
+    }
 
     if (response.getStatus().equals(ResponseStatus.OK)) {
       StudentEducationalPanel studentEducationalPanel = new StudentEducationalPanel(this);
@@ -1118,6 +1323,9 @@ public class Client {
 
   public void searchCourseTemporary(EduSearchCoursePanel eduSearchCoursePanel, String courseId) {
     Response response = serverController.sendSearchCourseTemporaryRequest(courseId);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -1144,6 +1352,9 @@ public class Client {
 
   public void searchProfessorTemporary(EduSearchProfessorPanel eduSearchProfessorPanel, String professorId) {
     Response response = serverController.sendSearchProfessorTemporaryRequest(professorId);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -1169,6 +1380,9 @@ public class Client {
 
   public void searchStudentTemporary(EduSearchStudentPanel eduSearchStudentPanel, String studentId) {
     Response response = serverController.sendSearchStudentTemporaryRequest(studentId);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
       ArrayList<String[]> strings = new ArrayList<>();
@@ -1194,6 +1408,9 @@ public class Client {
 
   public void searchCourseSummary(CourseSummaryPanel courseSummaryPanel, String courseId) {
     Response response = serverController.sendSearchCourseSummaryRequest(courseId);
+    if (!isConnected) {
+      return;
+    }
     if (response.getStatus().equals(ResponseStatus.OK)) {
       courseSummaryPanel.update((String) response.getData("id"), (String) response.getData("name"),
               (String) response.getData("professor"), (String) response.getData("faculty"),
@@ -1223,6 +1440,9 @@ public class Client {
       Request request = new Request(RequestType.UPDATE);
       request.addData("contactId", contactId);
       Response response = serverController.sendUpdateRequest(PanelName.MESSENGER_PANEL, request);
+      if (!isConnected) {
+        return;
+      }
 
       ArrayList<Chat> chats = new Gson().fromJson(new Gson().toJson(response.getData("chats")), TypeToken.getParameterized(ArrayList.class, Chat.class).getType());
       Chat chat = new Gson().fromJson(new Gson().toJson(response.getData("chat")), Chat.class);

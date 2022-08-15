@@ -315,7 +315,8 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, UserRole.Professor);
+//    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, UserRole.Professor);
+    client.refresh();
   }
 
   private void temporaryScoreActionPerformed(java.awt.event.ActionEvent evt) {

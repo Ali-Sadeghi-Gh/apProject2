@@ -1,6 +1,7 @@
 package shared.request;
 
 public enum RequestType {
+  OFFLINE_INFORM,
   LOGIN,
   CHANGE_PASSWORD,
   UPDATE,
@@ -32,4 +33,5 @@ public enum RequestType {
   SEARCH_COURSE_SUMMARY,
   MESSENGER_SEND_TEXT,
   MESSENGER_SEND_FILE,
+  SET_USER
 }

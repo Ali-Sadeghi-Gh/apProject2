@@ -5,11 +5,9 @@ import com.google.gson.GsonBuilder;
 import shared.model.EducationalRequest;
 import shared.model.PanelName;
 import shared.util.Config;
-import shared.util.Loop;
 import shared.request.*;
 import shared.response.Response;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
@@ -19,32 +17,32 @@ public class ServerController {
   private PrintStream printStream;
   private Scanner scanner;
   private String authToken;
-  private final GsonBuilder gsonBuilder = new GsonBuilder();
-  private final Gson gson;
-  private final int port;
-  private final String address;
+  private final Gson gson = new GsonBuilder().create();
 
-  public ServerController(String address, int port) {
-    this.address = address;
-    this.port = port;
-    gson = gsonBuilder.create();
-  }
 
-  public void connectToServer() {
+  public boolean connectToServer() {
+    boolean isConnected;
     try {
-      socket = new Socket(address, port);
+      socket = new Socket(getConfig().getProperty(String.class, "address"),
+              getConfig().getProperty(Integer.class, "port"));
       printStream = new PrintStream(socket.getOutputStream());
       scanner = new Scanner(socket.getInputStream());
       authToken = scanner.nextLine();
-    } catch (IOException e) {
-      e.printStackTrace();
+      isConnected = true;
+    } catch (Exception e) {
+      isConnected = false;
     }
+    return isConnected;
+  }
+
+  private Config getConfig() {
+    return Config.getConfig(Config.getMainConfig().getProperty(String.class, "clientConfig"));
   }
 
   public void kill() {
-    scanner.close();
-    printStream.close();
     try {
+      scanner.close();
+      printStream.close();
       socket.close();
     } catch (Exception ignore) {}
     System.exit(0);
@@ -52,8 +50,13 @@ public class ServerController {
 
   private void sendRequest(Request request) {
     String requestString = gson.toJson(request);
-    printStream.println(authToken + "&" + requestString);
-    printStream.flush();
+    try {
+      printStream.println(authToken + "&" + requestString);
+      printStream.flush();
+    } catch (Exception e) {
+      System.out.println(Config.getConfig(Config.getMainConfig().getProperty(String.class, "clientConfig")).getProperty(String.class, "printError"));
+      Offline.getInstance().start();
+    }
   }
 
   private Response scanResponse() {
@@ -61,10 +64,16 @@ public class ServerController {
     try {
       response = gson.fromJson(scanner.nextLine(), Response.class);
     } catch (Exception e) {
-      Loop.stopCurrent();
       System.out.println(Config.getConfig(Config.getMainConfig().getProperty(String.class, "clientConfig")).getProperty(String.class, "scanError"));
+      Offline.getInstance().start();
     }
     return response;
+  }
+
+  public Response sendOfflineInformRequest() {
+    Request request = new Request(RequestType.OFFLINE_INFORM);
+    sendRequest(request);
+    return scanResponse();
   }
 
   public Response sendUpdateRequest(PanelName panelName) {
@@ -80,7 +89,7 @@ public class ServerController {
     return scanResponse();
   }
 
-  public Response sendLoginRequest(int id, String password) {
+  public Response sendLoginRequest(String id, String password) {
     Request request = new Request(RequestType.LOGIN);
     request.addData("id", id);
     request.addData("password", password);
@@ -328,6 +337,12 @@ public class ServerController {
     request.addData("strings", strings);
     request.addData("fileName", fileName);
     request.addData("contactId", contactId);
+    sendRequest(request);
+  }
+
+  public void sendSetUserRequest(String id) {
+    Request request = new Request(RequestType.SET_USER);
+    request.addData("id", id);
     sendRequest(request);
   }
 }
