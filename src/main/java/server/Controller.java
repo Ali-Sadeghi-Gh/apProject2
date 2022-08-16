@@ -644,7 +644,7 @@ public class Controller {
       Student student = (Student) user;
       contacts.add(student.getSupervisorId());
       for (Student s : University.getInstance().getStudents()) {
-        if (student.getFacultyName().equals(s.getFacultyName()) && student.getEnteringYear().equals(s.getEnteringYear()) && !student.equals(s)) {
+        if (student.getFacultyName().equals(s.getFacultyName()) && student.getEnteringYear().equals(s.getEnteringYear()) && !student.equals(s) && !contacts.contains(String.valueOf(s.getId()))) {
           contacts.add(String.valueOf(s.getId()));
         }
       }
@@ -652,13 +652,13 @@ public class Controller {
       Professor professor = (Professor) user;
       if (professor.getPosition().equals(Professor.Position.eduAssistant) || professor.getPosition().equals(Professor.Position.dean)) {
         for (Student s : University.getInstance().getStudents()) {
-          if (professor.getFacultyName().equals(s.getFacultyName())) {
+          if (professor.getFacultyName().equals(s.getFacultyName()) && !contacts.contains(String.valueOf(s.getId()))) {
             contacts.add(String.valueOf(s.getId()));
           }
         }
       }
       for (Student s : University.getInstance().getStudents()) {
-        if (s.getSupervisorId().equals(String.valueOf(professor.getId()))) {
+        if (s.getSupervisorId().equals(String.valueOf(professor.getId())) && !contacts.contains(String.valueOf(s.getId()))) {
           contacts.add(String.valueOf(s.getId()));
         }
       }

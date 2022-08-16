@@ -71,6 +71,12 @@ public class StudentPanel extends javax.swing.JPanel {
         emailLabel = new javax.swing.JLabel();
         nameLabel = new javax.swing.JLabel();
         imgLabel = new javax.swing.JLabel();
+        chatsButton = new javax.swing.JButton();
+        notificationsButton = new javax.swing.JButton();
+        coursewareButton = new javax.swing.JButton();
+        takeCourseButton = new javax.swing.JButton();
+        offlineLabel = new javax.swing.JLabel();
+        refreshButton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1950, 1035));
 
@@ -241,50 +247,88 @@ public class StudentPanel extends javax.swing.JPanel {
 
         imgLabel.setText("ax");
 
+        chatsButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+        chatsButton.setText(getConfig().getProperty(String.class, "chatsButtonText"));
+        chatsButton.addActionListener(this::chatsButtonActionPerformed);
+
+        notificationsButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+        notificationsButton.setText(getConfig().getProperty(String.class, "notificationsButtonText"));
+        notificationsButton.addActionListener(this::notificationsButtonActionPerformed);
+
+        coursewareButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+        coursewareButton.setText(getConfig().getProperty(String.class, "coursewareButtonText"));
+        coursewareButton.addActionListener(this::coursewareButtonActionPerformed);
+
+        takeCourseButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+        takeCourseButton.setText(getConfig().getProperty(String.class, "takeCourseButtonText"));
+        takeCourseButton.addActionListener(this::takeCourseButtonActionPerformed);
+
+        offlineLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 22)); // NOI18N
+        offlineLabel.setForeground(new java.awt.Color(255, 0, 51));
+        offlineLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        offlineLabel.setText("");
+
+        refreshButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+        refreshButton.setText(getConfig().getProperty(String.class, "refreshButtonText"));
+        refreshButton.addActionListener(this::refreshButtonActionPerformed);
+        refreshButton.setVisible(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGap(54, 54, 54)
-                                .addComponent(mainPageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(mainPageButton, 200, 200, 200)
                                 .addGap(59, 59, 59)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(registrationMattersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(registrationMattersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(registrationMattersPanel, 200, 200, 200)
+                                        .addComponent(registrationMattersButton, 200, 200, 200))
                                 .addGap(56, 56, 56)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(educationalServicesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(educationalServicesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(47, 47, 47)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(recordAffairsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(recordAffairsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(40, 40, 40)
-                                .addComponent(profileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(89, 89, 89)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(timeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(currentTimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(46, 46, 46)
+                                        .addComponent(educationalServicesPanel, 210, 210, 210)
+                                        .addComponent(educationalServicesButton, 210, 210, 210))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(imgLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(logoutButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(37, 37, 37))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(47, 47, 47)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(recordAffairsPanel, 200, 200, 200)
+                                                        .addComponent(recordAffairsButton, 200, 200, 200))
+                                                .addGap(40, 40, 40)
+                                                .addComponent(profileButton, 180, 180, 180)
+                                                .addGap(89, 89, 89)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(timeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(currentTimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(46, 46, 46)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(imgLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(logoutButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(37, 37, 37))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(offlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(chatsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(notificationsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(coursewareButton, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(takeCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(108, 108, 108))))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(60, 60, 60)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(mainPageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(profileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(recordAffairsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(registrationMattersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(educationalServicesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(25, 25, 25)
+                                        .addComponent(mainPageButton, 65, 65, 65)
+                                        .addComponent(profileButton, 66, 66, 66)
+                                        .addComponent(recordAffairsButton, 66, 66, 66)
+                                        .addComponent(registrationMattersButton, 67, 67, 67)
+                                        .addComponent(educationalServicesButton, 65, 65, 65))
+                                .addGap(33, 33, 33)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(educationalServicesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(recordAffairsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -293,22 +337,34 @@ public class StudentPanel extends javax.swing.JPanel {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addContainerGap(91, Short.MAX_VALUE)
-                                                .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(96, Short.MAX_VALUE)
+                                                .addComponent(logoutButton, 70, 70, 70)
                                                 .addGap(63, 63, 63))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(40, 40, 40)
-                                                .addComponent(timeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(timeLabel, 81, 81, 81)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(currentTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(currentTimeLabel, 74, 74, 74)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(imgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(611, 611, 611))
+                                                .addComponent(nameLabel, 81, 81, 81)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(emailLabel, 78, 78, 78))
+                                        .addComponent(imgLabel, 200, 200, 200))
+                                .addGap(53, 53, 53)
+                                .addComponent(chatsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(notificationsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(coursewareButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(takeCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(47, 47, 47)
+                                .addComponent(offlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(144, 144, 144))
         );
     }// </editor-fold>
 
@@ -362,9 +418,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.CREATE_CHAT_PANEL, UserRole.Student);
-//        client.changePanel(PanelName.MESSENGER_PANEL, UserRole.Student);
-//     todo   client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.Student);
+        client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.Student);
     }
 
     private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -395,7 +449,34 @@ public class StudentPanel extends javax.swing.JPanel {
         client.changePanel(PanelName.MINOR_REQUEST_PANEL, null);
     }
 
+    private void notificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void takeCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void coursewareButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        client.refresh();
+    }
+
+    private void chatsButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        client.changePanel(PanelName.MESSENGER_PANEL, UserRole.Student);
+    }
+
     public void update(String id, String lastLogin, String email, String name, String currentTime) {
+        if (client.isConnected()) {
+            offlineLabel.setText("");
+            refreshButton.setVisible(false);
+        } else {
+            offlineLabel.setText(getConfig().getProperty(String.class, "offlineLabelText"));
+            refreshButton.setVisible(true);
+        }
         File file = new File(String.format(getConfig().getProperty(String.class, "imgFilePath"), id));
         imgLabel.setIcon(new ImageIcon(String.format(getConfig().getProperty(String.class, "imgFilePath"), file.exists() ? id : "default")));
 
@@ -436,5 +517,11 @@ public class StudentPanel extends javax.swing.JPanel {
     private javax.swing.JPanel registrationMattersPanel;
     private javax.swing.JLabel timeLabel;
     private javax.swing.JLabel currentTimeLabel;
+    private javax.swing.JLabel offlineLabel;
+    private javax.swing.JButton chatsButton;
+    private javax.swing.JButton notificationsButton;
+    private javax.swing.JButton coursewareButton;
+    private javax.swing.JButton takeCourseButton;
+    private javax.swing.JButton refreshButton;
     // End of variables declaration
 }
