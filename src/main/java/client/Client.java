@@ -4,6 +4,7 @@ import client.GUI.*;
 import client.GUI.admin.AdminPanel;
 import client.GUI.messenger.CreateChatPanel;
 import client.GUI.messenger.MessengerPanel;
+import client.GUI.mrMohseni.MrMohseniPanel;
 import client.GUI.professors.*;
 import client.GUI.professors.dean.*;
 import client.GUI.professors.eduAssistant.*;
@@ -126,6 +127,8 @@ public class Client {
       changePanel(PanelName.PROFESSOR_PANEL, null);
     } else if (userRole.equals(UserRole.ADMIN.toString())) {
       changePanel(PanelName.ADMIN_PANEL, null);
+    } else if (userRole.equals(UserRole.MR_MOHSENI.toString())) {
+      changePanel(PanelName.MR_MOHSENI_PANEL, null);
     }
   }
 
@@ -169,6 +172,16 @@ public class Client {
             (String) response.getData("name"), (String) response.getData("currentTime"));
   }
 
+  private void updateMrMohseniPanel(MrMohseniPanel mrMohseniPanel) {
+    Response response = serverController.sendUpdateRequest(PanelName.MR_MOHSENI_PANEL);
+    if (!isConnected) {
+      return;
+    }
+    mrMohseniPanel.update(String.valueOf(response.getData("id")),
+            (String) response.getData("lastLogin"), (String) response.getData("email"),
+            (String) response.getData("name"), (String) response.getData("currentTime"));
+  }
+
   public void logout() {
     loginCLI();
     Loop.stopCurrent();
@@ -194,6 +207,9 @@ public class Client {
         break;
       case ADMIN_PANEL:
         changeToAdminPanel();
+        break;
+      case MR_MOHSENI_PANEL:
+        changeToMrMohseniPanel();
         break;
       case STUDENT_PROFILE_PANEL:
         changeToStudentProfilePanel();
@@ -345,6 +361,13 @@ public class Client {
     mainFrame.setContentPane(adminPanel);
 
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateAdminPanel(adminPanel)).start();
+  }
+
+  private void changeToMrMohseniPanel() {
+    MrMohseniPanel mrMohseniPanel = new MrMohseniPanel(mainFrame, new JPanel(), this);
+    mainFrame.setContentPane(mrMohseniPanel);
+
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateMrMohseniPanel(mrMohseniPanel)).start();
   }
 
   private void changeToStudentProfilePanel() {
@@ -1463,6 +1486,8 @@ public class Client {
       jPanel = new EduAssistantPanel(mainFrame, messengerPanel, this);
     } else if (userRole.equals(UserRole.ADMIN)) {
       jPanel = new AdminPanel(mainFrame, messengerPanel, this);
+    } else if (userRole.equals(UserRole.MR_MOHSENI)) {
+      jPanel = new MrMohseniPanel(mainFrame, messengerPanel, this);
     }
     mainFrame.setContentPane(jPanel);
 
@@ -1492,6 +1517,9 @@ public class Client {
       } else if (userRole.equals(UserRole.ADMIN)) {
         AdminPanel adminPanel = (AdminPanel) finalJPanel;
         updateAdminPanel(adminPanel);
+      } else if (userRole.equals(UserRole.MR_MOHSENI)) {
+        MrMohseniPanel mrMohseniPanel = (MrMohseniPanel) finalJPanel;
+        updateMrMohseniPanel(mrMohseniPanel);
       }
     }).start();
   }
@@ -1509,6 +1537,10 @@ public class Client {
   }
 
   public void changeToCreateChatPanel(UserRole userRole) {
+    if (userRole.equals(UserRole.MR_MOHSENI)) {
+      System.out.println("dar inja chiz nasb khahad shod");
+      return;
+    }
     CreateChatPanel createChatPanel = new CreateChatPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
     if (userRole.equals(UserRole.STUDENT)) {

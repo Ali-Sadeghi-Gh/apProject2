@@ -5,5 +5,6 @@ public enum UserRole {
   PROFESSOR,
   EDU_ASSISTANT,
   DEAN,
-  ADMIN
+  ADMIN,
+  MR_MOHSENI
 }

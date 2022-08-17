@@ -5,6 +5,7 @@ import client.GUI.MainFrame;
 import client.GUI.WeeklySchedulePanel;
 import client.GUI.admin.AdminPanel;
 import client.GUI.messenger.MessengerPanel;
+import client.GUI.mrMohseni.MrMohseniPanel;
 import client.GUI.professors.ProfessorPanel;
 import client.GUI.professors.ProfessorProfilePanel;
 import client.GUI.professors.eduAssistant.EduAssistantPanel;
@@ -84,6 +85,9 @@ public class Offline {
       case ADMIN_PANEL:
         changeToAdminPanel();
         break;
+      case MR_MOHSENI_PANEL:
+        changeToMrMohseniPanel();
+        break;
       case STUDENT_PROFILE_PANEL:
         changeToStudentProfilePanel();
         break;
@@ -139,6 +143,14 @@ public class Offline {
     ).start();
   }
 
+  private void updateMrMohseniPanel(MrMohseniPanel mrMohseniPanel) {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () ->
+            mrMohseniPanel.update(String.valueOf(response.getData("id")),
+                    (String) response.getData("lastLogin"), (String) response.getData("email"),
+                    (String) response.getData("name"), Time.getCurrentTime())
+    ).start();
+  }
+
   private void changeToStudentMainPanel() {
     StudentMainPanel studentMainPanel = new StudentMainPanel();
     StudentPanel studentPanel = new StudentPanel(mainFrame, studentMainPanel, client);
@@ -165,6 +177,12 @@ public class Offline {
     AdminPanel adminPanel = new AdminPanel(mainFrame, new JPanel(), client);
     mainFrame.setContentPane(adminPanel);
     updateAdminPanel(adminPanel);
+  }
+
+  private void changeToMrMohseniPanel() {
+    MrMohseniPanel mrMohseniPanel = new MrMohseniPanel(mainFrame, new JPanel(), client);
+    mainFrame.setContentPane(mrMohseniPanel);
+    updateMrMohseniPanel(mrMohseniPanel);
   }
 
   private void changeToStudentProfilePanel() {
@@ -289,12 +307,14 @@ public class Offline {
     JPanel jPanel = null;
     if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, messengerPanel, client);
-    } else if ((userRole.equals(UserRole.PROFESSOR))) {
+    } else if (userRole.equals(UserRole.PROFESSOR)) {
       jPanel = new ProfessorPanel(mainFrame, messengerPanel, client);
     } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, messengerPanel, client);
     } else if (userRole.equals(UserRole.ADMIN)) {
       jPanel = new AdminPanel(mainFrame, messengerPanel, client);
+    } else if (userRole.equals(UserRole.MR_MOHSENI)) {
+      jPanel = new MrMohseniPanel(mainFrame, messengerPanel, client);
     }
     mainFrame.setContentPane(jPanel);
 
@@ -320,6 +340,9 @@ public class Offline {
     } else if (userRole.equals(UserRole.ADMIN)) {
       AdminPanel adminPanel = (AdminPanel) jPanel;
       updateAdminPanel(adminPanel);
+    } else if (userRole.equals(UserRole.MR_MOHSENI)) {
+      MrMohseniPanel mrMohseniPanel = (MrMohseniPanel) jPanel;
+      updateMrMohseniPanel(mrMohseniPanel);
     }
   }
 

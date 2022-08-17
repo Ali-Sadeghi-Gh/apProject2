@@ -5,10 +5,7 @@ import org.apache.log4j.Logger;
 import shared.model.*;
 import shared.model.message.Chat;
 import shared.model.message.Message;
-import shared.model.users.Admin;
-import shared.model.users.Professor;
-import shared.model.users.Student;
-import shared.model.users.User;
+import shared.model.users.*;
 import shared.util.Config;
 import shared.util.Data;
 import shared.util.LogIn;
@@ -550,6 +547,8 @@ public class Controller {
       return findProfessorById(id);
     } else if (id == 1) {
       return University.getInstance().getAdmin();
+    } else if (id == 2) {
+      return University.getInstance().getMrMohseni();
     }
 
     return null;
@@ -674,6 +673,12 @@ public class Controller {
       for (Professor p : University.getInstance().getProfessors()) {
         if (!contacts.contains(String.valueOf(p.getId()))) {
           contacts.add(String.valueOf(p.getId()));
+        }
+      }
+    } else if (user instanceof MrMohseni) {
+      for (Student s : University.getInstance().getStudents()) {
+        if (!contacts.contains(String.valueOf(s.getId()))) {
+          contacts.add(String.valueOf(s.getId()));
         }
       }
     }
@@ -969,7 +974,6 @@ public class Controller {
   ///////////////////////////////////////program/////////////////////////////////////////////
 
   public void startProgram() {
-
     logger.info(getConfig().getProperty(String.class, "startAppLog"));
     try {
       data.loadData();

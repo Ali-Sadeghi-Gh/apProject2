@@ -499,6 +499,7 @@ public class ClientHandler implements Runnable {
       case EDU_ASSISTANT_PANEL:
       case PROFESSOR_PANEL:
       case ADMIN_PANEL:
+      case MR_MOHSENI_PANEL:
         response.addData("id", String.valueOf(user.getId()));
         response.addData("lastLogin", user.getLastLogIn());
         response.addData("email", user.getEmail());
@@ -730,7 +731,6 @@ public class ClientHandler implements Runnable {
 
   private void handleLogin(Request request) {
     User user = Controller.getInstance().logIn(Integer.parseInt(String.valueOf(request.getData("id"))), (String) request.getData("password"));
-
     Response response;
 
     if (user == null) {
@@ -756,6 +756,8 @@ public class ClientHandler implements Runnable {
           }
         } else if (user instanceof Admin) {
           userRole = UserRole.ADMIN;
+        } else if (user instanceof MrMohseni) {
+          userRole = UserRole.MR_MOHSENI;
         }
         response.addData("userRole", userRole);
       }
@@ -807,6 +809,8 @@ public class ClientHandler implements Runnable {
       }
     } else if (user instanceof Admin) {
       userRole = UserRole.ADMIN;
+    } else if (user instanceof  MrMohseni) {
+      userRole = UserRole.MR_MOHSENI;
     }
     response.addData("userRole", userRole);
 

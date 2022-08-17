@@ -2,6 +2,8 @@ package shared.model.users;
 
 import shared.model.University;
 
+import java.util.ArrayList;
+
 public class Student extends User{
   private String supervisorId;
   private String enteringYear;
@@ -11,6 +13,7 @@ public class Student extends User{
   private String defendingTurn;
   private String dormitoryRequest;
   private String minor;
+  private ArrayList<String> TACourses;
 
   public Student(String name, String email, String melliCode, String facultyName, String phoneNumber, String password, String lastLogIn, String supervisorId, String enteringYear, EducationalStatus status, Grade grade) {
     super(name, email, melliCode, facultyName, phoneNumber, password, lastLogIn);
@@ -77,6 +80,17 @@ public class Student extends User{
 
   public void setMinor(String minor) {
     this.minor = minor;
+  }
+
+  public ArrayList<String> getTACourses() {
+    if (TACourses == null) {
+      TACourses = new ArrayList<>();
+    }
+    return TACourses;
+  }
+
+  public void addTACourses(String courseId) {
+    TACourses.add(courseId);
   }
 
   public int getId() {

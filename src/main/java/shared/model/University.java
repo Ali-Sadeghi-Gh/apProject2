@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shared.model.users.Admin;
+import shared.model.users.MrMohseni;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 
@@ -17,6 +18,7 @@ public class University {
   private List<Score> scores = new ArrayList<>();
   private List<TemporaryScore> temporaryScores = new ArrayList<>();
   private Admin admin;
+  private MrMohseni mrMohseni;
   private int studentId;
   private int professorId;
   private int courseId;
@@ -55,6 +57,14 @@ public class University {
 
   public void setAdmin(Admin admin) {
     this.admin = admin;
+  }
+
+  public MrMohseni getMrMohseni() {
+    return mrMohseni;
+  }
+
+  public void setMrMohseni(MrMohseni mrMohseni) {
+    this.mrMohseni = mrMohseni;
   }
 
   public List<Course> getCourses() {

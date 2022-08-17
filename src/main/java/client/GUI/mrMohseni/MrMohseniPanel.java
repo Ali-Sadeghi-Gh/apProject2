@@ -1,4 +1,4 @@
-package client.GUI.admin;
+package client.GUI.mrMohseni;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,17 +20,17 @@ import java.io.File;
  *
  * @author HP
  */
-public class AdminPanel extends javax.swing.JPanel {
+public class MrMohseniPanel extends javax.swing.JPanel {
   MainFrame mainFrame;
   Client client;
 
   /**
-   * Creates new form AdminPanel
+   * Creates new form MrMohseniPanel
    */
-  public AdminPanel(MainFrame mainFrame, JPanel jPanel, Client client) {
-    this.client = client;
+  public MrMohseniPanel(MainFrame mainFrame, JPanel jPanel, Client client) {
     this.mainFrame = mainFrame;
-    this.add(jPanel);
+    this.client = client;
+    add(jPanel);
     initComponents();
   }
 
@@ -43,19 +43,25 @@ public class AdminPanel extends javax.swing.JPanel {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">
   private void initComponents() {
 
+    nameLabel = new javax.swing.JLabel();
     emailLabel = new javax.swing.JLabel();
     timeLabel = new javax.swing.JLabel();
     imgLabel = new javax.swing.JLabel();
     logoutButton = new javax.swing.JButton();
     currentTimeLabel = new javax.swing.JLabel();
-    nameLabel = new javax.swing.JLabel();
-    chatsButton = new javax.swing.JButton();
     offlineLabel = new javax.swing.JLabel();
     refreshButton = new javax.swing.JButton();
+    chatsButton = new javax.swing.JButton();
+    searchStudentButton = new javax.swing.JButton();
+
+    nameLabel.setBackground(new java.awt.Color(200, 200, 200));
+    nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
+    nameLabel.setOpaque(true);
 
     emailLabel.setBackground(new java.awt.Color(200, 200, 200));
     emailLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    emailLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
+    emailLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     emailLabel.setOpaque(true);
 
     timeLabel.setBackground(new java.awt.Color(200, 200, 200));
@@ -73,15 +79,6 @@ public class AdminPanel extends javax.swing.JPanel {
     currentTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     currentTimeLabel.setOpaque(true);
 
-    nameLabel.setBackground(new java.awt.Color(200, 200, 200));
-    nameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    nameLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
-    nameLabel.setOpaque(true);
-
-    chatsButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
-    chatsButton.setText(getConfig().getProperty(String.class, "chatsButtonText"));
-    chatsButton.addActionListener(this::chatsButtonActionPerformed);
-
     offlineLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 22)); // NOI18N
     offlineLabel.setForeground(new java.awt.Color(255, 0, 51));
     offlineLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -91,14 +88,24 @@ public class AdminPanel extends javax.swing.JPanel {
     refreshButton.setText(getConfig().getProperty(String.class, "refreshButtonText"));
     refreshButton.addActionListener(this::refreshButtonActionPerformed);
 
+    chatsButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+    chatsButton.setText(getConfig().getProperty(String.class, "chatsButtonText"));
+    chatsButton.addActionListener(this::chatsButtonActionPerformed);
+
+    searchStudentButton.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
+    searchStudentButton.setText(getConfig().getProperty(String.class, "searchStudentButtonText"));
+    searchStudentButton.addActionListener(this::searchStudentButtonActionPerformed);
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                            .addGap(353, 353, 353)
-                            .addComponent(chatsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 694, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(280, 280, 280)
+                            .addGap(180, 180, 180)
+                            .addComponent(searchStudentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(175, 175, 175)
+                            .addComponent(chatsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(255, 255, 255)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,29 +115,32 @@ public class AdminPanel extends javax.swing.JPanel {
                                             .addComponent(imgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(currentTimeLabel, 280, 280, 280)
-                                                    .addComponent(timeLabel, 280, 280, 280))
+                                                    .addComponent(timeLabel, 280, 280, 280)
+                                                    .addComponent(currentTimeLabel, 280, 280, 280))
                                             .addGap(33, 33, 33)
                                             .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(93, 93, 93))
+                            .addGap(114, 114, 114))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(offlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(142, 142, 142))
+                            .addGap(202, 202, 202))
     );
     layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                            .addGap(49, 49, 49)
+                            .addGap(59, 59, 59)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(chatsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                            .addComponent(timeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(timeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(currentTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(currentTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(searchStudentButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(chatsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(imgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -138,11 +148,11 @@ public class AdminPanel extends javax.swing.JPanel {
                                             .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addComponent(emailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 295, Short.MAX_VALUE)
+                            .addGap(176, 176, 176)
                             .addComponent(offlineLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(204, 204, 204))
+                            .addContainerGap(313, Short.MAX_VALUE))
     );
   }// </editor-fold>
 
@@ -150,12 +160,16 @@ public class AdminPanel extends javax.swing.JPanel {
     client.logout();
   }
 
-  private void chatsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.MESSENGER_PANEL, UserRole.ADMIN);
-  }
-
   private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {
     client.refresh();
+  }
+
+  private void chatsButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    client.changePanel(PanelName.MESSENGER_PANEL, UserRole.MR_MOHSENI);
+  }
+
+  private void searchStudentButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    System.out.println("search");
   }
 
   public void update(String id, String lastLogin, String email, String name, String currentTime) {
@@ -176,7 +190,7 @@ public class AdminPanel extends javax.swing.JPanel {
   }
 
   private Config getConfig() {
-    return Config.getConfig(Config.getMainConfig().getProperty(String.class, "adminConfig"));
+    return Config.getConfig(Config.getMainConfig().getProperty(String.class, "mrMohseniConfig"));
   }
 
   // Variables declaration - do not modify
@@ -185,9 +199,10 @@ public class AdminPanel extends javax.swing.JPanel {
   private javax.swing.JLabel emailLabel;
   private javax.swing.JLabel imgLabel;
   private javax.swing.JButton logoutButton;
+  private javax.swing.JLabel nameLabel;
   private javax.swing.JLabel offlineLabel;
   private javax.swing.JButton refreshButton;
-  private javax.swing.JLabel nameLabel;
+  private javax.swing.JButton searchStudentButton;
   private javax.swing.JLabel timeLabel;
   // End of variables declaration
 }

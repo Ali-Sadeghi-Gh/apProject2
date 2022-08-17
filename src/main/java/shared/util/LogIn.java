@@ -3,6 +3,7 @@ package shared.util;
 import shared.model.University;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import shared.model.users.MrMohseni;
 import shared.model.users.Professor;
 import shared.model.users.Student;
 import shared.model.users.User;
@@ -24,7 +25,12 @@ public class LogIn {
       }
     }
     if (University.getInstance().getAdmin().getId() == id && University.getInstance().getAdmin().getPassword() == password.hashCode()) {
+      logger.info(getConfig().getProperty(String.class, "adminLoginLog"));
       return University.getInstance().getAdmin();
+    }
+    if (University.getInstance().getMrMohseni().getId() == id && University.getInstance().getMrMohseni().getPassword() == password.hashCode()) {
+      logger.info(getConfig().getProperty(String.class, "mrMohseniLoginLog"));
+      return University.getInstance().getMrMohseni();
     }
     return null;
   }
