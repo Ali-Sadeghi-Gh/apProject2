@@ -47,24 +47,6 @@ public class Time {
     return sdf.format(date);
   }
 
-  public static void showCurrentTime(JLabel label) {
-    Thread currentTime = new Thread() {
-      @Override
-      public void run() {
-        super.run();
-        while (true) {
-          label.setText("current time: " + getCurrentTime());
-          try {
-            sleep(1000);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-      }
-    };
-    currentTime.start();
-  }
-
   public static String[][] sortExamTime(String[][] data) {
     for (int i = 0; i < data.length; i++) {
       for (int j = i; j < data.length; j++) {

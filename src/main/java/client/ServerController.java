@@ -332,11 +332,30 @@ public class ServerController {
     sendRequest(request);
   }
 
+  public void sendMessengerSendTextRequest(String message, String faculty, String grade, String enteringYear) {
+    Request request = new Request(RequestType.MESSENGER_SEND_TEXT_MR_MOHSENI);
+    request.addData("message", message);
+    request.addData("faculty", faculty);
+    request.addData("grade", grade);
+    request.addData("enteringYear", enteringYear);
+    sendRequest(request);
+  }
+
   public void sendMessengerSendFileRequest(String[] strings,String fileName, String contactId) {
     Request request = new Request(RequestType.MESSENGER_SEND_FILE);
     request.addData("strings", strings);
     request.addData("fileName", fileName);
     request.addData("contactId", contactId);
+    sendRequest(request);
+  }
+
+  public void sendMessengerSendFileRequest(String[] strings,String fileName, String faculty, String grade, String enteringYear) {
+    Request request = new Request(RequestType.MESSENGER_SEND_FILE_MR_MOHSENI);
+    request.addData("strings", strings);
+    request.addData("fileName", fileName);
+    request.addData("faculty", faculty);
+    request.addData("grade", grade);
+    request.addData("enteringYear", enteringYear);
     sendRequest(request);
   }
 

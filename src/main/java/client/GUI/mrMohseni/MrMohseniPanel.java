@@ -169,7 +169,7 @@ public class MrMohseniPanel extends javax.swing.JPanel {
   }
 
   private void searchStudentButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    System.out.println("search");
+    client.changePanel(PanelName.SEARCH_STUDENT_PANEL, null);
   }
 
   public void update(String id, String lastLogin, String email, String name, String currentTime) {

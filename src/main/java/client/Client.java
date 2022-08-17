@@ -4,7 +4,9 @@ import client.GUI.*;
 import client.GUI.admin.AdminPanel;
 import client.GUI.messenger.CreateChatPanel;
 import client.GUI.messenger.MessengerPanel;
+import client.GUI.mrMohseni.CreateChatMrMohseniPanel;
 import client.GUI.mrMohseni.MrMohseniPanel;
+import client.GUI.mrMohseni.SearchStudentPanel;
 import client.GUI.professors.*;
 import client.GUI.professors.dean.*;
 import client.GUI.professors.eduAssistant.*;
@@ -321,6 +323,9 @@ public class Client {
         break;
       case CREATE_CHAT_PANEL:
         changeToCreateChatPanel(userRole);
+        break;
+      case SEARCH_STUDENT_PANEL:
+        changeToSearchStudentPanel();
         break;
     }
   }
@@ -1538,7 +1543,25 @@ public class Client {
 
   public void changeToCreateChatPanel(UserRole userRole) {
     if (userRole.equals(UserRole.MR_MOHSENI)) {
-      System.out.println("dar inja chiz nasb khahad shod");
+      CreateChatMrMohseniPanel createChatMrMohseniPanel = new CreateChatMrMohseniPanel(this);
+      MrMohseniPanel mrMohseniPanel = new MrMohseniPanel(mainFrame, createChatMrMohseniPanel, this);
+      mainFrame.setContentPane(mrMohseniPanel);
+
+      Response response = serverController.sendUpdateRequest(PanelName.CREATE_CHAT_PANEL);
+      if (!isConnected) {
+        return;
+      }
+
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      createChatMrMohseniPanel.update(((ArrayList<String>) response.getData("faculties")).toArray(new String[0]), strings.toArray(new String[0][0]));
+
+      new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
+        updateMrMohseniPanel(mrMohseniPanel);
+      }).start();
       return;
     }
     CreateChatPanel createChatPanel = new CreateChatPanel(mainFrame, this, userRole);
@@ -1567,7 +1590,7 @@ public class Client {
         objects.add(arrayList1.toArray());
       }
       Boolean[] booleans = createChatPanel.getSendMessageBooleans();
-      for (int i = 0; i< booleans.length; i++) {
+      for (int i = 0; i < booleans.length; i++) {
         objects.get(i)[3] = booleans[i];
       }
       createChatPanel.update(objects.toArray(new Object[0][0]));
@@ -1605,6 +1628,10 @@ public class Client {
     }
   }
 
+  public void messengerSendText(String message, String faculty, String grade, String enteringYear) {
+    serverController.sendMessengerSendTextRequest(message, faculty, grade, enteringYear);
+  }
+
   public void messengerSendFile(byte[] bytes, String fileName, ArrayList<String> contacts) {
     String[] strings = new String[bytes.length];
     for (int i = 0; i < bytes.length; i++) {
@@ -1613,5 +1640,66 @@ public class Client {
     for (String id : contacts) {
       serverController.sendMessengerSendFileRequest(strings, fileName, id);
     }
+  }
+
+  public void messengerSendFile(byte[] bytes, String fileName, String faculty, String grade, String enteringYear) {
+    String[] strings = new String[bytes.length];
+    for (int i = 0; i < bytes.length; i++) {
+      strings[i] = String.valueOf(bytes[i]);
+    }
+    serverController.sendMessengerSendFileRequest(strings, fileName, faculty, grade, enteringYear);
+  }
+
+  private void changeToSearchStudentPanel() {
+    SearchStudentPanel searchStudentPanel = new SearchStudentPanel(this);
+    MrMohseniPanel mrMohseniPanel = new MrMohseniPanel(mainFrame, searchStudentPanel, this);
+    mainFrame.setContentPane(mrMohseniPanel);
+
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
+      String studentId = "";
+      try {
+        Integer.parseInt(searchStudentPanel.getSearchString());
+        studentId = searchStudentPanel.getSearchString();
+      } catch (Exception ignore) {
+      }
+      Request request = new Request(RequestType.UPDATE);
+      request.addData("studentId", studentId);
+      Response response = serverController.sendUpdateRequest(PanelName.SEARCH_STUDENT_PANEL, request);
+      if (!isConnected) {
+        return;
+      }
+
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      searchStudentPanel.update(strings.toArray(new String[0][0]));
+
+      updateMrMohseniPanel(mrMohseniPanel);
+    }).start();
+  }
+
+  public void changeToStudentPanelMrMohseni(String studentId) {
+    StudentProfilePanel studentProfilePanel = new StudentProfilePanel(mainFrame, this);
+    MrMohseniPanel mrMohseniPanel = new MrMohseniPanel(mainFrame, studentProfilePanel, this);
+    mainFrame.setContentPane(mrMohseniPanel);
+
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
+      Request request = new Request(RequestType.UPDATE);
+      request.addData("studentId", studentId);
+      Response response = serverController.sendUpdateRequest(PanelName.STUDENT_PROFILE_PANEL, request);
+      if (!isConnected) {
+        return;
+      }
+
+      studentProfilePanel.update(String.valueOf(response.getData("id")),
+              (String) response.getData("melliCode"), (String) response.getData("faculty"),
+              (String) response.getData("phoneNumber"), (String) response.getData("enteringYear"),
+              (String) response.getData("grade"), (String) response.getData("status"),
+              (String) response.getData("supervisor"), Double.parseDouble(String.valueOf(response.getData("averageScore"))));
+
+      updateMrMohseniPanel(mrMohseniPanel);
+    }).start();
   }
 }

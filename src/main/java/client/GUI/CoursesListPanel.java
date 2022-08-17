@@ -55,8 +55,6 @@ public class CoursesListPanel extends javax.swing.JPanel {
     gradeBox = new javax.swing.JComboBox<>();
     searchButton = new javax.swing.JButton();
 
-    setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
     courseTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

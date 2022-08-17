@@ -484,6 +484,23 @@ public class Controller {
     logger.info(String.format(getConfig().getProperty(String.class, "finalizeScoreLogFirstStr"), course.getId()));
   }
 
+  public String[][] getStudentsDataByBeginId(String studentId) {
+    ArrayList<Student> students = new ArrayList<>();
+    for (Student student : University.getInstance().getStudents()) {
+      if (String.valueOf(student.getId()).startsWith(studentId)) {
+        students.add(student);
+      }
+    }
+    String[][] data = new String[students.size()][4];
+    for (int i = 0; i < students.size(); i++) {
+      data[i][0] = String.valueOf(students.get(i).getId());
+      data[i][1] = students.get(i).getName();
+      data[i][2] = students.get(i).getFacultyName();
+      data[i][3] = students.get(i).getGrade().toString();
+    }
+    return data;
+  }
+
   /////////////////////////////////////find sth///////////////////////////////////////
 
   public Course findCourse(int id) {
@@ -952,6 +969,26 @@ public class Controller {
     contact.getMessenger().getChat(String.valueOf(user.getId())).addMessage(contact.getMessenger(), message);
   }
 
+  public void sendTextMessage(User user, String messageStr, String faculty, String grade, String enteringYear) {
+    Message message = new Message(messageStr);
+    message.setAuthor(user.getName());
+
+    for (Student student : University.getInstance().getStudents()) {
+      if ((faculty.equals(getConfig().getProperty(String.class, "comboBoxDefault")) || faculty.equals(student.getFacultyName()) &&
+              (grade.equals(getConfig().getProperty(String.class, "comboBoxDefault")) || grade.equals(student.getGrade().toString())) &&
+              (enteringYear.equals("") || enteringYear.equals(student.getEnteringYear())))) {
+        if (student.getMessenger().getChat(String.valueOf(user.getId())) == null) {
+          student.getMessenger().addChat(new Chat(String.valueOf(user.getId()), user.getName()));
+        }
+        if (user.getMessenger().getChat(String.valueOf(student.getId())) == null) {
+          user.getMessenger().addChat(new Chat(String.valueOf(student.getId()), student.getName()));
+        }
+        student.getMessenger().getChat(String.valueOf(user.getId())).addMessage(student.getMessenger(), message);
+        user.getMessenger().getChat(String.valueOf(student.getId())).addMessage(user.getMessenger(), message);
+      }
+    }
+  }
+
   public void sendFileMessage(User user, String contactId, ArrayList<String> strings, String fileName) {
     byte[] bytes = new byte[strings.size()];
     for (int i = 0; i < strings.size(); i++) {
@@ -969,6 +1006,30 @@ public class Controller {
     }
     user.getMessenger().getChat(contactId).addMessage(user.getMessenger(), message);
     contact.getMessenger().getChat(String.valueOf(user.getId())).addMessage(contact.getMessenger(), message);
+  }
+
+  public void sendFileMessage(User user, ArrayList<String> strings, String fileName, String faculty, String grade, String enteringYear) {
+    byte[] bytes = new byte[strings.size()];
+    for (int i = 0; i < strings.size(); i++) {
+      bytes[i] = Byte.parseByte((strings.get(i)));
+    }
+    Message message = new Message(bytes, fileName);
+    message.setAuthor(user.getName());
+
+    for (Student student : University.getInstance().getStudents()) {
+      if ((faculty.equals(getConfig().getProperty(String.class, "comboBoxDefault")) || faculty.equals(student.getFacultyName()) &&
+              (grade.equals(getConfig().getProperty(String.class, "comboBoxDefault")) || grade.equals(student.getGrade().toString())) &&
+              (enteringYear.equals("") || enteringYear.equals(student.getEnteringYear())))) {
+        if (student.getMessenger().getChat(String.valueOf(user.getId())) == null) {
+          student.getMessenger().addChat(new Chat(String.valueOf(user.getId()), user.getName()));
+        }
+        if (user.getMessenger().getChat(String.valueOf(student.getId())) == null) {
+          user.getMessenger().addChat(new Chat(String.valueOf(student.getId()), student.getName()));
+        }
+        student.getMessenger().getChat(String.valueOf(user.getId())).addMessage(student.getMessenger(), message);
+        user.getMessenger().getChat(String.valueOf(student.getId())).addMessage(user.getMessenger(), message);
+      }
+    }
   }
 
   ///////////////////////////////////////program/////////////////////////////////////////////

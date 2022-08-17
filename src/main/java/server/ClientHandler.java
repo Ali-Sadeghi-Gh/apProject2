@@ -41,7 +41,7 @@ public class ClientHandler implements Runnable {
     try {
       Scanner scanner = new Scanner(socket.getInputStream());
       while (true) {
-        String[] strings = scanner.nextLine().split( "&");
+        String[] strings = scanner.nextLine().split("&");
         if (strings[0].equals(authToken)) {
           Request request = gson.fromJson(strings[1], Request.class);
           handleRequest(request);
@@ -100,11 +100,15 @@ public class ClientHandler implements Runnable {
         handleUpdate(request);
         break;
       case CHANGE_PHONE_NUMBER:
-        Controller.getInstance().changePhoneNumber((String) request.getData("phoneNumber"), user);
+        if (!(user instanceof MrMohseni)) {
+          Controller.getInstance().changePhoneNumber((String) request.getData("phoneNumber"), user);
+        }
         sendResponse(new Response(ResponseStatus.OK));
         break;
       case CHANGE_EMAIL:
-        Controller.getInstance().changeEmail((String) request.getData("email"), user);
+        if (!(user instanceof MrMohseni)) {
+          Controller.getInstance().changeEmail((String) request.getData("email"), user);
+        }
         sendResponse(new Response(ResponseStatus.OK));
         break;
       case IS_DEAN:
@@ -249,7 +253,7 @@ public class ClientHandler implements Runnable {
       case REMOVE_PROFESSOR:
         int id = Integer.parseInt(String.valueOf(request.getData("professorId")));
         response = new Response(ResponseStatus.OK);
-        if(user.getId() == id) {
+        if (user.getId() == id) {
           response.setErrorMessage(getConfig().getProperty(String.class, "removeDeanErrorMessage"));
         } else {
           if (Controller.getInstance().removeProfessor(id, user.getFacultyName())) {
@@ -301,7 +305,7 @@ public class ClientHandler implements Runnable {
       case REMOVE_COURSE:
         id = Integer.parseInt(String.valueOf(request.getData("courseId")));
         response = new Response(ResponseStatus.OK);
-        if(Controller.getInstance().removeCourse(id, user.getFacultyName())) {
+        if (Controller.getInstance().removeCourse(id, user.getFacultyName())) {
           response.setErrorMessage(String.format(getConfig().getProperty(String.class, "removeCourseMessage"), id));
         } else {
           response.setErrorMessage(getConfig().getProperty(String.class, "removeCourseMessage"));
@@ -335,7 +339,7 @@ public class ClientHandler implements Runnable {
           response.setErrorMessage(getConfig().getProperty(String.class, "invalidSupervisorMessage"));
         } else {
           id = Controller.getInstance().addStudent((String) request.getData("name"), (String) request.getData("email"),
-          (String) request.getData("melliCode"), user.getFacultyName(), (String) request.getData("phoneNumber"),
+                  (String) request.getData("melliCode"), user.getFacultyName(), (String) request.getData("phoneNumber"),
                   (String) request.getData("password"), String.valueOf(supervisor.getId()), (String) request.getData("enteringYear"),
                   (String) request.getData("status"), (String) request.getData("grade"));
           response = new Response(ResponseStatus.OK);
@@ -382,11 +386,11 @@ public class ClientHandler implements Runnable {
         } else {
           response = new Response(ResponseStatus.OK);
           response.addData("id", String.valueOf(course.getId()));
-          response.addData("name", course.getName()==null ? "-" : course.getName());
-          response.addData("grade", course.getGrade()==null ? "-" : course.getGrade().name());
-          response.addData("professor", Controller.getInstance().findProfessorByCourse(course.getId())==null ? "-"
-            : Controller.getInstance().findProfessorByCourse(course.getId()).getName());
-          response.addData("faculty", course.getFacultyName()==null ? "-" : course.getFacultyName());
+          response.addData("name", course.getName() == null ? "-" : course.getName());
+          response.addData("grade", course.getGrade() == null ? "-" : course.getGrade().name());
+          response.addData("professor", Controller.getInstance().findProfessorByCourse(course.getId()) == null ? "-"
+                  : Controller.getInstance().findProfessorByCourse(course.getId()).getName());
+          response.addData("faculty", course.getFacultyName() == null ? "-" : course.getFacultyName());
 
           TemporaryScore[] temporaryScores = Controller.getInstance().findTemporaryScoreByCourse(course);
           Score[] scores = Controller.getInstance().findScoreByCourse(course);
@@ -415,9 +419,9 @@ public class ClientHandler implements Runnable {
         } else {
           response = new Response(ResponseStatus.OK);
           response.addData("id", String.valueOf(professor.getId()));
-          response.addData("name", professor.getName()==null ? "-" : professor.getName());
-          response.addData("faculty", professor.getFacultyName()==null ? "-" : professor.getFacultyName());
-          response.addData("degree", professor.getDegree()==null ? "-" : professor.getDegree());
+          response.addData("name", professor.getName() == null ? "-" : professor.getName());
+          response.addData("faculty", professor.getFacultyName() == null ? "-" : professor.getFacultyName());
+          response.addData("degree", professor.getDegree() == null ? "-" : professor.getDegree());
           response.addData("data", Controller.getInstance().getAllScoresDataByProfessor(professor));
         }
         sendResponse(response);
@@ -430,9 +434,9 @@ public class ClientHandler implements Runnable {
         } else {
           response = new Response(ResponseStatus.OK);
           response.addData("id", String.valueOf(student.getId()));
-          response.addData("name", student.getName()==null ? "-" : student.getName());
-          response.addData("grade", student.getGrade()==null ? "-" : student.getGrade().name());
-          response.addData("faculty", student.getFacultyName()==null ? "-" : student.getFacultyName());
+          response.addData("name", student.getName() == null ? "-" : student.getName());
+          response.addData("grade", student.getGrade() == null ? "-" : student.getGrade().name());
+          response.addData("faculty", student.getFacultyName() == null ? "-" : student.getFacultyName());
           response.addData("data", Controller.getInstance().getCourseTemporaryScoreDataByStudent(student));
         }
         sendResponse(response);
@@ -450,7 +454,7 @@ public class ClientHandler implements Runnable {
           response.addData("id", String.valueOf(course.getId()));
           response.addData("name", course.getName() == null ? "-" : course.getName());
           response.addData("professor", Controller.getInstance().findProfessorByCourse(course.getId()) == null ? "-"
-            : Controller.getInstance().findProfessorByCourse(course.getId()).getName());
+                  : Controller.getInstance().findProfessorByCourse(course.getId()).getName());
           response.addData("grade", course.getGrade() == null ? "-" : course.getGrade().name());
           response.addData("faculty", course.getFacultyName() == null ? "-" : course.getFacultyName());
 
@@ -466,9 +470,19 @@ public class ClientHandler implements Runnable {
         String contactId = (String) request.getData("contactId");
         Controller.getInstance().sendTextMessage(user, contactId, (String) request.getData("message"));
         break;
+      case MESSENGER_SEND_TEXT_MR_MOHSENI:
+        Controller.getInstance().sendTextMessage(user, (String) request.getData("message"),
+                (String) request.getData("faculty"), (String) request.getData("grade"),
+                (String) request.getData("enteringYear"));
+        break;
       case MESSENGER_SEND_FILE:
         contactId = (String) request.getData("contactId");
         Controller.getInstance().sendFileMessage(user, contactId, (ArrayList<String>) request.getData("strings"), (String) request.getData("fileName"));
+        break;
+      case MESSENGER_SEND_FILE_MR_MOHSENI:
+        Controller.getInstance().sendFileMessage(user, (ArrayList<String>) request.getData("strings"), (String) request.getData("fileName")
+                , (String) request.getData("faculty"), (String) request.getData("grade"),
+                (String) request.getData("enteringYear"));
         break;
       case ADD_CONTACT:
         //todo
@@ -512,16 +526,23 @@ public class ClientHandler implements Runnable {
         response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
         break;
       case STUDENT_PROFILE_PANEL:
-        student = (Student) user;
-        response.addData("id", student.getId());
-        response.addData("melliCode", student.getMelliCode());
-        response.addData("faculty", student.getFacultyName());
-        response.addData("phoneNumber", student.getPhoneNumber());
-        response.addData("enteringYear", student.getEnteringYear());
-        response.addData("grade", student.getGrade());
-        response.addData("status", student.getStatus());
-        response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
-        response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent(student));
+        student = null;
+        if (user instanceof Student) {
+          student = (Student) user;
+        } else if (user instanceof MrMohseni) {
+          student = Controller.getInstance().findStudentById(Integer.parseInt(String.valueOf(request.getData("studentId"))));
+        }
+        if (student != null) {
+          response.addData("id", String.valueOf(student.getId()));
+          response.addData("melliCode", student.getMelliCode());
+          response.addData("faculty", student.getFacultyName());
+          response.addData("phoneNumber", student.getPhoneNumber());
+          response.addData("enteringYear", student.getEnteringYear());
+          response.addData("grade", student.getGrade());
+          response.addData("status", student.getStatus());
+          response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
+          response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent(student));
+        }
         break;
       case PROFESSOR_PROFILE_PANEL:
         Professor professor = (Professor) user;
@@ -595,7 +616,7 @@ public class ClientHandler implements Runnable {
       case DORMITORY_REQUEST_PANEL:
         student = (Student) user;
         if (student.getGrade() != null && student.getGrade().equals(Student.Grade.masters)) {
-          response.addData("result", student.getDormitoryRequest()==null ? "" : student.getDormitoryRequest());
+          response.addData("result", student.getDormitoryRequest() == null ? "" : student.getDormitoryRequest());
         } else {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage(getConfig().getProperty(String.class, "sectionForMastersErrorMessage"));
@@ -604,7 +625,7 @@ public class ClientHandler implements Runnable {
       case DEFENDING_REQUEST_PANEL:
         student = (Student) user;
         if (student.getGrade() != null && student.getGrade().equals(Student.Grade.phd)) {
-          response.addData("result", student.getDefendingTurn()==null ? "" : student.getDefendingTurn());
+          response.addData("result", student.getDefendingTurn() == null ? "" : student.getDefendingTurn());
         } else {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage(getConfig().getProperty(String.class, "sectionForPhdErrorMessage"));
@@ -617,11 +638,11 @@ public class ClientHandler implements Runnable {
       case PROFESSOR_TEMPORARY_SCORE_LIST:
         Course course = Controller.getInstance().findCourse(Integer.parseInt((String) request.getData("courseId")));
         response.addData("data", Controller.getInstance().getStudentsTemporaryScoreDataByCourse(course));
-        response.addData("courseName", course.getName()==null ? "-" : course.getName());
+        response.addData("courseName", course.getName() == null ? "-" : course.getName());
         response.addData("courseId", String.valueOf(course.getId()));
-        response.addData("faculty", course.getFacultyName()==null ? "-" : course.getFacultyName());
+        response.addData("faculty", course.getFacultyName() == null ? "-" : course.getFacultyName());
         response.addData("credit", String.valueOf(course.getCredit()));
-        response.addData("grade", course.getGrade()==null ? "-" : course.getGrade().name());
+        response.addData("grade", course.getGrade() == null ? "-" : course.getGrade().name());
         break;
       case RECOMMENDATION_LIST_PANEL:
         response.addData("data", Controller.getInstance().getRecommendationData((Professor) user, EducationalRequest.Type.recommendation));
@@ -642,11 +663,11 @@ public class ClientHandler implements Runnable {
           response.setErrorMessage("professor not found");
         } else {
           response.addData("id", String.valueOf(changingProfessor.getId()));
-          response.addData("name", changingProfessor.getName()==null ? "" : changingProfessor.getName());
-          response.addData("melliCode", changingProfessor.getMelliCode()==null ? "" : changingProfessor.getMelliCode());
-          response.addData("email", changingProfessor.getEmail()==null ? "" : changingProfessor.getEmail());
-          response.addData("phoneNumber", changingProfessor.getPhoneNumber()==null ? "" : changingProfessor.getPhoneNumber());
-          response.addData("roomNumber", changingProfessor.getRoomNumber()==null ? "" : changingProfessor.getRoomNumber());
+          response.addData("name", changingProfessor.getName() == null ? "" : changingProfessor.getName());
+          response.addData("melliCode", changingProfessor.getMelliCode() == null ? "" : changingProfessor.getMelliCode());
+          response.addData("email", changingProfessor.getEmail() == null ? "" : changingProfessor.getEmail());
+          response.addData("phoneNumber", changingProfessor.getPhoneNumber() == null ? "" : changingProfessor.getPhoneNumber());
+          response.addData("roomNumber", changingProfessor.getRoomNumber() == null ? "" : changingProfessor.getRoomNumber());
           String[] degrees;
           if (changingProfessor.getDegree() == null || changingProfessor.getDegree().equals(Professor.Degree.assistant)) {
             degrees = new String[]{Professor.Degree.assistant.name(), Professor.Degree.associate.name(), Professor.Degree.full.name()};
@@ -677,11 +698,11 @@ public class ClientHandler implements Runnable {
           response.setErrorMessage(getConfig().getProperty(String.class, "courseNotFoundMessage"));
         } else {
           response.addData("id", String.valueOf(changingCourse.getId()));
-          response.addData("name", changingCourse.getName()==null ? "" : changingCourse.getName());
-          response.addData("professorId", Controller.getInstance().findProfessorByCourse(changingCourse.getId())==null ?
+          response.addData("name", changingCourse.getName() == null ? "" : changingCourse.getName());
+          response.addData("professorId", Controller.getInstance().findProfessorByCourse(changingCourse.getId()) == null ?
                   "" : String.valueOf(Controller.getInstance().findProfessorByCourse(changingCourse.getId()).getId()));
           response.addData("credit", String.valueOf(changingCourse.getCredit()));
-          response.addData("classTime", changingCourse.getClassTime()==null ? "" : changingCourse.getClassTime());
+          response.addData("classTime", changingCourse.getClassTime() == null ? "" : changingCourse.getClassTime());
           if (changingCourse.getExamTime() != null) {
             String[] exam = changingCourse.getExamTime().split(" ");
             String[] examDate = exam[0].split("/");
@@ -700,11 +721,11 @@ public class ClientHandler implements Runnable {
           }
           String[] grades;
           if (changingCourse.getGrade() == null || changingCourse.getGrade().equals(Student.Grade.underGraduate)) {
-            grades = new String[] {Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()};
+            grades = new String[]{Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()};
           } else if (changingCourse.getGrade().equals(Student.Grade.masters)) {
-            grades = new String[] {Student.Grade.masters.name(), Student.Grade.phd.name(), Student.Grade.underGraduate.name()};
+            grades = new String[]{Student.Grade.masters.name(), Student.Grade.phd.name(), Student.Grade.underGraduate.name()};
           } else {
-            grades = new String[] {Student.Grade.phd.name(), Student.Grade.underGraduate.name(), Student.Grade.masters.name()};
+            grades = new String[]{Student.Grade.phd.name(), Student.Grade.underGraduate.name(), Student.Grade.masters.name()};
           }
           response.addData("grades", grades);
         }
@@ -724,6 +745,12 @@ public class ClientHandler implements Runnable {
         break;
       case CREATE_CHAT_PANEL:
         response.addData("data", Controller.getInstance().getContactData(user));
+        if (user instanceof MrMohseni) {
+          response.addData("faculties", Controller.getInstance().getFacultiesName());
+        }
+        break;
+      case SEARCH_STUDENT_PANEL:
+        response.addData("data", Controller.getInstance().getStudentsDataByBeginId((String) request.getData("studentId")));
         break;
     }
     sendResponse(response);
@@ -809,7 +836,7 @@ public class ClientHandler implements Runnable {
       }
     } else if (user instanceof Admin) {
       userRole = UserRole.ADMIN;
-    } else if (user instanceof  MrMohseni) {
+    } else if (user instanceof MrMohseni) {
       userRole = UserRole.MR_MOHSENI;
     }
     response.addData("userRole", userRole);
