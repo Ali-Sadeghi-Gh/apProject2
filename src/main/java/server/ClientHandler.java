@@ -3,18 +3,13 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import shared.model.*;
-import shared.model.message.Message;
-import shared.model.users.Professor;
-import shared.model.users.Student;
-import shared.model.users.User;
-import shared.model.users.UserRole;
+import shared.model.users.*;
 import shared.util.Config;
 import shared.util.Time;
 import shared.request.Request;
 import shared.response.Response;
 import shared.response.ResponseStatus;
 
-import javax.jws.Oneway;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -88,13 +83,13 @@ public class ClientHandler implements Runnable {
           Controller.getInstance().setUserLoginTime(user);
           UserRole userRole = null;
           if (user instanceof Student) {
-            userRole = UserRole.Student;
+            userRole = UserRole.STUDENT;
           } else if (user instanceof Professor) {
             Professor professor = (Professor) user;
             if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
-              userRole = UserRole.EduAssistant;
+              userRole = UserRole.EDU_ASSISTANT;
             } else {
-              userRole = UserRole.Professor;
+              userRole = UserRole.PROFESSOR;
             }
           }
           response.addData("userRole", userRole);
@@ -503,6 +498,7 @@ public class ClientHandler implements Runnable {
       case STUDENT_PANEL:
       case EDU_ASSISTANT_PANEL:
       case PROFESSOR_PANEL:
+      case ADMIN_PANEL:
         response.addData("id", String.valueOf(user.getId()));
         response.addData("lastLogin", user.getLastLogIn());
         response.addData("email", user.getEmail());
@@ -750,14 +746,16 @@ public class ClientHandler implements Runnable {
 
         UserRole userRole = null;
         if (user instanceof Student) {
-          userRole = UserRole.Student;
+          userRole = UserRole.STUDENT;
         } else if (user instanceof Professor) {
           Professor professor = (Professor) user;
           if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
-            userRole = UserRole.EduAssistant;
+            userRole = UserRole.EDU_ASSISTANT;
           } else {
-            userRole = UserRole.Professor;
+            userRole = UserRole.PROFESSOR;
           }
+        } else if (user instanceof Admin) {
+          userRole = UserRole.ADMIN;
         }
         response.addData("userRole", userRole);
       }
@@ -767,6 +765,7 @@ public class ClientHandler implements Runnable {
   }
 
   private void handleOfflineInform() {
+    Controller.getInstance().saveData();
     Response response = new Response(ResponseStatus.OK);
 
     response.addData("id", String.valueOf(user.getId()));
@@ -780,7 +779,10 @@ public class ClientHandler implements Runnable {
     UserRole userRole = null;
     if (user instanceof Student) {
       Student student = (Student) user;
-      userRole = UserRole.Student;
+      userRole = UserRole.STUDENT;
+      response.addData("weeklyScheduleData", Controller.getInstance().getScheduleData(user));
+      response.addData("examListData", Controller.getInstance().getExamListData(user));
+
       response.addData("educationalStatus", student.getStatus());
       response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
       response.addData("enteringYear", student.getEnteringYear());
@@ -793,19 +795,20 @@ public class ClientHandler implements Runnable {
       response.addData("averageScore", String.valueOf(Controller.getInstance().getAverageScoreByStudent(student)));
       response.addData("educationalData", Controller.getInstance().getScoresData(student));
     } else if (user instanceof Professor) {
+      response.addData("weeklyScheduleData", Controller.getInstance().getScheduleData(user));
+      response.addData("examListData", Controller.getInstance().getExamListData(user));
       Professor professor = (Professor) user;
       response.addData("degree", professor.getDegree());
       response.addData("roomNumber", professor.getRoomNumber());
       if (professor.getPosition().equals(Professor.Position.eduAssistant)) {
-        userRole = UserRole.EduAssistant;
+        userRole = UserRole.EDU_ASSISTANT;
       } else {
-        userRole = UserRole.Professor;
+        userRole = UserRole.PROFESSOR;
       }
+    } else if (user instanceof Admin) {
+      userRole = UserRole.ADMIN;
     }
     response.addData("userRole", userRole);
-
-    response.addData("weeklyScheduleData", Controller.getInstance().getScheduleData(user));
-    response.addData("examListData", Controller.getInstance().getExamListData(user));
 
     response.addData("chats", user.getMessenger().getChats());
 

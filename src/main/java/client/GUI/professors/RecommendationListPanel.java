@@ -50,7 +50,7 @@ public class RecommendationListPanel extends javax.swing.JPanel {
     answerButton = new javax.swing.JButton();
 
     backButton.setText(getConfig().getProperty(String.class, "backButtonText"));
-    if (!userRole.equals(UserRole.EduAssistant)) {
+    if (!userRole.equals(UserRole.EDU_ASSISTANT)) {
       backButton.setVisible(false);
     }
     backButton.addActionListener(this::backButtonActionPerformed);

@@ -1,8 +1,9 @@
 package shared.model.users;
 
 public enum UserRole {
-  Student,
-  Professor,
-  EduAssistant,
-  Dean
+  STUDENT,
+  PROFESSOR,
+  EDU_ASSISTANT,
+  DEAN,
+  ADMIN
 }

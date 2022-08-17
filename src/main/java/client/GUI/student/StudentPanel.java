@@ -400,12 +400,12 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changeToCoursesListPanel(UserRole.Student, getConfig().getProperty(String.class, "comboBoxDefault"),
+        client.changeToCoursesListPanel(UserRole.STUDENT, getConfig().getProperty(String.class, "comboBoxDefault"),
                 "", getConfig().getProperty(String.class, "comboBoxDefault"));
     }
 
     private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changeToProfessorsListPanel(UserRole.Student, getConfig().getProperty(String.class, "comboBoxDefault"),
+        client.changeToProfessorsListPanel(UserRole.STUDENT, getConfig().getProperty(String.class, "comboBoxDefault"),
                 "", getConfig().getProperty(String.class, "comboBoxDefault"));
     }
 
@@ -418,11 +418,11 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.Student);
+        client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.STUDENT);
     }
 
     private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.Student);
+        client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.STUDENT);
     }
 
     private void enrollmentCertificateButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -466,7 +466,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void chatsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        client.changePanel(PanelName.MESSENGER_PANEL, UserRole.Student);
+        client.changePanel(PanelName.MESSENGER_PANEL, UserRole.STUDENT);
     }
 
     public void update(String id, String lastLogin, String email, String name, String currentTime) {

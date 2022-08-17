@@ -237,7 +237,7 @@ public class ChangeProfessorPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changeToProfessorsListPanel(UserRole.Professor, getConfig().getProperty(String.class, "comboBoxDefault"),
+    client.changeToProfessorsListPanel(UserRole.PROFESSOR, getConfig().getProperty(String.class, "comboBoxDefault"),
             "", getConfig().getProperty(String.class, "comboBoxDefault"));
   }
 

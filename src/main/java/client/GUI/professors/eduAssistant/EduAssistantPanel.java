@@ -373,7 +373,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.PROFESSOR_PROFILE_PANEL, UserRole.EduAssistant);
+    client.changePanel(PanelName.PROFESSOR_PROFILE_PANEL, UserRole.EDU_ASSISTANT);
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -382,7 +382,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changeToProfessorsListPanel(UserRole.EduAssistant, getConfig().getProperty(String.class, "comboBoxDefault"),
+    client.changeToProfessorsListPanel(UserRole.EDU_ASSISTANT, getConfig().getProperty(String.class, "comboBoxDefault"),
             "", getConfig().getProperty(String.class, "comboBoxDefault"));
   }
 
@@ -399,11 +399,11 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.EduAssistant);
+    client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.EDU_ASSISTANT);
   }
 
   private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.EduAssistant);
+    client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.EDU_ASSISTANT);
   }
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -411,7 +411,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void chatsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.MESSENGER_PANEL, UserRole.EduAssistant);
+    client.changePanel(PanelName.MESSENGER_PANEL, UserRole.EDU_ASSISTANT);
   }
 
   private void notificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {

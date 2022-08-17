@@ -104,7 +104,7 @@ public class EduTemporaryScorePanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void submitScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.PROFESSORS_COURSE_LIST, UserRole.EduAssistant);
+    client.changePanel(PanelName.PROFESSORS_COURSE_LIST, UserRole.EDU_ASSISTANT);
   }
 
   private void courseSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {

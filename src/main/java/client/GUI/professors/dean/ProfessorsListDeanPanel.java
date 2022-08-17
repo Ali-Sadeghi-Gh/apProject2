@@ -176,7 +176,7 @@ public class ProfessorsListDeanPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changeToProfessorsListPanel(UserRole.Professor, Objects.requireNonNull(facultyBox.getSelectedItem()).toString(), nameField.getText(), Objects.requireNonNull(degreeBox.getSelectedItem()).toString());
+    client.changeToProfessorsListPanel(UserRole.PROFESSOR, Objects.requireNonNull(facultyBox.getSelectedItem()).toString(), nameField.getText(), Objects.requireNonNull(degreeBox.getSelectedItem()).toString());
   }
 
   private void removeProfessorButtonActionPerformed(java.awt.event.ActionEvent evt) {

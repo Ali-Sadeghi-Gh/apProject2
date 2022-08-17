@@ -350,37 +350,37 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void profileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.PROFESSOR_PROFILE_PANEL, UserRole.Professor);
+    client.changePanel(PanelName.PROFESSOR_PROFILE_PANEL, UserRole.PROFESSOR);
   }
 
   private void coursesListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changeToCoursesListPanel(UserRole.Professor, getConfig().getProperty(String.class, "comboBoxDefault"),
+    client.changeToCoursesListPanel(UserRole.PROFESSOR, getConfig().getProperty(String.class, "comboBoxDefault"),
             "", getConfig().getProperty(String.class, "comboBoxDefault"));
   }
 
   private void professorsListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changeToProfessorsListPanel(UserRole.Professor, getConfig().getProperty(String.class, "comboBoxDefault"),
+    client.changeToProfessorsListPanel(UserRole.PROFESSOR, getConfig().getProperty(String.class, "comboBoxDefault"),
             "", getConfig().getProperty(String.class, "comboBoxDefault"));
   }
 
   private void weeklyScheduleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.Professor);
+    client.changePanel(PanelName.WEEKLY_SCHEDULE_PANEL, UserRole.PROFESSOR);
   }
 
   private void examListButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.Professor);
+    client.changePanel(PanelName.EXAM_LIST_PANEL, UserRole.PROFESSOR);
   }
 
   private void requestButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, UserRole.Professor);
+    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, UserRole.PROFESSOR);
   }
 
   private void temporaryScoreActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.PROFESSORS_COURSE_LIST, UserRole.Professor);
+    client.changePanel(PanelName.PROFESSORS_COURSE_LIST, UserRole.PROFESSOR);
   }
 
   private void chatsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.MESSENGER_PANEL, UserRole.Professor);
+    client.changePanel(PanelName.MESSENGER_PANEL, UserRole.PROFESSOR);
   }
 
   private void notificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {

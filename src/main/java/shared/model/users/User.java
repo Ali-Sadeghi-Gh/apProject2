@@ -1,6 +1,7 @@
 package shared.model.users;
 
 import server.Controller;
+import shared.model.message.Chat;
 import shared.model.message.Messenger;
 
 import java.util.ArrayList;
@@ -109,13 +110,14 @@ public abstract class User {
     if (messenger == null) {
       messenger = new Messenger();
     }
+    if (messenger.getChat("1") == null && !(this instanceof Admin)) {
+      messenger.addChat(new Chat("1", "Admin"));
+    }
     return messenger;
   }
 
   public ArrayList<String> getContacts() {
-    if (contacts == null) {
-      contacts = Controller.getInstance().getContacts(this);
-    }
+    contacts = Controller.getInstance().getContacts(this);
     return contacts;
   }
 

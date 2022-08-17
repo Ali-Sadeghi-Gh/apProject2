@@ -83,7 +83,7 @@ public class EduRequestPanel extends javax.swing.JPanel {
   }// </editor-fold>
 
   private void recommendationButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, UserRole.EduAssistant);
+    client.changePanel(PanelName.RECOMMENDATION_LIST_PANEL, UserRole.EDU_ASSISTANT);
   }
 
   private void dropoutButtonActionPerformed(java.awt.event.ActionEvent evt) {

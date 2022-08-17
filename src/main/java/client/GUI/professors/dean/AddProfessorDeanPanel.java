@@ -244,14 +244,14 @@ public class AddProfessorDeanPanel extends javax.swing.JPanel {
       return;
     }
 
-    client.addProfessor(UserRole.Dean, nameField.getText(), emailField.getText(), melliCodeField.getText(),
+    client.addProfessor(UserRole.DEAN, nameField.getText(), emailField.getText(), melliCodeField.getText(),
             phoneField.getText(), passwordField.getText(), roomNumberField.getText(),
             Objects.requireNonNull(degreeBox.getSelectedItem()).toString(),
             Objects.requireNonNull(positionBox.getSelectedItem()).toString());
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    client.changeToProfessorsListPanel(UserRole.Professor, getConfig().getProperty(String.class, "comboBoxDefault"),
+    client.changeToProfessorsListPanel(UserRole.PROFESSOR, getConfig().getProperty(String.class, "comboBoxDefault"),
             "", getConfig().getProperty(String.class, "comboBoxDefault"));
   }
 

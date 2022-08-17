@@ -8,6 +8,7 @@ package client.GUI.messenger;
 
 import client.GUI.MainFrame;
 import client.Client;
+import client.Offline;
 import shared.model.PanelName;
 import shared.model.message.Chat;
 import shared.model.users.UserRole;
@@ -131,12 +132,20 @@ public class MessengerPanel extends javax.swing.JPanel {
 
   private void sendTextButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (!textField.getText().equals("")) {
-      client.messengerSendText(textField.getText(), String.valueOf(contactId));
-      textField.setText("");
+      if (!client.isConnected() && contactId.equals("1")) {
+        Offline.getInstance().saveAdminMessage(textField.getText());
+        textField.setText("");
+      } else if (client.isConnected()) {
+        client.messengerSendText(textField.getText(), String.valueOf(contactId));
+        textField.setText("");
+      }
     }
   }
 
   private void sendFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    if (!client.isConnected()) {
+      return;
+    }
     JFileChooser fileChooser = new JFileChooser(getConfig().getProperty(String.class, "fileChooserOpenDefaultDir"));
     int response = fileChooser.showOpenDialog(null);
     if (response == JFileChooser.APPROVE_OPTION) {
@@ -197,7 +206,11 @@ public class MessengerPanel extends javax.swing.JPanel {
   }
 
   public void updateMessenger(String contactId) {
-    client.changeToMessengerPanel(userRole, contactId);
+    if (client.isConnected()) {
+      client.changeToMessengerPanel(userRole, contactId);
+    } else {
+      Offline.getInstance().changeToMessengerPanel(userRole, contactId);
+    }
   }
 
   private Config getConfig() {

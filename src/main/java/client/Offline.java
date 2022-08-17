@@ -3,6 +3,8 @@ package client;
 import client.GUI.ExamListPanel;
 import client.GUI.MainFrame;
 import client.GUI.WeeklySchedulePanel;
+import client.GUI.admin.AdminPanel;
+import client.GUI.messenger.MessengerPanel;
 import client.GUI.professors.ProfessorPanel;
 import client.GUI.professors.ProfessorProfilePanel;
 import client.GUI.professors.eduAssistant.EduAssistantPanel;
@@ -10,7 +12,10 @@ import client.GUI.student.StudentEducationalOuterPanel;
 import client.GUI.student.StudentMainPanel;
 import client.GUI.student.StudentPanel;
 import client.GUI.student.StudentProfilePanel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import shared.model.PanelName;
+import shared.model.message.Chat;
 import shared.model.users.UserRole;
 import shared.response.Response;
 import shared.util.Config;
@@ -18,7 +23,9 @@ import shared.util.Loop;
 import shared.util.Time;
 
 import javax.swing.*;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Offline {
   private static Offline instance;
@@ -47,6 +54,7 @@ public class Offline {
     } else {
       client.setUser((String) response.getData("id"));
       client.mainPanelCLI((String) response.getData("userRole"));
+      sendAdminMessage();
     }
   }
 
@@ -73,6 +81,9 @@ public class Offline {
       case EDU_ASSISTANT_PANEL:
         changeToEduAssistantPanel();
         break;
+      case ADMIN_PANEL:
+        changeToAdminPanel();
+        break;
       case STUDENT_PROFILE_PANEL:
         changeToStudentProfilePanel();
         break;
@@ -89,7 +100,7 @@ public class Offline {
         changeToExamListPanel(userRole);
         break;
       case MESSENGER_PANEL:
-//        changeToMessengerPanel(userRole, "0");
+        changeToMessengerPanel(userRole, "0");
         break;
       default:
         mainFrame.showMessage(getConfig().getProperty(String.class, "offlineAccessErrorMessage"));
@@ -99,24 +110,32 @@ public class Offline {
   private void updateStudentPanel(StudentPanel studentPanel) {
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () ->
             studentPanel.update(String.valueOf(response.getData("id")),
-            (String) response.getData("lastLogin"), (String) response.getData("email"),
-            (String) response.getData("name"), Time.getCurrentTime())
+                    (String) response.getData("lastLogin"), (String) response.getData("email"),
+                    (String) response.getData("name"), Time.getCurrentTime())
     ).start();
   }
 
   private void updateProfessorPanel(ProfessorPanel professorPanel) {
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () ->
             professorPanel.update(String.valueOf(response.getData("id")),
-            (String) response.getData("lastLogin"), (String) response.getData("email"),
-            (String) response.getData("name"), Time.getCurrentTime())
+                    (String) response.getData("lastLogin"), (String) response.getData("email"),
+                    (String) response.getData("name"), Time.getCurrentTime())
     ).start();
   }
 
   private void updateEduAssistantPanel(EduAssistantPanel eduAssistantPanel) {
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () ->
             eduAssistantPanel.update(String.valueOf(response.getData("id")),
-            (String) response.getData("lastLogin"), (String) response.getData("email"),
-            (String) response.getData("name"), Time.getCurrentTime())
+                    (String) response.getData("lastLogin"), (String) response.getData("email"),
+                    (String) response.getData("name"), Time.getCurrentTime())
+    ).start();
+  }
+
+  private void updateAdminPanel(AdminPanel adminPanel) {
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () ->
+            adminPanel.update(String.valueOf(response.getData("id")),
+                    (String) response.getData("lastLogin"), (String) response.getData("email"),
+                    (String) response.getData("name"), Time.getCurrentTime())
     ).start();
   }
 
@@ -142,6 +161,12 @@ public class Offline {
     updateEduAssistantPanel(eduAssistantPanel);
   }
 
+  private void changeToAdminPanel() {
+    AdminPanel adminPanel = new AdminPanel(mainFrame, new JPanel(), client);
+    mainFrame.setContentPane(adminPanel);
+    updateAdminPanel(adminPanel);
+  }
+
   private void changeToStudentProfilePanel() {
     StudentProfilePanel studentProfilePanel = new StudentProfilePanel(mainFrame, client);
     StudentPanel studentPanel = new StudentPanel(mainFrame, studentProfilePanel, client);
@@ -159,9 +184,9 @@ public class Offline {
   private void changeToProfessorProfilePanel(UserRole userRole) {
     ProfessorProfilePanel professorProfilePanel = new ProfessorProfilePanel(mainFrame, client);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.EduAssistant)) {
+    if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, professorProfilePanel, client);
-    } else if (userRole.equals(UserRole.Professor)) {
+    } else if (userRole.equals(UserRole.PROFESSOR)) {
       jPanel = new ProfessorPanel(mainFrame, professorProfilePanel, client);
     }
     mainFrame.setContentPane(jPanel);
@@ -171,10 +196,10 @@ public class Offline {
             (String) response.getData("phoneNumber"), (String) response.getData("degree"),
             (String) response.getData("roomNumber"));
 
-    if (userRole.equals(UserRole.EduAssistant)) {
+    if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) jPanel;
       updateEduAssistantPanel(eduAssistantPanel);
-    } else if (userRole.equals(UserRole.Professor)) {
+    } else if (userRole.equals(UserRole.PROFESSOR)) {
       ProfessorPanel professorPanel = (ProfessorPanel) jPanel;
       updateProfessorPanel(professorPanel);
     }
@@ -200,11 +225,11 @@ public class Offline {
   private void changeToWeeklySchedulePanel(UserRole userRole) {
     WeeklySchedulePanel weeklySchedulePanel = new WeeklySchedulePanel(mainFrame, client);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, weeklySchedulePanel, client);
-    } else if ((userRole.equals(UserRole.Professor))) {
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, weeklySchedulePanel, client);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, weeklySchedulePanel, client);
     }
     mainFrame.setContentPane(jPanel);
@@ -216,13 +241,13 @@ public class Offline {
     }
     weeklySchedulePanel.update(strings.toArray(new String[0][0]));
 
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       StudentPanel studentPanel = (StudentPanel) jPanel;
       updateStudentPanel(studentPanel);
-    } else if (userRole.equals(UserRole.Professor)) {
+    } else if (userRole.equals(UserRole.PROFESSOR)) {
       ProfessorPanel professorPanel = (ProfessorPanel) jPanel;
       updateProfessorPanel(professorPanel);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) jPanel;
       updateEduAssistantPanel(eduAssistantPanel);
     }
@@ -231,11 +256,11 @@ public class Offline {
   private void changeToExamListPanel(UserRole userRole) {
     ExamListPanel examListPanel = new ExamListPanel(mainFrame, client);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, examListPanel, client);
-    } else if ((userRole.equals(UserRole.Professor))) {
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, examListPanel, client);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, examListPanel, client);
     }
     mainFrame.setContentPane(jPanel);
@@ -247,15 +272,106 @@ public class Offline {
     }
     examListPanel.update(strings.toArray(new String[0][0]));
 
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       StudentPanel studentPanel = (StudentPanel) jPanel;
       updateStudentPanel(studentPanel);
-    } else if (userRole.equals(UserRole.Professor)) {
+    } else if (userRole.equals(UserRole.PROFESSOR)) {
       ProfessorPanel professorPanel = (ProfessorPanel) jPanel;
       updateProfessorPanel(professorPanel);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) jPanel;
       updateEduAssistantPanel(eduAssistantPanel);
+    }
+  }
+
+  public void changeToMessengerPanel(UserRole userRole, String contactId) {
+    MessengerPanel messengerPanel = new MessengerPanel(mainFrame, client, userRole);
+    JPanel jPanel = null;
+    if (userRole.equals(UserRole.STUDENT)) {
+      jPanel = new StudentPanel(mainFrame, messengerPanel, client);
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
+      jPanel = new ProfessorPanel(mainFrame, messengerPanel, client);
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
+      jPanel = new EduAssistantPanel(mainFrame, messengerPanel, client);
+    } else if (userRole.equals(UserRole.ADMIN)) {
+      jPanel = new AdminPanel(mainFrame, messengerPanel, client);
+    }
+    mainFrame.setContentPane(jPanel);
+
+    ArrayList<Chat> chats = new Gson().fromJson(new Gson().toJson(response.getData("chats")), TypeToken.getParameterized(ArrayList.class, Chat.class).getType());
+    Chat chat = null;
+    for (Chat c : chats) {
+      if (c.getContactId().equals(contactId)) {
+        chat = c;
+        break;
+      }
+    }
+    messengerPanel.update(chats, chat, 0, 0);
+
+    if (userRole.equals(UserRole.STUDENT)) {
+      StudentPanel studentPanel = (StudentPanel) jPanel;
+      updateStudentPanel(studentPanel);
+    } else if (userRole.equals(UserRole.PROFESSOR)) {
+      ProfessorPanel professorPanel = (ProfessorPanel) jPanel;
+      updateProfessorPanel(professorPanel);
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
+      EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) jPanel;
+      updateEduAssistantPanel(eduAssistantPanel);
+    } else if (userRole.equals(UserRole.ADMIN)) {
+      AdminPanel adminPanel = (AdminPanel) jPanel;
+      updateAdminPanel(adminPanel);
+    }
+  }
+
+  public void saveAdminMessage(String message) {
+    String id = (String) response.getData("id");
+    File file = new File(String.format(getConfig().getProperty(String.class, "offlineMessagesFilePath"), id));
+    if (!file.exists()) {
+      try {
+        file.createNewFile();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    PrintStream printStream = null;
+    try {
+      printStream = new PrintStream(new FileOutputStream(file, true));
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    if (printStream != null) {
+      printStream.println(message);
+      printStream.flush();
+      printStream.close();
+      mainFrame.showMessage(getConfig().getProperty(String.class, "saveOfflineMessagesMessage"));
+    }
+  }
+
+  public void sendAdminMessage() {
+    String id = (String) response.getData("id");
+    File file = new File(String.format(getConfig().getProperty(String.class, "offlineMessagesFilePath"), id));
+    if (file.exists()) {
+      Scanner scanner = null;
+      try {
+        scanner = new Scanner(file);
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+      if (scanner != null) {
+        while (scanner.hasNext()) {
+          client.messengerSendText(scanner.nextLine(), "1");
+        }
+        scanner.close();
+        PrintStream printStream;
+        try {
+          printStream = new PrintStream(file);
+          printStream.print("");
+          printStream.flush();
+          printStream.close();
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        }
+      }
     }
   }
 

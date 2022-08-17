@@ -13,15 +13,10 @@ public class Messenger {
   }
 
   public ArrayList<Chat> getChats() {
-    ArrayList<Chat> chatArrayList = new ArrayList<>();
-    if (chats != null) {
-      for (Chat c : chats) {
-        Chat chat = new Chat(c.getContactId(), c.getContactName());
-        chat.setLastMessage(c.getLastMessage());
-        chatArrayList.add(chat);
-      }
+    if (chats == null) {
+      chats = new ArrayList<>();
     }
-    return chatArrayList;
+    return chats;
   }
 
   public Chat getChat(String contactId) {

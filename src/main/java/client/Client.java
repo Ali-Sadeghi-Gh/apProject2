@@ -1,6 +1,7 @@
 package client;
 
 import client.GUI.*;
+import client.GUI.admin.AdminPanel;
 import client.GUI.messenger.CreateChatPanel;
 import client.GUI.messenger.MessengerPanel;
 import client.GUI.professors.*;
@@ -71,6 +72,7 @@ public class Client {
     new Loop(getConfig().getProperty(Double.class, "offlineLoopTime"), () -> {
       Offline.getInstance().update(serverController.sendOfflineInformRequest());
     }).offlineStart();
+    Offline.getInstance().sendAdminMessage();
   }
 
   public void setUser(String id) {
@@ -116,12 +118,14 @@ public class Client {
   }
 
   public void mainPanelCLI(String userRole) {
-    if (userRole.equals(UserRole.Student.toString())) {
+    if (userRole.equals(UserRole.STUDENT.toString())) {
       changePanel(PanelName.STUDENT_MAIN_PANEL, null);
-    } else if (userRole.equals(UserRole.EduAssistant.toString())) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT.toString())) {
       changePanel(PanelName.EDU_ASSISTANT_PANEL, null);
-    } else if (userRole.equals(UserRole.Professor.toString())) {
+    } else if (userRole.equals(UserRole.PROFESSOR.toString())) {
       changePanel(PanelName.PROFESSOR_PANEL, null);
+    } else if (userRole.equals(UserRole.ADMIN.toString())) {
+      changePanel(PanelName.ADMIN_PANEL, null);
     }
   }
 
@@ -155,6 +159,16 @@ public class Client {
             (String) response.getData("name"), (String) response.getData("currentTime"));
   }
 
+  private void updateAdminPanel(AdminPanel adminPanel) {
+    Response response = serverController.sendUpdateRequest(PanelName.ADMIN_PANEL);
+    if (!isConnected) {
+      return;
+    }
+    adminPanel.update(String.valueOf(response.getData("id")),
+            (String) response.getData("lastLogin"), (String) response.getData("email"),
+            (String) response.getData("name"), (String) response.getData("currentTime"));
+  }
+
   public void logout() {
     loginCLI();
     Loop.stopCurrent();
@@ -177,6 +191,9 @@ public class Client {
         break;
       case EDU_ASSISTANT_PANEL:
         changeToEduAssistantPanel();
+        break;
+      case ADMIN_PANEL:
+        changeToAdminPanel();
         break;
       case STUDENT_PROFILE_PANEL:
         changeToStudentProfilePanel();
@@ -323,6 +340,13 @@ public class Client {
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
+  private void changeToAdminPanel() {
+    AdminPanel adminPanel = new AdminPanel(mainFrame, new JPanel(), this);
+    mainFrame.setContentPane(adminPanel);
+
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateAdminPanel(adminPanel)).start();
+  }
+
   private void changeToStudentProfilePanel() {
     StudentProfilePanel studentProfilePanel = new StudentProfilePanel(mainFrame, this);
     StudentPanel studentPanel = new StudentPanel(mainFrame, studentProfilePanel, this);
@@ -346,9 +370,9 @@ public class Client {
   private void changeToProfessorProfilePanel(UserRole userRole) {
     ProfessorProfilePanel professorProfilePanel = new ProfessorProfilePanel(mainFrame, this);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.EduAssistant)) {
+    if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, professorProfilePanel, this);
-    } else if (userRole.equals(UserRole.Professor)) {
+    } else if (userRole.equals(UserRole.PROFESSOR)) {
       jPanel = new ProfessorPanel(mainFrame, professorProfilePanel, this);
     }
     mainFrame.setContentPane(jPanel);
@@ -364,10 +388,10 @@ public class Client {
               (String) response.getData("phoneNumber"), (String) response.getData("degree"),
               (String) response.getData("roomNumber"));
 
-      if (userRole.equals(UserRole.EduAssistant)) {
+      if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
-      } else if (userRole.equals(UserRole.Professor)) {
+      } else if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
       }
@@ -409,9 +433,9 @@ public class Client {
     }
     CoursesListPanel coursesListPanel = new CoursesListPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, coursesListPanel, this);
-    } else if ((userRole.equals(UserRole.Professor))) {
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, coursesListPanel, this);
     }
     mainFrame.setContentPane(jPanel);
@@ -435,10 +459,10 @@ public class Client {
 
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
-      if (userRole.equals(UserRole.Student)) {
+      if (userRole.equals(UserRole.STUDENT)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
         updateStudentPanel(studentPanel);
-      } else if (userRole.equals(UserRole.Professor)) {
+      } else if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
       }
@@ -450,7 +474,7 @@ public class Client {
       mainFrame.showMessage(getConfig().getProperty(String.class, "offlineAccessErrorMessage"));
       return;
     }
-    if (userRole.equals(UserRole.Professor)) {
+    if (userRole.equals(UserRole.PROFESSOR)) {
       Response response = serverController.sendIsDeanRequest();
       if (!isConnected) {
         return;
@@ -484,11 +508,11 @@ public class Client {
 
     ProfessorsListPanel professorsListPanel = new ProfessorsListPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, professorsListPanel, this);
-    } else if ((userRole.equals(UserRole.Professor))) {
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, professorsListPanel, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, professorsListPanel, this);
     }
     mainFrame.setContentPane(jPanel);
@@ -512,13 +536,13 @@ public class Client {
 
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
-      if (userRole.equals(UserRole.Student)) {
+      if (userRole.equals(UserRole.STUDENT)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
         updateStudentPanel(studentPanel);
-      } else if (userRole.equals(UserRole.Professor)) {
+      } else if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
       }
@@ -603,11 +627,11 @@ public class Client {
   private void changeToWeeklySchedulePanel(UserRole userRole) {
     WeeklySchedulePanel weeklySchedulePanel = new WeeklySchedulePanel(mainFrame, this);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, weeklySchedulePanel, this);
-    } else if ((userRole.equals(UserRole.Professor))) {
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, weeklySchedulePanel, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, weeklySchedulePanel, this);
     }
     mainFrame.setContentPane(jPanel);
@@ -625,13 +649,13 @@ public class Client {
       }
       weeklySchedulePanel.update(strings.toArray(new String[0][0]));
 
-      if (userRole.equals(UserRole.Student)) {
+      if (userRole.equals(UserRole.STUDENT)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
         updateStudentPanel(studentPanel);
-      } else if (userRole.equals(UserRole.Professor)) {
+      } else if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
       }
@@ -641,11 +665,11 @@ public class Client {
   private void changeToExamListPanel(UserRole userRole) {
     ExamListPanel examListPanel = new ExamListPanel(mainFrame, this);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, examListPanel, this);
-    } else if ((userRole.equals(UserRole.Professor))) {
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, examListPanel, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, examListPanel, this);
     }
     mainFrame.setContentPane(jPanel);
@@ -663,13 +687,13 @@ public class Client {
       }
       examListPanel.update(strings.toArray(new String[0][0]));
 
-      if (userRole.equals(UserRole.Student)) {
+      if (userRole.equals(UserRole.STUDENT)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
         updateStudentPanel(studentPanel);
-      } else if (userRole.equals(UserRole.Professor)) {
+      } else if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
       }
@@ -842,9 +866,9 @@ public class Client {
   private void changeToProfessorsCourseList(UserRole userRole) {
     ProfessorsCourseList professorsCourseList = new ProfessorsCourseList(mainFrame, this, userRole);
     JPanel jPanel = null;
-    if ((userRole.equals(UserRole.Professor))) {
+    if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, professorsCourseList, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, professorsCourseList, this);
     }
     mainFrame.setContentPane(jPanel);
@@ -862,10 +886,10 @@ public class Client {
 
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
-      if (userRole.equals(UserRole.Professor)) {
+      if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
       }
@@ -891,19 +915,19 @@ public class Client {
             (String) response.getData("credit"), (String) response.getData("grade"));
 
     JPanel jPanel = null;
-    if ((userRole.equals(UserRole.Professor))) {
+    if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, professorTemporaryScoreList, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, professorTemporaryScoreList, this);
     }
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
-      if (userRole.equals(UserRole.Professor)) {
+      if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
       }
@@ -913,9 +937,9 @@ public class Client {
   private void changeToRecommendationListPanel(UserRole userRole) {
     RecommendationListPanel recommendationListPanel = new RecommendationListPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
-    if ((userRole.equals(UserRole.Professor))) {
+    if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, recommendationListPanel, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, recommendationListPanel, this);
     }
     mainFrame.setContentPane(jPanel);
@@ -933,10 +957,10 @@ public class Client {
       }
       recommendationListPanel.update(strings.toArray(new String[0][0]));
 
-      if (userRole.equals(UserRole.Professor)) {
+      if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
       }
@@ -946,19 +970,19 @@ public class Client {
   private void changeToAnswerRecommendationPanel(UserRole userRole) {
     AnswerRecommendationPanel answerRecommendationPanel = new AnswerRecommendationPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
-    if ((userRole.equals(UserRole.Professor))) {
+    if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, answerRecommendationPanel, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, answerRecommendationPanel, this);
     }
     mainFrame.setContentPane(jPanel);
 
     JPanel finalJPanel = jPanel;
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
-      if (userRole.equals(UserRole.Professor)) {
+      if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
       }
@@ -1011,9 +1035,9 @@ public class Client {
       return;
     }
     mainFrame.showMessage(response.getErrorMessage());
-    if (userRole.equals(UserRole.Dean)) {
+    if (userRole.equals(UserRole.DEAN)) {
       changePanel(PanelName.ADD_PROFESSOR_DEAN_PANEL, null);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       changePanel(PanelName.ADD_PROFESSOR_PANEL, null);
     }
   }
@@ -1431,12 +1455,14 @@ public class Client {
   public void changeToMessengerPanel(UserRole userRole, String contactId) {
     MessengerPanel messengerPanel = new MessengerPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, messengerPanel, this);
-    } else if ((userRole.equals(UserRole.Professor))) {
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, messengerPanel, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, messengerPanel, this);
+    } else if (userRole.equals(UserRole.ADMIN)) {
+      jPanel = new AdminPanel(mainFrame, messengerPanel, this);
     }
     mainFrame.setContentPane(jPanel);
 
@@ -1454,15 +1480,18 @@ public class Client {
       messengerPanel.update(chats, chat, messengerPanel.getChatsScrollValue(),
               messengerPanel.getMessagesScrollValue());
 
-      if (userRole.equals(UserRole.Student)) {
+      if (userRole.equals(UserRole.STUDENT)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
         updateStudentPanel(studentPanel);
-      } else if (userRole.equals(UserRole.Professor)) {
+      } else if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
+      } else if (userRole.equals(UserRole.ADMIN)) {
+        AdminPanel adminPanel = (AdminPanel) finalJPanel;
+        updateAdminPanel(adminPanel);
       }
     }).start();
   }
@@ -1482,12 +1511,14 @@ public class Client {
   public void changeToCreateChatPanel(UserRole userRole) {
     CreateChatPanel createChatPanel = new CreateChatPanel(mainFrame, this, userRole);
     JPanel jPanel = null;
-    if (userRole.equals(UserRole.Student)) {
+    if (userRole.equals(UserRole.STUDENT)) {
       jPanel = new StudentPanel(mainFrame, createChatPanel, this);
-    } else if ((userRole.equals(UserRole.Professor))) {
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
       jPanel = new ProfessorPanel(mainFrame, createChatPanel, this);
-    } else if (userRole.equals(UserRole.EduAssistant)) {
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
       jPanel = new EduAssistantPanel(mainFrame, createChatPanel, this);
+    } else if (userRole.equals(UserRole.ADMIN)) {
+      jPanel = new AdminPanel(mainFrame, createChatPanel, this);
     }
     mainFrame.setContentPane(jPanel);
 
@@ -1509,15 +1540,18 @@ public class Client {
       }
       createChatPanel.update(objects.toArray(new Object[0][0]));
 
-      if (userRole.equals(UserRole.Student)) {
+      if (userRole.equals(UserRole.STUDENT)) {
         StudentPanel studentPanel = (StudentPanel) finalJPanel;
         updateStudentPanel(studentPanel);
-      } else if (userRole.equals(UserRole.Professor)) {
+      } else if (userRole.equals(UserRole.PROFESSOR)) {
         ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
         updateProfessorPanel(professorPanel);
-      } else if (userRole.equals(UserRole.EduAssistant)) {
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
         EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
         updateEduAssistantPanel(eduAssistantPanel);
+      } else if (userRole.equals(UserRole.ADMIN)) {
+        AdminPanel adminPanel = (AdminPanel) finalJPanel;
+        updateAdminPanel(adminPanel);
       }
     }).start();
   }

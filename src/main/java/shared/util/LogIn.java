@@ -23,6 +23,9 @@ public class LogIn {
         return professor;
       }
     }
+    if (University.getInstance().getAdmin().getId() == id && University.getInstance().getAdmin().getPassword() == password.hashCode()) {
+      return University.getInstance().getAdmin();
+    }
     return null;
   }
 
