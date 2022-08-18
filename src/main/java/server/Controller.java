@@ -715,10 +715,38 @@ public class Controller {
     return student.getId();
   }
 
-  public int addCourse(String name, String facultyName, String grade, String credit, String examTime, String classTime, String professorId) {
-    Course course = new Course(name, facultyName, Student.Grade.valueOf(grade), Integer.parseInt(credit), examTime, classTime);
+  public int addCourse(String name, String facultyName, String grade, String credit, String examTime, String classTime,
+                       String professorId, String TAId, String corequisite, String prerequisite, String capacity) {
+    Course course = new Course(name, facultyName, Student.Grade.valueOf(grade), Integer.parseInt(credit), examTime, classTime, Integer.parseInt(capacity));
     University.getInstance().addCourse(course);
     findProfessorById(Integer.parseInt(professorId)).addCourse(String.valueOf(course.getId()));
+    for (String str : TAId.split(" ")) {
+      try {
+        if (findStudentById(Integer.parseInt(str)) != null) {
+          Student student = findStudentById(Integer.parseInt(str));
+          if (!course.getTAIds().contains(String.valueOf(student.getId()))) {
+            course.addTAId(str);
+          }
+          if (!student.getTACourses().contains(str)) {
+            student.addTACourses(str);
+          }
+        }
+      } catch (Exception ignore) {}
+    }
+    for (String str : corequisite.split(" ")) {
+      try {
+        if (findCourse(Integer.parseInt(str)) != null) {
+          course.addCorequisite(str);
+        }
+      } catch (Exception ignore) {}
+    }
+    for (String str : prerequisite.split(" ")) {
+      try {
+        if (findCourse(Integer.parseInt(str)) != null) {
+          course.addPrerequisite(str);
+        }
+      } catch (Exception ignore) {}
+    }
 
     logger.info(String.format(getConfig().getProperty(String.class, "addCourseLog"), course.getId()));
     return course.getId();

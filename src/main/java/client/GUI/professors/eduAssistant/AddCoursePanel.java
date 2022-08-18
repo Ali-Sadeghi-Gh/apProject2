@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- *
  * @author HP
  */
 public class AddCoursePanel extends javax.swing.JPanel {
@@ -65,6 +64,14 @@ public class AddCoursePanel extends javax.swing.JPanel {
     examHourField = new javax.swing.JTextField();
     jLabel3 = new javax.swing.JLabel();
     examMinuteField = new javax.swing.JTextField();
+    TAIdLabel = new javax.swing.JLabel();
+    TAIdField = new javax.swing.JTextField();
+    corequisiteLabel = new javax.swing.JLabel();
+    corequisiteField = new javax.swing.JTextField();
+    prerequisiteLabel = new javax.swing.JLabel();
+    prerequisiteField = new javax.swing.JTextField();
+    capacityLabel = new javax.swing.JLabel();
+    capacityField = new javax.swing.JTextField();
 
     gradeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     gradeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -93,7 +100,7 @@ public class AddCoursePanel extends javax.swing.JPanel {
     addButton.addActionListener(this::addButtonActionPerformed);
 
     gradeBox.setMaximumRowCount(10);
-    gradeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()}));
+    gradeBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{Student.Grade.underGraduate.name(), Student.Grade.masters.name(), Student.Grade.phd.name()}));
 
     examYearField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
     examMonthField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -127,114 +134,174 @@ public class AddCoursePanel extends javax.swing.JPanel {
     jLabel3.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     jLabel3.setText(":");
 
+    TAIdLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
+    TAIdLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    TAIdLabel.setText("TA id:");
+
+    TAIdField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+    corequisiteLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
+    corequisiteLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    corequisiteLabel.setText("corequisite:");
+
+    corequisiteField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+
+    prerequisiteLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
+    prerequisiteLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    prerequisiteLabel.setText("prerequisite:");
+
+    prerequisiteField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+    capacityLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+    capacityLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    capacityLabel.setText("capacity:");
+
+    capacityField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                            .addGap(43, 43, 43)
-                            .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(220, 220, 220)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(professorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                                            .addComponent(gradeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(creditLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(creditField, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
-                                            .addComponent(gradeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(professorField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(nameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(56, 56, 56)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                            .addComponent(classTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(classTimeField, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(43, 43, 43)
+                                            .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 423, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                            .addComponent(capacityLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addGap(31, 31, 31)
+                                                            .addComponent(capacityField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                    .addComponent(professorLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(gradeLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(TAIdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(creditLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addGap(31, 31, 31)
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                                    .addComponent(creditField)
+                                                                    .addComponent(gradeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(professorField)
+                                                                    .addComponent(nameField)
+                                                                    .addComponent(TAIdField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addGap(95, 95, 95)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(examDateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(examTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(layout.createSequentialGroup()
-                                                            .addGap(44, 44, 44)
-                                                            .addComponent(examYearField, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(jLabel1)
-                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(examMonthField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(jLabel2)
-                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(examDayField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addComponent(classTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addGap(18, 18, 18)
+                                                            .addComponent(classTimeField, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                     .addGroup(layout.createSequentialGroup()
-                                                            .addGap(53, 53, 53)
-                                                            .addComponent(examHourField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(jLabel3)
-                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(examMinuteField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addGap(127, 127, 127))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(169, 169, 169))
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                    .addComponent(examDateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                    .addComponent(examTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(layout.createSequentialGroup()
+                                                                            .addGap(53, 53, 53)
+                                                                            .addComponent(examHourField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(jLabel3)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(examMinuteField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addGroup(layout.createSequentialGroup()
+                                                                            .addGap(44, 44, 44)
+                                                                            .addComponent(examYearField, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(jLabel1)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(examMonthField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(jLabel2)
+                                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                            .addComponent(examDayField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                    .addComponent(corequisiteLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addGroup(layout.createSequentialGroup()
+                                                                            .addGap(180, 180, 180)
+                                                                            .addComponent(prerequisiteField, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                    .addComponent(prerequisiteLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addComponent(corequisiteField, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGap(124, 124, 124))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(83, 83, 83))))
     );
     layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(28, 28, 28)
-                            .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                            .addGap(34, 34, 34)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(nameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
-                                            .addGap(82, 82, 82))
+                                            .addGap(395, 395, 395)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(corequisiteField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                    .addComponent(corequisiteLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addGap(90, 90, 90))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                            .addGap(90, 90, 90)
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                    .addComponent(prerequisiteField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                    .addComponent(prerequisiteLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addGap(54, 54, 54)
+                                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
-                                            .addGap(81, 81, 81)
+                                            .addGap(80, 80, 80)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                     .addComponent(classTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(classTimeField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(professorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(professorField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                            .addGap(78, 78, 78)
+                                            .addGap(75, 75, 75)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(creditLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(creditField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(76, 76, 76))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(examDayField, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(examDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(examYearField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(examMonthField, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(examDayField, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(75, 75, 75)
+                                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(26, 26, 26)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                     .addComponent(examTimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(examHourField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(examMinuteField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(18, 18, 18)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(gradeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(gradeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(58, 58, 58)
-                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(96, 96, 96))
+                                                    .addComponent(examMinuteField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                            .addGap(28, 28, 28)
+                                            .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(65, 65, 65)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(professorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                            .addGap(1, 1, 1)
+                                                            .addComponent(professorField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGap(62, 62, 62)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(creditField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(creditLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(67, 67, 67)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(gradeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(gradeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(61, 61, 61)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(TAIdLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(TAIdField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(50, 50, 50)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(capacityField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(capacityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addContainerGap(45, Short.MAX_VALUE))
     );
   }// </editor-fold>
 
@@ -299,19 +366,19 @@ public class AddCoursePanel extends javax.swing.JPanel {
       mainFrame.showMessage(getConfig().getProperty(String.class, "examTimeNumErrorMessage"));
       return;
     }
-    if (Integer.parseInt(examMonthField.getText())<0 || Integer.parseInt(examMonthField.getText())>12) {
+    if (Integer.parseInt(examMonthField.getText()) < 0 || Integer.parseInt(examMonthField.getText()) > 12) {
       mainFrame.showMessage(getConfig().getProperty(String.class, "invalidExamTimeErrorMessage"));
       return;
     }
-    if (Integer.parseInt(examDayField.getText())<0 || Integer.parseInt(examDayField.getText())>31) {
+    if (Integer.parseInt(examDayField.getText()) < 0 || Integer.parseInt(examDayField.getText()) > 31) {
       mainFrame.showMessage(getConfig().getProperty(String.class, "invalidExamTimeErrorMessage"));
       return;
     }
-    if (Integer.parseInt(examHourField.getText())<0 || Integer.parseInt(examHourField.getText())>23) {
+    if (Integer.parseInt(examHourField.getText()) < 0 || Integer.parseInt(examHourField.getText()) > 23) {
       mainFrame.showMessage(getConfig().getProperty(String.class, "invalidExamTimeErrorMessage"));
       return;
     }
-    if (Integer.parseInt(examMinuteField.getText())<0 || Integer.parseInt(examMinuteField.getText())>59) {
+    if (Integer.parseInt(examMinuteField.getText()) < 0 || Integer.parseInt(examMinuteField.getText()) > 59) {
       mainFrame.showMessage(getConfig().getProperty(String.class, "invalidExamTimeErrorMessage"));
       return;
     }
@@ -324,8 +391,16 @@ public class AddCoursePanel extends javax.swing.JPanel {
       return;
     }
 
+    try {
+      Integer.parseInt(capacityField.getText());
+    } catch (Exception e) {
+      mainFrame.showMessage(getConfig().getProperty(String.class, "capacityNumErrorMessage"));
+      return;
+    }
+
     client.addCourse(nameField.getText(), Objects.requireNonNull(gradeBox.getSelectedItem()).toString(),
-            creditField.getText(), Time.convertDateToStringExam(examDate), classTimeField.getText(), professorField.getText());
+            creditField.getText(), Time.convertDateToStringExam(examDate), classTimeField.getText(),
+            professorField.getText(), TAIdField.getText(), corequisiteField.getText(), prerequisiteField.getText(), capacityField.getText());
   }
 
   private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -338,10 +413,14 @@ public class AddCoursePanel extends javax.swing.JPanel {
   }
 
   // Variables declaration - do not modify
+  private javax.swing.JTextField TAIdField;
+  private javax.swing.JLabel TAIdLabel;
   private javax.swing.JButton addButton;
   private javax.swing.JButton backButton;
   private javax.swing.JTextField classTimeField;
   private javax.swing.JLabel classTimeLabel;
+  private javax.swing.JTextField corequisiteField;
+  private javax.swing.JLabel corequisiteLabel;
   private javax.swing.JTextField creditField;
   private javax.swing.JLabel creditLabel;
   private javax.swing.JLabel examDateLabel;
@@ -358,7 +437,11 @@ public class AddCoursePanel extends javax.swing.JPanel {
   private javax.swing.JLabel jLabel3;
   private javax.swing.JTextField nameField;
   private javax.swing.JLabel nameLabel;
+  private javax.swing.JTextField prerequisiteField;
+  private javax.swing.JLabel prerequisiteLabel;
   private javax.swing.JTextField professorField;
   private javax.swing.JLabel professorLabel;
+  private javax.swing.JTextField capacityField;
+  private javax.swing.JLabel capacityLabel;
   // End of variables declaration
 }

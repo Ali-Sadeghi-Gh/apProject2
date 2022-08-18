@@ -30,6 +30,7 @@ public class ServerController {
       authToken = scanner.nextLine();
       isConnected = true;
     } catch (Exception e) {
+      System.out.println(getConfig().getProperty(String.class, "address"));
       isConnected = false;
     }
     return isConnected;
@@ -234,7 +235,8 @@ public class ServerController {
     return scanResponse();
   }
 
-  public Response sendAddCourseRequest(String name, String grade, String credit, String examTime, String classTime, String professorId) {
+  public Response sendAddCourseRequest(String name, String grade, String credit, String examTime, String classTime,
+                                       String professorId, String TAId, String corequisite, String prerequisite, String capacity) {
     Request request = new Request(RequestType.ADD_COURSE);
     request.addData("name", name);
     request.addData("grade", grade);
@@ -242,6 +244,10 @@ public class ServerController {
     request.addData("examTime", examTime);
     request.addData("classTime", classTime);
     request.addData("professorId", professorId);
+    request.addData("TAId", TAId);
+    request.addData("corequisite", corequisite);
+    request.addData("prerequisite", prerequisite);
+    request.addData("capacity", capacity);
     sendRequest(request);
     return scanResponse();
   }

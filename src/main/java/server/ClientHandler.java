@@ -297,7 +297,9 @@ public class ClientHandler implements Runnable {
           id = Controller.getInstance().addCourse((String) request.getData("name"), user.getFacultyName(),
                   (String) request.getData("grade"), (String) request.getData("credit"),
                   (String) request.getData("examTime"), (String) request.getData("classTime"),
-                  (String) request.getData("professorId"));
+                  (String) request.getData("professorId"), (String) request.getData("TAId"),
+                  (String) request.getData("corequisite"), (String) request.getData("prerequisite"),
+                  (String) request.getData("capacity"));
           response.setErrorMessage(String.format(getConfig().getProperty(String.class, "addCourseMessage"), id));
         }
         sendResponse(response);

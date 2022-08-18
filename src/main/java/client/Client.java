@@ -1147,8 +1147,10 @@ public class Client {
     new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> updateEduAssistantPanel(eduAssistantPanel)).start();
   }
 
-  public void addCourse(String name, String grade, String credit, String examTime, String classTime, String professorId) {
-    Response response = serverController.sendAddCourseRequest(name, grade, credit, examTime, classTime, professorId);
+  public void addCourse(String name, String grade, String credit, String examTime, String classTime, String professorId,
+                        String TAId, String corequisite, String prerequisite, String capacity) {
+    Response response = serverController.sendAddCourseRequest(name, grade, credit, examTime, classTime, professorId,
+            TAId, corequisite, prerequisite, capacity);
     if (!isConnected) {
       return;
     }
