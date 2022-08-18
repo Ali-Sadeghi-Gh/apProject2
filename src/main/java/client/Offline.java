@@ -157,7 +157,8 @@ public class Offline {
     mainFrame.setContentPane(studentPanel);
 
     studentMainPanel.update((String) response.getData("educationalStatus"),
-            (String) response.getData("supervisor"));
+            (String) response.getData("supervisor"), (String) response.getData("registration"),
+            (String) response.getData("registrationTime"));
     updateStudentPanel(studentPanel);
   }
 

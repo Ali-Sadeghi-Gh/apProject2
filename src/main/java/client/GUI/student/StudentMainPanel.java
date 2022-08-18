@@ -52,13 +52,11 @@ public class StudentMainPanel extends javax.swing.JPanel {
     registrationTimeLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     registrationTimeLabel.setBackground(new java.awt.Color(200, 200, 200));
     registrationTimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    registrationTimeLabel.setText(getConfig().getProperty(String.class, "registrationTimeLabelText"));
     registrationTimeLabel.setOpaque(true);
 
     registrationPermitLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 20)); // NOI18N
     registrationPermitLabel.setBackground(new java.awt.Color(200, 200, 200));
     registrationPermitLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    registrationPermitLabel.setText(getConfig().getProperty(String.class, "registrationPermitLabelText"));
     registrationPermitLabel.setOpaque(true);
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -89,9 +87,11 @@ public class StudentMainPanel extends javax.swing.JPanel {
     );
   }// </editor-fold>
 
-  public void update(String educationalStatus, String supervisor) {
+  public void update(String educationalStatus, String supervisor, String registration, String registrationTime) {
     supervisorLabel.setText(String.format(getConfig().getProperty(String.class, "supervisorLabelText"), (supervisor == null || supervisor.equals("")) ? "-" : supervisor));
     statusLabel.setText(String.format(getConfig().getProperty(String.class, "eduStatusLabelText"), educationalStatus == null ? "-" : educationalStatus));
+    registrationPermitLabel.setText(registration);
+    registrationTimeLabel.setText(String.format(getConfig().getProperty(String.class, "registrationTimeLabelText"), registrationTime));
   }
 
   private Config getConfig() {

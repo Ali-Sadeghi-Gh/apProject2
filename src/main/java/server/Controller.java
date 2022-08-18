@@ -11,6 +11,7 @@ import shared.util.Data;
 import shared.util.LogIn;
 import shared.util.Time;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1028,6 +1029,21 @@ public class Controller {
         }
         student.getMessenger().getChat(String.valueOf(user.getId())).addMessage(student.getMessenger(), message);
         user.getMessenger().getChat(String.valueOf(student.getId())).addMessage(user.getMessenger(), message);
+      }
+    }
+  }
+
+  public void setTakeCourseTime(String faculty, String grade, String enteringYear, String startTime, String endTime) {
+    for (Student student : University.getInstance().getStudents()) {
+      if ((faculty.equals(getConfig().getProperty(String.class, "comboBoxDefault")) || faculty.equals(student.getFacultyName()) &&
+              (grade.equals(getConfig().getProperty(String.class, "comboBoxDefault")) || grade.equals(student.getGrade().toString())) &&
+              (enteringYear.equals("") || enteringYear.equals(student.getEnteringYear())))) {
+        try {
+          student.setStartTakeCourseTime(Time.convertStringToDateExam(startTime));
+          student.setEndTakeCourseTime(Time.convertStringToDateExam(endTime));
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
       }
     }
   }

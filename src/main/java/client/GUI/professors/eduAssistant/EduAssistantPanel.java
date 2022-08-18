@@ -423,7 +423,7 @@ public class EduAssistantPanel extends javax.swing.JPanel {
   }
 
   private void setTakeCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
+    client.changePanel(PanelName.SET_TAKE_COURSE_TIME_PANEL, null);
   }
 
   private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {

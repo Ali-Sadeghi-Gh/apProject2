@@ -3,6 +3,7 @@ package shared.model.users;
 import shared.model.University;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Student extends User{
   private String supervisorId;
@@ -14,6 +15,8 @@ public class Student extends User{
   private String dormitoryRequest;
   private String minor;
   private ArrayList<String> TACourses;
+  private Date startTakeCourseTime;
+  private Date endTakeCourseTime;
 
   public Student(String name, String email, String melliCode, String facultyName, String phoneNumber, String password, String lastLogIn, String supervisorId, String enteringYear, EducationalStatus status, Grade grade) {
     super(name, email, melliCode, facultyName, phoneNumber, password, lastLogIn);
@@ -91,6 +94,22 @@ public class Student extends User{
 
   public void addTACourses(String courseId) {
     TACourses.add(courseId);
+  }
+
+  public Date getStartTakeCourseTime() {
+    return startTakeCourseTime;
+  }
+
+  public void setStartTakeCourseTime(Date startTakeCourseTime) {
+    this.startTakeCourseTime = startTakeCourseTime;
+  }
+
+  public Date getEndTakeCourseTime() {
+    return endTakeCourseTime;
+  }
+
+  public void setEndTakeCourseTime(Date endTakeCourseTime) {
+    this.endTakeCourseTime = endTakeCourseTime;
   }
 
   public int getId() {

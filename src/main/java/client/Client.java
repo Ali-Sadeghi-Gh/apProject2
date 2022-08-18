@@ -51,6 +51,7 @@ public class Client {
       isConnected = serverController.connectToServer();
     }
 
+    System.out.println(isConnected);
     if (isConnected) {
       Offline.getInstance().finish();
     } else {
@@ -327,6 +328,9 @@ public class Client {
       case SEARCH_STUDENT_PANEL:
         changeToSearchStudentPanel();
         break;
+      case SET_TAKE_COURSE_TIME_PANEL:
+        changeToSetTakeCourseTimePanel();
+        break;
     }
   }
 
@@ -341,7 +345,8 @@ public class Client {
         return;
       }
       studentMainPanel.update((String) response1.getData("educationalStatus"),
-              (String) response1.getData("supervisor"));
+              (String) response1.getData("supervisor"), (String) response1.getData("registration"),
+              (String) response1.getData("registrationTime"));
 
       updateStudentPanel(studentPanel);
     }).start();
@@ -1701,5 +1706,31 @@ public class Client {
 
       updateMrMohseniPanel(mrMohseniPanel);
     }).start();
+  }
+
+  private void changeToSetTakeCourseTimePanel() {
+    SetTakeCourseTimePanel setTakeCourseTimePanel = new SetTakeCourseTimePanel(mainFrame, this);
+    EduAssistantPanel eduAssistantPanel = new EduAssistantPanel(mainFrame, setTakeCourseTimePanel, this);
+    mainFrame.setContentPane(eduAssistantPanel);
+
+    Response response = serverController.sendUpdateRequest(PanelName.SET_TAKE_COURSE_TIME_PANEL);
+    if (!isConnected) {
+      return;
+    }
+    setTakeCourseTimePanel.update(((ArrayList<String>) response.getData("faculties")).toArray(new String[0]));
+
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
+      updateEduAssistantPanel(eduAssistantPanel);
+    }).start();
+  }
+
+  public void setTakeCourseTime(String faculty, String grade, String enteringYear, String startTime, String endTime) {
+    Response response = serverController.sendSetTakeCourseTimeRequest(faculty, grade, enteringYear, startTime, endTime);
+    if (!isConnected) {
+      return;
+    }
+    if (response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+    }
   }
 }

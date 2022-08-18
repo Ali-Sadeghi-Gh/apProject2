@@ -371,4 +371,15 @@ public class ServerController {
     sendRequest(request);
     return scanResponse();
   }
+
+  public Response sendSetTakeCourseTimeRequest(String faculty, String grade, String enteringYear, String startTime, String endTime) {
+    Request request = new Request(RequestType.SET_TAKE_COURSE_TIME);
+    request.addData("faculty", faculty);
+    request.addData("grade", grade);
+    request.addData("enteringYear", enteringYear);
+    request.addData("startTime", startTime);
+    request.addData("endTime", endTime);
+    sendRequest(request);
+    return scanResponse();
+  }
 }

@@ -480,8 +480,8 @@ public class ClientHandler implements Runnable {
         Controller.getInstance().sendFileMessage(user, contactId, (ArrayList<String>) request.getData("strings"), (String) request.getData("fileName"));
         break;
       case MESSENGER_SEND_FILE_MR_MOHSENI:
-        Controller.getInstance().sendFileMessage(user, (ArrayList<String>) request.getData("strings"), (String) request.getData("fileName")
-                , (String) request.getData("faculty"), (String) request.getData("grade"),
+        Controller.getInstance().sendFileMessage(user, (ArrayList<String>) request.getData("strings"), (String) request.getData("fileName"),
+                (String) request.getData("faculty"), (String) request.getData("grade"),
                 (String) request.getData("enteringYear"));
         break;
       case ADD_CONTACT:
@@ -499,6 +499,14 @@ public class ClientHandler implements Runnable {
             user.addContact(String.valueOf(u.getId()));
           }
         }
+        sendResponse(response);
+        break;
+      case SET_TAKE_COURSE_TIME:
+        Controller.getInstance().setTakeCourseTime((String) request.getData("faculty"), (String) request.getData("grade"),
+                (String) request.getData("enteringYear"), (String) request.getData("startTime"),
+                (String) request.getData("endTime"));
+        response = new Response(ResponseStatus.OK);
+        response.setErrorMessage(getConfig().getProperty(String.class, "takeCourseTimeSetErrorMessage"));
         sendResponse(response);
         break;
     }
@@ -524,6 +532,13 @@ public class ClientHandler implements Runnable {
         Student student = (Student) user;
         response.addData("educationalStatus", student.getStatus());
         response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
+        if (student.getStartTakeCourseTime() == null) {
+          response.addData("registration", getConfig().getProperty(String.class, "registrationNotPermitErrorMessage"));
+          response.addData("registrationTime", getConfig().getProperty(String.class, "registrationTimeUndefinedErrorMessage"));
+        } else {
+          response.addData("registration", getConfig().getProperty(String.class, "registrationPermitErrorMessage"));
+          response.addData("registrationTime", Time.convertDateToStringExam(student.getStartTakeCourseTime()));
+        }
         break;
       case STUDENT_PROFILE_PANEL:
         student = null;
@@ -752,6 +767,9 @@ public class ClientHandler implements Runnable {
       case SEARCH_STUDENT_PANEL:
         response.addData("data", Controller.getInstance().getStudentsDataByBeginId((String) request.getData("studentId")));
         break;
+      case SET_TAKE_COURSE_TIME_PANEL:
+        response.addData("faculties", Controller.getInstance().getFacultiesName());
+        break;
     }
     sendResponse(response);
   }
@@ -819,6 +837,13 @@ public class ClientHandler implements Runnable {
       response.addData("status", student.getStatus());
       response.addData("supervisor", Controller.getInstance().findProfessorById(Integer.parseInt(student.getSupervisorId())).getName());
       response.addData("averageScore", Controller.getInstance().getAverageScoreByStudent(student));
+      if (student.getStartTakeCourseTime() == null) {
+        response.addData("registration", getConfig().getProperty(String.class, "registrationNotPermitErrorMessage"));
+        response.addData("registrationTime", getConfig().getProperty(String.class, "registrationTimeUndefinedErrorMessage"));
+      } else {
+        response.addData("registration", getConfig().getProperty(String.class, "registrationPermitErrorMessage"));
+        response.addData("registrationTime", Time.convertDateToStringExam(student.getStartTakeCourseTime()));
+      }
 
       response.addData("credit", String.valueOf(Controller.getInstance().getPassCredit(student)));
       response.addData("averageScore", String.valueOf(Controller.getInstance().getAverageScoreByStudent(student)));
