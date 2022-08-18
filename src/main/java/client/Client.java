@@ -51,7 +51,6 @@ public class Client {
       isConnected = serverController.connectToServer();
     }
 
-    System.out.println(isConnected);
     if (isConnected) {
       Offline.getInstance().finish();
     } else {
@@ -330,6 +329,9 @@ public class Client {
         break;
       case SET_TAKE_COURSE_TIME_PANEL:
         changeToSetTakeCourseTimePanel();
+        break;
+      case TAKE_COURSE_PANEL:
+        changeToTakeCoursePanel();
         break;
     }
   }
@@ -1734,5 +1736,56 @@ public class Client {
     if (response.getStatus().equals(ResponseStatus.OK)) {
       mainFrame.showMessage(response.getErrorMessage());
     }
+  }
+
+  private void changeToTakeCoursePanel() {
+    Response response = serverController.sendUpdateRequest(PanelName.TAKE_COURSE_PANEL);
+    if (!isConnected) {
+      return;
+    }
+    if (!response.getStatus().equals(ResponseStatus.OK)) {
+      mainFrame.showMessage(response.getErrorMessage());
+      return;
+    }
+
+    TakeCoursePanel takeCoursePanel = new TakeCoursePanel(this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, takeCoursePanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+    takeCoursePanel.update(((ArrayList<String>) response.getData("faculties")).toArray(new String[0]));
+
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
+      Request request = new Request(RequestType.UPDATE);
+      request.addData("faculty", takeCoursePanel.getFaculty());
+      request.addData("sort", takeCoursePanel.getSort());
+      Response response1 = serverController.sendUpdateRequest(PanelName.TAKE_COURSE_PANEL, request);
+      if (!isConnected) {
+        return;
+      }
+      if (response1.getData("data") != null) {
+        ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response1.getData("data");
+        ArrayList<String[]> strings = new ArrayList<>();
+        for (ArrayList<String> arrayList1 : arrayList) {
+          strings.add(arrayList1.toArray(new String[0]));
+        }
+        takeCoursePanel.update(strings.toArray(new String[0][0]));
+      }
+
+      updateStudentPanel(studentPanel);
+    }).start();
+  }
+
+  public void takeCourse(String courseId) {
+    Response response = serverController.sendTakeCourseRequest(courseId);
+    if (!isConnected) {
+      return;
+    }
+    if (response.getStatus().equals(ResponseStatus.ERROR)) {
+      mainFrame.showMessage(response.getErrorMessage());
+    }
+  }
+
+  public void markCourse(String courseId) {
+    serverController.sendMarkCourseRequest(courseId);
   }
 }

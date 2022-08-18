@@ -511,6 +511,18 @@ public class ClientHandler implements Runnable {
         response.setErrorMessage(getConfig().getProperty(String.class, "takeCourseTimeSetErrorMessage"));
         sendResponse(response);
         break;
+      case TAKE_COURSE:
+        if (Controller.getInstance().takeCourse(user, (String) request.getData("courseId"))) {
+          response = new Response(ResponseStatus.OK);
+        } else {
+          response = new Response(ResponseStatus.ERROR);
+          response.setErrorMessage(getConfig().getProperty(String.class, "takeCourseCapacitySetErrorMessage"));
+        }
+        sendResponse(response);
+        break;
+      case MARK_COURSE:
+        Controller.getInstance().markCourse(user, (String) request.getData("courseId"));
+        break;
     }
   }
 
@@ -772,6 +784,17 @@ public class ClientHandler implements Runnable {
       case SET_TAKE_COURSE_TIME_PANEL:
         response.addData("faculties", Controller.getInstance().getFacultiesName());
         break;
+      case TAKE_COURSE_PANEL:
+        if (request.getData("faculty") == null || request.getData("sort") == null) {
+          if (Controller.getInstance().checkTakeCourseTime(user)) {
+            response.addData("faculties", Controller.getInstance().getFacultiesName());
+          } else {
+            response = new Response(ResponseStatus.ERROR);
+            response.setErrorMessage(getConfig().getProperty(String.class, "takeCourseTimeErrorMessage"));
+          }
+        } else {
+          response.addData("data", Controller.getInstance().getTakeCourseData(user, (String) request.getData("faculty"), (String) request.getData("sort")));
+        }
     }
     sendResponse(response);
   }

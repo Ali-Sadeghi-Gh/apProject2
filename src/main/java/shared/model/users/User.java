@@ -16,6 +16,7 @@ public abstract class User {
   protected int password;
   protected String lastLogIn;
   protected List<String> courses;
+  protected List<String> markedCourses;
   protected Messenger messenger;
   protected ArrayList<String> contacts;
 
@@ -86,6 +87,9 @@ public abstract class User {
   }
 
   public List<String> getCourses() {
+    if (courses == null) {
+      courses = new ArrayList<>();
+    }
     return courses;
   }
 
@@ -98,6 +102,24 @@ public abstract class User {
 
   public void removeCourse(String courseId) {
     courses.remove(courseId);
+  }
+
+  public List<String> getMarkedCourses() {
+    if (markedCourses == null) {
+      markedCourses = new ArrayList<>();
+    }
+    return markedCourses;
+  }
+
+  public void addMarkedCourse(String courseId) {
+    if (markedCourses == null) {
+      markedCourses = new ArrayList<>();
+    }
+    markedCourses.add(courseId);
+  }
+
+  public void removeMarkedCourse(String courseId) {
+    markedCourses.remove(courseId);
   }
 
   public abstract int getId();

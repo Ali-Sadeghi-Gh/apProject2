@@ -30,7 +30,6 @@ public class ServerController {
       authToken = scanner.nextLine();
       isConnected = true;
     } catch (Exception e) {
-      System.out.println(getConfig().getProperty(String.class, "address"));
       isConnected = false;
     }
     return isConnected;
@@ -387,5 +386,18 @@ public class ServerController {
     request.addData("endTime", endTime);
     sendRequest(request);
     return scanResponse();
+  }
+
+  public Response sendTakeCourseRequest(String courseId) {
+    Request request = new Request(RequestType.TAKE_COURSE);
+    request.addData("courseId", courseId);
+    sendRequest(request);
+    return scanResponse();
+  }
+
+  public void sendMarkCourseRequest(String courseId) {
+    Request request = new Request(RequestType.MARK_COURSE);
+    request.addData("courseId", courseId);
+    sendRequest(request);
   }
 }
