@@ -450,7 +450,7 @@ public class StudentPanel extends javax.swing.JPanel {
     }
 
     private void notificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        client.changePanel(PanelName.NOTIFICATION_PANEL, UserRole.STUDENT);
     }
 
     private void takeCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {

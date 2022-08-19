@@ -400,4 +400,12 @@ public class ServerController {
     request.addData("courseId", courseId);
     sendRequest(request);
   }
+
+  public void sendAnswerRequestNotificationRequest(String userId, String type, String answer) {
+    Request request = new Request(RequestType.ANSWER_REQUEST_NOTIFICATION);
+    request.addData("userId", userId);
+    request.addData("type", type);
+    request.addData("answer", answer);
+    sendRequest(request);
+  }
 }

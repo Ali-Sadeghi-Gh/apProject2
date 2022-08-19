@@ -254,6 +254,7 @@ public class CreateChatPanel extends javax.swing.JPanel {
       return;
     }
     client.addContact(contactIdField.getText());
+    contactIdField.setText("");
   }
 
   public void showData(Object[][] data) {

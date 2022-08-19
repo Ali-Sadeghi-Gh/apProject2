@@ -5,7 +5,10 @@ import org.apache.log4j.Logger;
 import shared.model.*;
 import shared.model.message.Chat;
 import shared.model.message.Message;
+import shared.model.message.Notification;
 import shared.model.users.*;
+import shared.response.Response;
+import shared.response.ResponseStatus;
 import shared.util.Config;
 import shared.util.Data;
 import shared.util.LogIn;
@@ -443,6 +446,31 @@ public class Controller {
       data[i][3] = String.valueOf(getStudentCountHaveCourse(course));
       data[i][4] = user.getCourses().contains(String.valueOf(course.getId())) ? "remove" : "take";
       data[i][5] = user.getMarkedCourses().contains(String.valueOf(course.getId())) ? "unmark" : "mark";
+    }
+    return data;
+  }
+
+  public String[][] getAnswersNotificationData(User user) {
+    String[][] data = new String[user.getAnswersNotification().size()][4];
+    for (int i = 0; i < user.getAnswersNotification().size(); i++) {
+      User u = findUserById(Integer.parseInt(user.getAnswersNotification().get(i).getToId()));
+      data[i][0] = String.valueOf(u.getId());
+      data[i][1] = u.getName();
+      data[i][2] = user.getAnswersNotification().get(i).getType().toString();
+      data[i][3] = user.getAnswersNotification().get(i).getStatus().toString();
+    }
+    return data;
+  }
+
+  public String[][] getRequestsNotificationData(User user) {
+    String[][] data = new String[user.getRequestsNotification().size()][5];
+    for (int i = 0; i < user.getRequestsNotification().size(); i++) {
+      User u = findUserById(Integer.parseInt(user.getRequestsNotification().get(i).getFromId()));
+      data[i][0] = String.valueOf(u.getId());
+      data[i][1] = u.getName();
+      data[i][2] = user.getRequestsNotification().get(i).getType().toString();
+      data[i][3] = Notification.NotificationStatus.ACCEPT.toString();
+      data[i][4] = Notification.NotificationStatus.REJECT.toString();
     }
     return data;
   }
@@ -1187,6 +1215,40 @@ public class Controller {
       user.removeMarkedCourse(courseId);
     } else {
       user.addMarkedCourse(courseId);
+    }
+  }
+
+  public void answerRequestNotification(User user, int userId, String type, String answer) {
+    Notification.NotificationType notificationType = Notification.NotificationType.valueOf(type);
+    Notification.NotificationStatus notificationStatus = Notification.NotificationStatus.valueOf(answer);
+    Notification notification = null;
+    for (Notification n : user.getRequestsNotification()) {
+      if (n.getType().equals(notificationType) && n.getFromId().equals(String.valueOf(userId))) {
+        notification = n;
+        break;
+      }
+    }
+    if (notification != null) {
+      user.removeRequestNotification(notification);
+
+      User u = findUserById(userId);
+      if (u != null) {
+        for (Notification n : u.getAnswersNotification()) {
+          if (n.getType().equals(notificationType) && n.getToId().equals(String.valueOf(user.getId())) && n.getStatus().equals(Notification.NotificationStatus.UNDEFINED)) {
+            n.setStatus(notificationStatus);
+            break;
+          }
+        }
+
+        if (notificationStatus.equals(Notification.NotificationStatus.ACCEPT) && notificationType.equals(Notification.NotificationType.MESSAGE)) {
+          if (!u.getContacts().contains(String.valueOf(user.getId()))) {
+            u.addContact(String.valueOf(user.getId()));
+          }
+          if (!user.getContacts().contains(String.valueOf(userId))) {
+            user.addContact(String.valueOf(userId));
+          }
+        }
+      }
     }
   }
 

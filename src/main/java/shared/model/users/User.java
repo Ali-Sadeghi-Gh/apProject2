@@ -3,6 +3,7 @@ package shared.model.users;
 import server.Controller;
 import shared.model.message.Chat;
 import shared.model.message.Messenger;
+import shared.model.message.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,8 @@ public abstract class User {
   protected List<String> markedCourses;
   protected Messenger messenger;
   protected ArrayList<String> contacts;
+  protected ArrayList<Notification> answersNotification;
+  protected ArrayList<Notification> requestsNotification;
 
   public User(String name, String email, String melliCode, String facultyName, String phoneNumber, String password, String lastLogIn) {
     this.name = name;
@@ -139,11 +142,57 @@ public abstract class User {
   }
 
   public ArrayList<String> getContacts() {
-    contacts = Controller.getInstance().getContacts(this);
+    if (contacts == null) {
+      contacts = new ArrayList<>();
+    }
+    ArrayList<String> strings = Controller.getInstance().getContacts(this);
+    for (String str : strings) {
+      if (!contacts.contains(str)) {
+        contacts.add(str);
+      }
+    }
     return contacts;
   }
 
   public void addContact(String contact) {
-    getContacts().add(contact);
+    if (contacts == null) {
+      contacts = getContacts();
+    }
+    contacts.add(contact);
+  }
+
+  public ArrayList<Notification> getAnswersNotification() {
+    if (answersNotification == null) {
+      answersNotification = new ArrayList<>();
+    }
+    return answersNotification;
+  }
+
+  public void addAnswerNotification(Notification notification) {
+    if (answersNotification == null) {
+      answersNotification = new ArrayList<>();
+    }
+    answersNotification.add(notification);
+  }
+
+  public ArrayList<Notification> getRequestsNotification() {
+    if (requestsNotification == null) {
+      requestsNotification = new ArrayList<>();
+    }
+    return requestsNotification;
+  }
+
+  public void addRequestNotification(Notification notification) {
+    if (requestsNotification == null) {
+      requestsNotification = new ArrayList<>();
+    }
+    requestsNotification.add(notification);
+  }
+
+  public void removeRequestNotification(Notification notification) {
+    if (requestsNotification == null) {
+      requestsNotification = new ArrayList<>();
+    }
+    requestsNotification.remove(notification);
   }
 }

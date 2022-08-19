@@ -336,6 +336,9 @@ public class Client {
       case MARKED_COURSE_PANEL:
         changeToMarkedCoursePanel();
         break;
+      case NOTIFICATION_PANEL:
+        changeToNotificationPanel(userRole);
+        break;
     }
   }
 
@@ -1812,5 +1815,54 @@ public class Client {
 
       updateStudentPanel(studentPanel);
     }).start();
+  }
+
+  private void changeToNotificationPanel(UserRole userRole) {
+    NotificationPanel notificationPanel = new NotificationPanel(this);
+    JPanel jPanel = null;
+    if (userRole.equals(UserRole.STUDENT)) {
+      jPanel = new StudentPanel(mainFrame, notificationPanel, this);
+    } else if ((userRole.equals(UserRole.PROFESSOR))) {
+      jPanel = new ProfessorPanel(mainFrame, notificationPanel, this);
+    } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
+      jPanel = new EduAssistantPanel(mainFrame, notificationPanel, this);
+    }
+    mainFrame.setContentPane(jPanel);
+
+    JPanel finalJPanel = jPanel;
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.NOTIFICATION_PANEL);
+      if (!isConnected) {
+        return;
+      }
+
+      ArrayList<ArrayList<String>> arrayListAnswers = (ArrayList<ArrayList<String>>) response.getData("answersData");
+      ArrayList<String[]> stringsAnswers = new ArrayList<>();
+      for (ArrayList<String > arrayList1 : arrayListAnswers) {
+        stringsAnswers.add(arrayList1.toArray(new String[0]));
+      }
+
+      ArrayList<ArrayList<String>> arrayListRequests = (ArrayList<ArrayList<String>>) response.getData("requestsData");
+      ArrayList<String[]> stringsRequests = new ArrayList<>();
+      for (ArrayList<String > arrayList1 : arrayListRequests) {
+        stringsRequests.add(arrayList1.toArray(new String[0]));
+      }
+      notificationPanel.update(stringsAnswers.toArray(new String[0][0]), stringsRequests.toArray(new String[0][0]));
+
+      if (userRole.equals(UserRole.STUDENT)) {
+        StudentPanel studentPanel = (StudentPanel) finalJPanel;
+        updateStudentPanel(studentPanel);
+      } else if (userRole.equals(UserRole.PROFESSOR)) {
+        ProfessorPanel professorPanel = (ProfessorPanel) finalJPanel;
+        updateProfessorPanel(professorPanel);
+      } else if (userRole.equals(UserRole.EDU_ASSISTANT)) {
+        EduAssistantPanel eduAssistantPanel = (EduAssistantPanel) finalJPanel;
+        updateEduAssistantPanel(eduAssistantPanel);
+      }
+    }).start();
+  }
+
+  public void answerRequestNotification(String userId, String type, String answer) {
+    serverController.sendAnswerRequestNotificationRequest(userId, type, answer);
   }
 }

@@ -384,7 +384,7 @@ public class ProfessorPanel extends javax.swing.JPanel {
   }
 
   private void notificationsButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    // TODO add your handling code here:
+    client.changePanel(PanelName.NOTIFICATION_PANEL, UserRole.PROFESSOR);
   }
 
   private void coursewareButtonActionPerformed(java.awt.event.ActionEvent evt) {

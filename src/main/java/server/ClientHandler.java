@@ -3,6 +3,7 @@ package server;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import shared.model.*;
+import shared.model.message.Notification;
 import shared.model.users.*;
 import shared.util.Config;
 import shared.util.Time;
@@ -487,19 +488,16 @@ public class ClientHandler implements Runnable {
                 (String) request.getData("enteringYear"));
         break;
       case ADD_CONTACT:
-        //todo
-        User u = Controller.getInstance().findUserById(Integer.parseInt(String.valueOf(request.getData("contactId"))));
-        if (u == null) {
+        User contact = Controller.getInstance().findUserById(Integer.parseInt(String.valueOf(request.getData("contactId"))));
+        if (contact != null) {
+          response = new Response(ResponseStatus.OK);
+          Notification notification = new Notification(Notification.NotificationType.MESSAGE, String.valueOf(user.getId()),
+                  String.valueOf(request.getData("contactId")));
+          user.addAnswerNotification(notification);
+          Controller.getInstance().findUserById(Integer.parseInt(String.valueOf(request.getData("contactId")))).addRequestNotification(notification);
+        } else {
           response = new Response(ResponseStatus.ERROR);
           response.setErrorMessage(getConfig().getProperty(String.class, "contactNotFoundErrorMessage"));
-        } else {
-          if (user.getContacts().contains(String.valueOf(u.getId()))) {
-            response = new Response(ResponseStatus.ERROR);
-            response.setErrorMessage(getConfig().getProperty(String.class, "existContactErrorMessage"));
-          } else {
-            response = new Response(ResponseStatus.OK);
-            user.addContact(String.valueOf(u.getId()));
-          }
         }
         sendResponse(response);
         break;
@@ -522,6 +520,10 @@ public class ClientHandler implements Runnable {
         break;
       case MARK_COURSE:
         Controller.getInstance().markCourse(user, (String) request.getData("courseId"));
+        break;
+      case ANSWER_REQUEST_NOTIFICATION:
+        Controller.getInstance().answerRequestNotification(user, Integer.parseInt(String.valueOf(request.getData("userId"))),
+                (String) request.getData("type"), (String) request.getData("answer"));
         break;
     }
   }
@@ -798,6 +800,10 @@ public class ClientHandler implements Runnable {
         break;
       case MARKED_COURSE_PANEL:
         response.addData("data", Controller.getInstance().getMarkedCourseData(user));
+        break;
+      case NOTIFICATION_PANEL:
+        response.addData("answersData", Controller.getInstance().getAnswersNotificationData(user));
+        response.addData("requestsData", Controller.getInstance().getRequestsNotificationData(user));
         break;
     }
     sendResponse(response);
