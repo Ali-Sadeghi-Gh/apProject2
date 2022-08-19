@@ -433,6 +433,20 @@ public class Controller {
     return data;
   }
 
+  public String[][] getMarkedCourseData(User user) {
+    String[][] data = new String[user.getMarkedCourses().size()][6];
+    for (int i = 0; i < user.getMarkedCourses().size(); i++) {
+      Course course = findCourse(Integer.parseInt(user.getMarkedCourses().get(i)));
+      data[i][0] = String.valueOf(course.getId());
+      data[i][1] = course.getName();
+      data[i][2] = String.valueOf(course.getCapacity());
+      data[i][3] = String.valueOf(getStudentCountHaveCourse(course));
+      data[i][4] = user.getCourses().contains(String.valueOf(course.getId())) ? "remove" : "take";
+      data[i][5] = user.getMarkedCourses().contains(String.valueOf(course.getId())) ? "unmark" : "mark";
+    }
+    return data;
+  }
+
   ////////////////////////////////score////////////////////////////////////
 
   public double getAverageScoreByCourse(Course course) {

@@ -333,6 +333,9 @@ public class Client {
       case TAKE_COURSE_PANEL:
         changeToTakeCoursePanel();
         break;
+      case MARKED_COURSE_PANEL:
+        changeToMarkedCoursePanel();
+        break;
     }
   }
 
@@ -1787,5 +1790,27 @@ public class Client {
 
   public void markCourse(String courseId) {
     serverController.sendMarkCourseRequest(courseId);
+  }
+
+  private void changeToMarkedCoursePanel() {
+    MarkedCoursePanel markedCoursePanel = new MarkedCoursePanel(this);
+    StudentPanel studentPanel = new StudentPanel(mainFrame, markedCoursePanel, this);
+    mainFrame.setContentPane(studentPanel);
+
+    new Loop(getConfig().getProperty(Double.class, "updateLoopTime"), () -> {
+      Response response = serverController.sendUpdateRequest(PanelName.MARKED_COURSE_PANEL);
+      if (!isConnected) {
+        return;
+      }
+
+      ArrayList<ArrayList<String>> arrayList = (ArrayList<ArrayList<String>>) response.getData("data");
+      ArrayList<String[]> strings = new ArrayList<>();
+      for (ArrayList<String> arrayList1 : arrayList) {
+        strings.add(arrayList1.toArray(new String[0]));
+      }
+      markedCoursePanel.update(strings.toArray(new String[0][0]));
+
+      updateStudentPanel(studentPanel);
+    }).start();
   }
 }

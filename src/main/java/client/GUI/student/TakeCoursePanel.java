@@ -7,6 +7,7 @@ package client.GUI.student;
  */
 
 import client.Client;
+import shared.model.PanelName;
 import shared.util.Config;
 
 import javax.swing.*;
@@ -83,6 +84,7 @@ public class TakeCoursePanel extends javax.swing.JPanel {
     });
 
     markedButton.setText(getConfig().getProperty(String.class, "markedButtonText"));
+    markedButton.addActionListener(this::markedButtonActionPerformed);
 
     facultyLabel.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
     facultyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -138,6 +140,10 @@ public class TakeCoursePanel extends javax.swing.JPanel {
                             .addContainerGap(63, Short.MAX_VALUE))
     );
   }// </editor-fold>
+
+  private void markedButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    client.changePanel(PanelName.MARKED_COURSE_PANEL, null);
+  }
 
   private void showData(String[][] data) {
     String[] cols = {"id", "name", "capacity", "students", "status", "mark"};

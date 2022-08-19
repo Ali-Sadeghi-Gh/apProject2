@@ -795,6 +795,10 @@ public class ClientHandler implements Runnable {
         } else {
           response.addData("data", Controller.getInstance().getTakeCourseData(user, (String) request.getData("faculty"), (String) request.getData("sort")));
         }
+        break;
+      case MARKED_COURSE_PANEL:
+        response.addData("data", Controller.getInstance().getMarkedCourseData(user));
+        break;
     }
     sendResponse(response);
   }
